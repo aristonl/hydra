@@ -10,6 +10,20 @@ typedef struct {
 	unsigned int Width, Height, PixelsPerScanLine;
 } Framebuffer;
 
+#define PSF1_MAGIC0 0x36
+#define PSF1_MAGIC1 0x04
+
+typedef struct {
+	unsigned char magic[2];
+	unsigned char mode;
+	unsigned char charsize;
+} PSF1_HEADER;
+
+typedef struct {
+	PSF1_HEADER* psf1_Header;
+	void* glyphBuffer;
+} PSF1_FONT;
+
 Framebuffer tempFramebuffer;
 Framebuffer* InitializeGOP() {
 	EFI_GUID GOP_GUID = EFI_GRAPHICS_OUTPUT_PROTOCOL_GUID;
@@ -38,6 +52,28 @@ EFI_FILE* LoadFile(EFI_FILE* dir, CHAR16* path, EFI_HANDLE ImageHandle, EFI_SYST
 	EFI_STATUS status = dir->Open(dir, &LoadedFile, path, EFI_FILE_MODE_READ, EFI_FILE_READ_ONLY);
 	if (status != EFI_SUCCESS) return NULL;
 	else return LoadedFile;
+}
+
+PSF1_FONT* LoadPSF1Font(EFI_FILE* Directory, CHAR16* Path, EFI_HANDLE ImageHandle, EFI_SYSTEM_TABLE* SystemTable) {
+	EFI_FILE* font = LoadFile(Directory, Path, ImageHandle, SystemTable);
+	if (font == NULL) return NULL;
+	PSF1_HEADER* fontHeader;
+	SystemTable->BootServices->AllocatePool(EfiLoaderData, sizeof(PSF1_HEADER), (void**)&fontHeader);
+	UINTN size = sizeof(PSF1_HEADER);
+	font->Read(font, &size, fontHeader);
+	if (fontHeader->magic[0] != PSF1_MAGIC0 || fontHeader->magic[1] != PSF1_MAGIC1) return NULL;
+	UINTN glyphBufferSize = fontHeader->charsize * 256;
+	if (fontHeader->mode == 1) glyphBufferSize = fontHeader->charsize * 512;
+	void* glyphBuffer; {
+		font->SetPosition(font, sizeof(PSF1_HEADER));
+		SystemTable->BootServices->AllocatePool(EfiLoaderData, glyphBufferSize, (void**)&glyphBuffer);
+		font->Read(font, &glyphBufferSize, glyphBuffer);
+	}
+	PSF1_FONT* finishedFont;
+	SystemTable->BootServices->AllocatePool(EfiLoaderData, sizeof(PSF1_FONT), (void**)&finishedFont);
+	finishedFont->psf1_Header = fontHeader;
+	finishedFont->glyphBuffer = glyphBuffer;
+	return finishedFont;
 }
 
 int memcmp(const void* aptr, const void* bptr, size_t n) {
@@ -92,9 +128,69 @@ EFI_STATUS efi_main (EFI_HANDLE ImageHandle, EFI_SYSTEM_TABLE* SystemTable) {
 			}
 		}
 	}
-	void (*KernelStart)(Framebuffer*) = ((__attribute__((sysv_abi)) void (*)(Framebuffer*)) header.e_entry);
+	int (*KernelStart)(Framebuffer*, PSF1_FONT*) = ((__attribute__((sysv_abi)) int (*)(Framebuffer*, PSF1_FONT*)) header.e_entry);
 	// Change output type to custom exit codes for reboot, shutdown, sleep, and panic
 	Framebuffer* framebuffer = InitializeGOP();
-	KernelStart(framebuffer);
-	return EFI_SUCCESS;
+	PSF1_FONT* newFont = LoadPSF1Font(NULL, L"font.psf", ImageHandle, SystemTable);
+	if (newFont == NULL) Print(L"Error whilst loading font file!\n\r");
+	for (unsigned int y=0;y<framebuffer->Height;y++) {
+		for (unsigned int x=0;x<framebuffer->Height;x++) {
+			*(unsigned int*)(x + (y * framebuffer->PixelsPerScanLine * 4) + framebuffer->BaseAddress) = 0x000000;
+		}
+	}
+	uint8_t end = 0;
+	switch (KernelStart(framebuffer, newFont)) {
+		case 0: {
+			Print(L"Successfully booted OS, but there was likely an error!\n\r");
+			Print(L"The OS should never send you back to the bootloader\n\r");
+			Print(L"Please contact Null, https://null-llc.com/support\n\r");
+			end = 2;
+			break;
+		}
+		case 1: {
+			Print(L"Font file lost!\n\r");
+			Print(L"Okay how the fuck did you do that?!\n\r");
+			end = 0;
+			break;
+		}
+		case 2: {
+			Print(L"Framebuffer lost!\n\r");
+			Print(L"Okay how the fuck did you do that?!\n\r");
+			Print(L"Seriously though? HOWW?!?!\n\r");
+			end = 0;
+			break;
+		}
+		case 300: {
+			end = 0;
+			break;
+		}
+		case 301: {
+			end = 1;
+			break;
+		}
+		case 302: {
+			end = 2;
+			break;
+		}
+		case 303: {
+			end = 3;
+			break;
+		}
+		default: {
+			Print(L"Unknown Error!\n\r");
+			Print(L"We are not sure what happened...\n\r");
+			Print(L"There is reason to believe that the OS is corrupted!\n\r");
+			Print(L"Please contact Null, https://null-llc.com/support\n\r");
+			end = 2;
+			break;
+		}
+	}
+	if (end == 0) {
+		while(1) __asm__("hlt");
+	} else if (end == 1) SystemTable->RuntimeServices->ResetSystem(EfiResetCold, EFI_SUCCESS, 0, NULL);
+	else if (end == 2) SystemTable->RuntimeServices->ResetSystem(EfiResetWarm, EFI_SUCCESS, 0, NULL);
+	else if (end == 3) SystemTable->RuntimeServices->ResetSystem(EfiResetShutdown, EFI_SUCCESS, 0, NULL);
+    
+	
+	return EFI_ABORTED;
 }

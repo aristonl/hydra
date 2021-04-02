@@ -13,3 +13,6 @@ P2:
 	@-cd $(HOST-KERNEL);make buildimg
 	@echo Running OS
 	@-cd $(HOST-KERNEL);make run
+P3:
+	@echo Creating OS ISO
+	@-cd $(HOST-KERNEL);make buildiso
