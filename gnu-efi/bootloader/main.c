@@ -24,6 +24,11 @@ typedef struct {
 	void* glyphBuffer;
 } PSF1_FONT;
 
+typedef struct {
+	Framebuffer* framebuffer;
+	PSF1_FONT* psf1_Font;
+} BootData;
+
 Framebuffer tempFramebuffer;
 Framebuffer* InitializeGOP() {
 	EFI_GUID GOP_GUID = EFI_GRAPHICS_OUTPUT_PROTOCOL_GUID;
@@ -128,8 +133,7 @@ EFI_STATUS efi_main (EFI_HANDLE ImageHandle, EFI_SYSTEM_TABLE* SystemTable) {
 			}
 		}
 	}
-	int (*KernelStart)(Framebuffer*, PSF1_FONT*) = ((__attribute__((sysv_abi)) int (*)(Framebuffer*, PSF1_FONT*)) header.e_entry);
-	// Change output type to custom exit codes for reboot, shutdown, sleep, and panic
+	int (*KernelStart)(BootData*) = ((__attribute__((sysv_abi)) int (*)(BootData*)) header.e_entry);
 	Framebuffer* framebuffer = InitializeGOP();
 	PSF1_FONT* newFont = LoadPSF1Font(NULL, L"font.psf", ImageHandle, SystemTable);
 	if (newFont == NULL) Print(L"Error whilst loading font file!\n\r");
@@ -138,8 +142,11 @@ EFI_STATUS efi_main (EFI_HANDLE ImageHandle, EFI_SYSTEM_TABLE* SystemTable) {
 			*(unsigned int*)(x + (y * framebuffer->PixelsPerScanLine * 4) + framebuffer->BaseAddress) = 0x000000;
 		}
 	}
+	BootData bootdata;
+	bootdata.framebuffer = framebuffer;
+	bootdata.psf1_Font = newFont;
 	uint8_t end = 0;
-	switch (KernelStart(framebuffer, newFont)) {
+	switch (KernelStart(&bootdata)) {
 		case 0: {
 			Print(L"Successfully booted OS, but there was likely an error!\n\r");
 			Print(L"The OS should never send you back to the bootloader\n\r");

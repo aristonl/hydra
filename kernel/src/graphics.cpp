@@ -11,30 +11,18 @@ void GUI::SetColor(unsigned int newColor) {
 
 void GUI::SetFramebuffer(Framebuffer* newFramebuffer) {
     framebuffer = newFramebuffer;
-    backBuffer = (unsigned int*)framebuffer->BaseAddress+2149561095;
-	frontBuffer = (unsigned int*)framebuffer->BaseAddress;
 }
 
-void GUI::SwapBuffers() {
-    for (int y=0;y<framebuffer->Height;y++) {
-        for (int x=0;x<framebuffer->Width;x++) {
-            *(unsigned int*)((unsigned int*)framebuffer->BaseAddress + x + (y * framebuffer->PixelsPerScanLine)) = *(unsigned int*)((unsigned int*)framebuffer->BaseAddress+2149561095 + x + (y * framebuffer->PixelsPerScanLine));
-        }
-    }
-    color = 0xFFFFFFFF;
-    SetXY(0,0);
-    printf("Swapping finished!");
-}
-
-void GUI::putpixel(int x, int y, unsigned int color, unsigned int* buffer) {
+void GUI::putpixel(int x, int y, unsigned int color) {
     y+=1;
-    *(unsigned int*)(buffer + x + (y * framebuffer->PixelsPerScanLine)) = color;
+    unsigned int* pixPtr = (unsigned int*) framebuffer->BaseAddress;
+    *(unsigned int*)(pixPtr + x + (y * framebuffer->PixelsPerScanLine)) = color;
 }
 
 void GUI::DrawRectangle(int x, int y, int width, int height, unsigned int color) {
     for (int j = y; j < y+height; j++) {
         for (int i = x; i < x+width; i++) {
-            putpixel(i,j,color,backBuffer);
+            putpixel(i,j,color);
         }
     }
 }
@@ -42,7 +30,7 @@ void GUI::DrawRectangle(int x, int y, int width, int height, unsigned int color)
 void GUI::DrawRectangleFromTo(int x, int y, int toX, int toY, unsigned int color) {
     for (int j = y; j < toY; j++) {
         for (int i = x; i < toX; i++) {
-            putpixel(i,j,color,backBuffer);
+            putpixel(i,j,color);
         }
     }
 }
@@ -50,57 +38,57 @@ void GUI::DrawRectangleFromTo(int x, int y, int toX, int toY, unsigned int color
 void GUI::DrawCursor(int x, int y, int64_t style) {
     if (style == 0) {
         // Outline
-        for (int i=0; i<=16; i++) putpixel(x,y+i,0x000000,frontBuffer);
-        putpixel(x+1, y+16, 0x000000,frontBuffer);
-        putpixel(x+2, y+15, 0x000000,frontBuffer);
-        putpixel(x+3, y+14, 0x000000,frontBuffer);
-        putpixel(x+4, y+13, 0x000000,frontBuffer);
-        putpixel(x+5, y+14, 0x000000,frontBuffer);
-        putpixel(x+5, y+15, 0x000000,frontBuffer);
-        putpixel(x+6, y+16, 0x000000,frontBuffer);
-        putpixel(x+6, y+17, 0x000000,frontBuffer);
-        putpixel(x+7, y+18, 0x000000,frontBuffer);
-        putpixel(x+8, y+18, 0x000000,frontBuffer);
-        putpixel(x+9, y+17, 0x000000,frontBuffer);
-        putpixel(x+9, y+16, 0x000000,frontBuffer);
-        putpixel(x+8, y+15, 0x000000,frontBuffer);
-        putpixel(x+8, y+14, 0x000000,frontBuffer);
-        putpixel(x+7, y+13, 0x000000,frontBuffer);
-        putpixel(x+7, y+12, 0x000000,frontBuffer);
-        putpixel(x+8, y+12, 0x000000,frontBuffer);
-        putpixel(x+9, y+12, 0x000000,frontBuffer);
-        putpixel(x+10, y+12, 0x000000,frontBuffer);
-        putpixel(x+11, y+12, 0x000000,frontBuffer);
-        putpixel(x+11, y+11, 0x000000,frontBuffer);
-        putpixel(x+11, y+11, 0x000000,frontBuffer);
-        putpixel(x+10, y+10, 0x000000,frontBuffer);
-        putpixel(x+9, y+9, 0x000000,frontBuffer);
-        putpixel(x+8, y+8, 0x000000,frontBuffer);
-        putpixel(x+7, y+7, 0x000000,frontBuffer);
-        putpixel(x+6, y+6, 0x000000,frontBuffer);
-        putpixel(x+5, y+5, 0x000000,frontBuffer);
-        putpixel(x+4, y+4, 0x000000,frontBuffer);
-        putpixel(x+3, y+3, 0x000000,frontBuffer);
-        putpixel(x+2, y+2, 0x000000,frontBuffer);
-        putpixel(x+1, y+1, 0x000000,frontBuffer);
+        for (int i=0; i<=16; i++) putpixel(x,y+i,0x000000);
+        putpixel(x+1, y+16, 0x000000);
+        putpixel(x+2, y+15, 0x000000);
+        putpixel(x+3, y+14, 0x000000);
+        putpixel(x+4, y+13, 0x000000);
+        putpixel(x+5, y+14, 0x000000);
+        putpixel(x+5, y+15, 0x000000);
+        putpixel(x+6, y+16, 0x000000);
+        putpixel(x+6, y+17, 0x000000);
+        putpixel(x+7, y+18, 0x000000);
+        putpixel(x+8, y+18, 0x000000);
+        putpixel(x+9, y+17, 0x000000);
+        putpixel(x+9, y+16, 0x000000);
+        putpixel(x+8, y+15, 0x000000);
+        putpixel(x+8, y+14, 0x000000);
+        putpixel(x+7, y+13, 0x000000);
+        putpixel(x+7, y+12, 0x000000);
+        putpixel(x+8, y+12, 0x000000);
+        putpixel(x+9, y+12, 0x000000);
+        putpixel(x+10, y+12, 0x000000);
+        putpixel(x+11, y+12, 0x000000);
+        putpixel(x+11, y+11, 0x000000);
+        putpixel(x+11, y+11, 0x000000);
+        putpixel(x+10, y+10, 0x000000);
+        putpixel(x+9, y+9, 0x000000);
+        putpixel(x+8, y+8, 0x000000);
+        putpixel(x+7, y+7, 0x000000);
+        putpixel(x+6, y+6, 0x000000);
+        putpixel(x+5, y+5, 0x000000);
+        putpixel(x+4, y+4, 0x000000);
+        putpixel(x+3, y+3, 0x000000);
+        putpixel(x+2, y+2, 0x000000);
+        putpixel(x+1, y+1, 0x000000);
 
         // Fill
-        for (int i = 0; i <= 13; i++) putpixel(x+1, y+2+i, 0xFFFFFF,frontBuffer);
-        for (int i = 0; i <= 11; i++) putpixel(x+2, y+3+i, 0xFFFFFF,frontBuffer);
-        for (int i = 0; i <= 9; i++) putpixel(x+3, y+4+i, 0xFFFFFF,frontBuffer);
-        for (int i = 0; i <= 7; i++) putpixel(x+4, y+5+i, 0xFFFFFF,frontBuffer);
-        for (int i = 0; i <= 7; i++) putpixel(x+5, y+6+i, 0xFFFFFF,frontBuffer);
-        for (int i = 0; i <= 8; i++) putpixel(x+6, y+7+i, 0xFFFFFF,frontBuffer);
-        for (int i = 0; i <= 3; i++) putpixel(x+7, y+8+i, 0xFFFFFF,frontBuffer);
-        for (int i = 0; i <= 2; i++) putpixel(x+8, y+9+i, 0xFFFFFF,frontBuffer);
-        for (int i = 0; i <= 1; i++) putpixel(x+9, y+10+i, 0xFFFFFF,frontBuffer);
-        putpixel(x+10, y+11, 0xFFFFFF,frontBuffer);
-        putpixel(x+7, y+14, 0xFFFFFF,frontBuffer);
-        putpixel(x+7, y+15, 0xFFFFFF,frontBuffer);
-        putpixel(x+7, y+16, 0xFFFFFF,frontBuffer);
-        putpixel(x+7, y+17, 0xFFFFFF,frontBuffer);
-        putpixel(x+8, y+16, 0xFFFFFF,frontBuffer);
-        putpixel(x+8, y+17, 0xFFFFFF,frontBuffer);
+        for (int i = 0; i <= 13; i++) putpixel(x+1, y+2+i, 0xFFFFFF);
+        for (int i = 0; i <= 11; i++) putpixel(x+2, y+3+i, 0xFFFFFF);
+        for (int i = 0; i <= 9; i++) putpixel(x+3, y+4+i, 0xFFFFFF);
+        for (int i = 0; i <= 7; i++) putpixel(x+4, y+5+i, 0xFFFFFF);
+        for (int i = 0; i <= 7; i++) putpixel(x+5, y+6+i, 0xFFFFFF);
+        for (int i = 0; i <= 8; i++) putpixel(x+6, y+7+i, 0xFFFFFF);
+        for (int i = 0; i <= 3; i++) putpixel(x+7, y+8+i, 0xFFFFFF);
+        for (int i = 0; i <= 2; i++) putpixel(x+8, y+9+i, 0xFFFFFF);
+        for (int i = 0; i <= 1; i++) putpixel(x+9, y+10+i, 0xFFFFFF);
+        putpixel(x+10, y+11, 0xFFFFFF);
+        putpixel(x+7, y+14, 0xFFFFFF);
+        putpixel(x+7, y+15, 0xFFFFFF);
+        putpixel(x+7, y+16, 0xFFFFFF);
+        putpixel(x+7, y+17, 0xFFFFFF);
+        putpixel(x+8, y+16, 0xFFFFFF);
+        putpixel(x+8, y+17, 0xFFFFFF);
     } else {
         if (font == NULL) return;
         SetXY(10, 10);
@@ -145,6 +133,14 @@ void GUI::SetY(unsigned int y) {
     TextCursorPosition.Y = y;
 }
 
+unsigned int GUI::GetX() {
+    return TextCursorPosition.X;
+}
+
+unsigned int GUI::GetY() {
+    return TextCursorPosition.Y;
+}
+
 void GUI::SetXY(unsigned int x, unsigned int y) {
     TextCursorPosition.X = x;
     TextCursorPosition.Y = y;
@@ -160,12 +156,12 @@ void GUI::DrawCircle(int x0, int y0, int radius, unsigned int color, bool filled
 
         while (x >= y) {
             for (int i = x0 - x; i <= x0 + x; i++) {
-                putpixel(i, y0 + y, color,backBuffer);
-                putpixel(i, y0 - y, color,backBuffer);
+                putpixel(i, y0 + y, color);
+                putpixel(i, y0 - y, color);
             }
             for (int i = x0 - y; i <= x0 + y; i++) {
-                putpixel(i, y0 + x, color,backBuffer);
-                putpixel(i, y0 - x, color,backBuffer);
+                putpixel(i, y0 + x, color);
+                putpixel(i, y0 - x, color);
             }
             y++;
             radiusError += yChange;
@@ -179,28 +175,28 @@ void GUI::DrawCircle(int x0, int y0, int radius, unsigned int color, bool filled
     } else {
         int x = 0, y = radius;
         int d = 3 - 2 * radius;
-        putpixel(x0+x, y0+y, color,backBuffer);
-        putpixel(x0-x, y0+y, color,backBuffer);
-        putpixel(x0+x, y0-y, color,backBuffer);
-        putpixel(x0-x, y0-y, color,backBuffer);
-        putpixel(x0+y, y0+x, color,backBuffer);
-        putpixel(x0-y, y0+x, color,backBuffer);
-        putpixel(x0+y, y0-x, color,backBuffer);
-        putpixel(x0-y, y0-x, color,backBuffer);
+        putpixel(x0+x, y0+y, color);
+        putpixel(x0-x, y0+y, color);
+        putpixel(x0+x, y0-y, color);
+        putpixel(x0-x, y0-y, color);
+        putpixel(x0+y, y0+x, color);
+        putpixel(x0-y, y0+x, color);
+        putpixel(x0+y, y0-x, color);
+        putpixel(x0-y, y0-x, color);
         while (y >= x) {
             x++;
             if (d > 0) {
                 y--;
                 d = d + 4 * (x - y) + 10;
             } else d = d + 4 * x + 6;
-            putpixel(x0+x, y0+y, color,backBuffer);
-            putpixel(x0-x, y0+y, color,backBuffer);
-            putpixel(x0+x, y0-y, color,backBuffer);
-            putpixel(x0-x, y0-y, color,backBuffer);
-            putpixel(x0+y, y0+x, color,backBuffer);
-            putpixel(x0-y, y0+x, color,backBuffer);
-            putpixel(x0+y, y0-x, color,backBuffer);
-            putpixel(x0-y, y0-x, color,backBuffer);
+            putpixel(x0+x, y0+y, color);
+            putpixel(x0-x, y0+y, color);
+            putpixel(x0+x, y0-y, color);
+            putpixel(x0-x, y0-y, color);
+            putpixel(x0+y, y0+x, color);
+            putpixel(x0-y, y0+x, color);
+            putpixel(x0+y, y0-x, color);
+            putpixel(x0-y, y0-x, color);
         }
     }
     
@@ -213,7 +209,7 @@ void GUI::DrawRectangleNoCorners(int x, int y, int width, int height, unsigned i
             else if (i > x+width-radius && j < y+radius) {}
             else if (i < x+radius && j > y+height-radius) {}
             else if (i > x+width-radius && j > y+height-radius) {}
-            else putpixel(i,j,color,backBuffer);
+            else putpixel(i,j,color);
         }
     }
 }
