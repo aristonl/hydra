@@ -26,7 +26,9 @@ typedef struct {
 
 typedef struct {
 	Framebuffer* framebuffer;
-	PSF1_FONT* psf1_Font;
+	PSF1_FONT* font;
+	EFI_MEMORY_DESCRIPTOR* Map;
+	UINTN MapSize, MapDescriptorSize;
 } BootData;
 
 Framebuffer tempFramebuffer;
@@ -142,10 +144,22 @@ EFI_STATUS efi_main (EFI_HANDLE ImageHandle, EFI_SYSTEM_TABLE* SystemTable) {
 			*(unsigned int*)(x + (y * framebuffer->PixelsPerScanLine * 4) + framebuffer->BaseAddress) = 0x000000;
 		}
 	}
+	uefi_call_wrapper(SystemTable->ConOut->ClearScreen, 1, ST->ConOut);
+	EFI_MEMORY_DESCRIPTOR* Map = NULL;
+	UINTN MapSize, MapKey, DescriptorSize;
+	UINT32 DescriptorVersion; {
+		SystemTable->BootServices->GetMemoryMap(&MapSize, Map, &MapKey, &DescriptorSize, &DescriptorVersion);
+		SystemTable->BootServices->AllocatePool(EfiLoaderData, MapSize, (void**) &Map);
+		SystemTable->BootServices->GetMemoryMap(&MapSize, Map, &MapKey, &DescriptorSize, &DescriptorVersion);
+	}
 	BootData bootdata;
 	bootdata.framebuffer = framebuffer;
-	bootdata.psf1_Font = newFont;
+	bootdata.font = newFont;
+	bootdata.Map = Map;
+	bootdata.MapSize = MapSize;
+	bootdata.MapDescriptorSize = DescriptorSize;
 	uint8_t end = 0;
+	SystemTable->BootServices->ExitBootServices(ImageHandle, MapKey);
 	switch (KernelStart(&bootdata)) {
 		case 0: {
 			Print(L"Successfully booted OS, but there was likely an error!\n\r");
@@ -165,6 +179,13 @@ EFI_STATUS efi_main (EFI_HANDLE ImageHandle, EFI_SYSTEM_TABLE* SystemTable) {
 			Print(L"Okay how the fuck did you do that?!\n\r");
 			Print(L"Seriously though? HOWW?!?!\n\r");
 			end = 0;
+			break;
+		}
+		case 3: {
+			Print(L"Memory Map Corrupted\n\r");
+			Print(L"That shouldn't happen :P\n\r");
+			Print(L"Please contact Null, https://null-llc.com/support\n\r");
+			end = 2;
 			break;
 		}
 		case 300: {

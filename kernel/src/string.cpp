@@ -166,3 +166,19 @@ const char* to_string(double value, uint8_t decimalPlaces){
 const char* to_string(double value){
     return to_string(value, 2);
 }
+
+const char* to_memstring(uint64_t value) {
+    if (value >= 1073741824) return to_string(((double) value) / 1073741824);
+    if (value >= 1048576) return to_string(((uint64_t) value) / 1048576);
+    if (value >= 1024) return to_string(((uint64_t) value) / 1024);
+    if (value < 1024) return to_string((uint64_t) value);
+    return "Severe Error Whilst Converting To Memory!";
+}
+
+const char* to_memstring_type(uint64_t value) {
+    if (value >= 1073741824) return "GB";
+    if (value >= 1048576) return "MB";
+    if (value >= 1024) return "KB";
+    if (value < 1024) return "Bytes";
+    return "Severe Error Whilst Converting To Memory!";
+}

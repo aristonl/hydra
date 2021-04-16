@@ -1,6 +1,8 @@
 #include "graphics.h"
 #include "string.h"
 
+GUI* gui;
+
 void GUI::SetFont(PSF1_FONT* newFont) {
     font = newFont;
 }
@@ -11,12 +13,18 @@ void GUI::SetColor(unsigned int newColor) {
 
 void GUI::SetFramebuffer(Framebuffer* newFramebuffer) {
     framebuffer = newFramebuffer;
+    CursorPosition.X = framebuffer->Width/2;
+    CursorPosition.Y = framebuffer->Height/2;
 }
 
 void GUI::putpixel(int x, int y, unsigned int color) {
-    y+=1;
     unsigned int* pixPtr = (unsigned int*) framebuffer->BaseAddress;
     *(unsigned int*)(pixPtr + x + (y * framebuffer->PixelsPerScanLine)) = color;
+}
+
+unsigned int GUI::getpixel(unsigned int x, unsigned int y) {
+    unsigned int* pixPtr = (unsigned int*) framebuffer->BaseAddress;
+    return *(unsigned int*)(pixPtr + x + (y * framebuffer->PixelsPerScanLine));
 }
 
 void GUI::DrawRectangle(int x, int y, int width, int height, unsigned int color) {
@@ -96,54 +104,61 @@ void GUI::DrawCursor(int x, int y, int64_t style) {
         printf(to_string((uint64_t) style));
         printf("\", was not found!");
     }
+    CursorPosition.X = x;
+    CursorPosition.Y = y;
 }
 
-void GUI::putchar(char c, unsigned int xOff, unsigned int yOff) {
-    unsigned int* pixPtr = (unsigned int*) framebuffer->BaseAddress;
-    char* fontPtr = (char*) font->glyphBuffer + (c * font->psf1_Header->charsize);
-    for (unsigned long y = yOff; y < yOff + 16; y++) {
-        for (unsigned long x = xOff; x < xOff+8; x++) {
-            if ((*fontPtr & (0b10000000 >> (x - xOff))) > 0) {
-                *(unsigned int*)(pixPtr + x + (y * framebuffer->PixelsPerScanLine)) = color;
+void GUI::putchar(char c, unsigned int xOff, unsigned int yOff, unsigned int initCursorPosX) {
+    if (c == '\n') {
+        SetXY(initCursorPosX, GetY() + 16);
+    } else {
+        unsigned int* pixPtr = (unsigned int*) framebuffer->BaseAddress;
+        char* fontPtr = (char*) font->glyphBuffer + (c * font->psf1_Header->charsize);
+        for (unsigned long y = yOff; y < yOff + 16; y++) {
+            for (unsigned long x = xOff; x < xOff+8; x++) {
+                if ((*fontPtr & (0b10000000 >> (x - xOff))) > 0) {
+                    *(unsigned int*)(pixPtr + x + (y * framebuffer->PixelsPerScanLine)) = color;
+                }
             }
+            fontPtr++;
         }
-        fontPtr++;
     }
+    
 }
 
 void GUI::printf(const char* str) {
-    char* chr = (char*)str;
-    while(*chr != 0){
-        putchar(*chr, TextCursorPosition.X, TextCursorPosition.Y);
-        TextCursorPosition.X+=8;
-        if(TextCursorPosition.X + 8 > framebuffer->Width)
-        {
-            TextCursorPosition.X = 0;
-            TextCursorPosition.Y += 16;
+    char* chr = (char*) str;
+    unsigned int initCursorPosX = GetY()-8;
+    while (*chr != 0) {
+        putchar(*chr, PointPosition.X, PointPosition.Y, initCursorPosX);
+        PointPosition.X+=8;
+        if (PointPosition.X+8 > framebuffer->Width) {
+            PointPosition.X = 0;
+            PointPosition.Y += 16;
         }
         chr++;
     }
 }
 
 void GUI::SetX(unsigned int x) {
-    TextCursorPosition.X = x;
+    PointPosition.X = x;
 }
 
 void GUI::SetY(unsigned int y) {
-    TextCursorPosition.Y = y;
+    PointPosition.Y = y;
 }
 
 unsigned int GUI::GetX() {
-    return TextCursorPosition.X;
+    return PointPosition.X;
 }
 
 unsigned int GUI::GetY() {
-    return TextCursorPosition.Y;
+    return PointPosition.Y;
 }
 
 void GUI::SetXY(unsigned int x, unsigned int y) {
-    TextCursorPosition.X = x;
-    TextCursorPosition.Y = y;
+    PointPosition.X = x;
+    PointPosition.Y = y;
 }
 
 void GUI::DrawCircle(int x0, int y0, int radius, unsigned int color, bool filled) {
@@ -199,26 +214,77 @@ void GUI::DrawCircle(int x0, int y0, int radius, unsigned int color, bool filled
             putpixel(x0-y, y0-x, color);
         }
     }
-    
 }
 
-void GUI::DrawRectangleNoCorners(int x, int y, int width, int height, unsigned int color, int radius) {
+void GUI::DrawRectangleNoCorners(int x, int y, int width, int height, unsigned int color, int radiusL, int radiusR, int radiusBL, int radiusBR) {
     for (int j = y; j < y+height; j++) {
         for (int i = x; i < x+width; i++) {
-            if (i < x+radius && j < y+radius) {}
-            else if (i > x+width-radius && j < y+radius) {}
-            else if (i < x+radius && j > y+height-radius) {}
-            else if (i > x+width-radius && j > y+height-radius) {}
+            if (i < x+radiusL && j < y+radiusL) {}
+            else if (i > x+width-radiusR && j < y+radiusR) {}
+            else if (i < x+radiusBL && j > y+height-radiusBL) {}
+            else if (i > x+width-radiusBR && j > y+height-radiusBR) {}
             else putpixel(i,j,color);
         }
     }
 }
 
-void GUI::DrawBox(int x, int y, int width, int height, unsigned int color, int radius) {
-    radius++;
-    DrawRectangleNoCorners(x, y, width, height, color, radius);
-    DrawCircle(x+radius, y+radius, radius, color, true);
-    DrawCircle(x+width-radius-1, y+radius, radius, color, true);
-    DrawCircle(x+radius, y+height-radius-1, radius, color, true);
-    DrawCircle(x+width-radius-1, y+height-radius-1, radius, color, true);
+void GUI::DrawBox(int x, int y, int width, int height, unsigned int color, int radiusL, int radiusR, int radiusBL, int radiusBR) {
+    radiusL++;radiusR++;radiusBL++;radiusBR++;
+    DrawRectangleNoCorners(x, y, width, height, color, radiusL, radiusR, radiusBL, radiusBR);
+    DrawCircle(x+radiusL, y+radiusL, radiusL, color, true);
+    DrawCircle(x+width-radiusR-1, y+radiusR, radiusR, color, true);
+    DrawCircle(x+radiusBL, y+height-radiusBL-1, radiusBL, color, true);
+    DrawCircle(x+width-radiusBR-1, y+height-radiusBR-1, radiusBR, color, true);
+}
+
+unsigned int GUI::GetWidth() {
+    return framebuffer->Width;
+}
+
+unsigned int GUI::GetHeight() {
+    return framebuffer->Height;
+}
+
+void* GUI::GetBaseAddress() {
+    return framebuffer->BaseAddress;
+}
+
+unsigned int GUI::GetPPSL() {
+    return framebuffer->PixelsPerScanLine;
+}
+
+size_t GUI::GetSize() {
+    return framebuffer->Size;
+}
+
+Box::Box() {
+    x=0,y=0,width=0,height=0,rtl=0,rtr=0,rbl=0,rbr=0,color=0xFFFFFF;
+}
+
+void Box::render()
+{
+    for (int j = y; j < y+height; j++) {
+        for (int i = x; i < x+width; i++) {
+            gui->putpixel(i, j, color);
+        }
+    }
+}
+
+void Box::SetWidth(unsigned int width) {
+    Box::height = height;
+}
+
+void Box::SetHeight(unsigned int height) {
+    Box::height = height;
+}
+
+void Box::SetRadius(unsigned int rtl, unsigned int rtr, unsigned int rbl, unsigned int rbr) {
+    Box::rtl = rtl;
+    Box::rtr = rtr;
+    Box::rbl = rbl;
+    Box::rbr = rbr;
+}
+
+void Box::SetRadius(unsigned int radius) {
+    SetRadius(radius, radius, radius, radius);
 }

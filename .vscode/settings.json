@@ -1,5 +1,7 @@
 {
     "files.associations": {
-        "graphics.h": "c"
+        "graphics.h": "c",
+        "chrono": "cpp",
+        "ios": "cpp"
     }
 }
