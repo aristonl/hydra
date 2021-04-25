@@ -256,35 +256,3 @@ unsigned int GUI::GetPPSL() {
 size_t GUI::GetSize() {
     return framebuffer->Size;
 }
-
-Box::Box() {
-    x=0,y=0,width=0,height=0,rtl=0,rtr=0,rbl=0,rbr=0,color=0xFFFFFF;
-}
-
-void Box::render()
-{
-    for (int j = y; j < y+height; j++) {
-        for (int i = x; i < x+width; i++) {
-            gui->putpixel(i, j, color);
-        }
-    }
-}
-
-void Box::SetWidth(unsigned int width) {
-    Box::height = height;
-}
-
-void Box::SetHeight(unsigned int height) {
-    Box::height = height;
-}
-
-void Box::SetRadius(unsigned int rtl, unsigned int rtr, unsigned int rbl, unsigned int rbr) {
-    Box::rtl = rtl;
-    Box::rtr = rtr;
-    Box::rbl = rbl;
-    Box::rbr = rbr;
-}
-
-void Box::SetRadius(unsigned int radius) {
-    SetRadius(radius, radius, radius, radius);
-}

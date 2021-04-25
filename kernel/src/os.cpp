@@ -94,11 +94,6 @@ int StartOS(BootData* bootdata) {
 
     gui->SetXY(0,0);
 
-    Box testBox = Box();
-    testBox.SetHeight(10);
-    testBox.SetWidth(10);
-    testBox.render();
-
     gui->printf("test\ntest\ntesting");
 
     // asm("int $0x0e");            Force Panic

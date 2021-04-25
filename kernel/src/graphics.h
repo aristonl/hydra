@@ -51,15 +51,3 @@ class GUI {
 };
 
 extern GUI* gui;
-
-class Box {
-	public:
-        Box();
-        void SetWidth(unsigned int width);
-        void SetHeight(unsigned int height);
-        void SetRadius(unsigned int rtl, unsigned int rtr, unsigned int rbl, unsigned int rbr);
-        void SetRadius(unsigned int radius);
-        void render();
-    private:
-        unsigned int x, y, width, height, rtl, rtr, rbl, rbr, color;
-};
