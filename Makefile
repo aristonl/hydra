@@ -1,20 +1,12 @@
-GUEST-BOOTLOADER = /home/HydraOS/gnu-efi/
-GUEST-KERNEL = /home/HydraOS/kernel/
-HOST-KERNEL = /Users/fire/Documents/GitHub/Hydra/kernel/
-
 all:
-	@-sh compile.sh
-P1:
-	@echo Creating bootloader...
-	@-cd $(GUEST-BOOTLOADER);make bootloader
-	@echo Creating Kernel binary...
-	@-cd $(GUEST-KERNEL);make kernel
-	@echo Done!
-P2:
-	@echo Creating OS image
-	@-cd $(HOST-KERNEL);make buildimg
-	@echo Running OS
-	@-cd $(HOST-KERNEL);make run
+	@if [ $(OS) = "macOS" ]; then\
+        docker exec HBM /bin/bash -c "cd /home/HydraOS/gnu-efi/;make bootloader";\
+        docker exec HBM /bin/bash -c "cd /home/HydraOS/kernel/;make kernel";\
+		cd kernel;make buildimg;make run;\
+	elif [ $(OS) = "Ubuntu" ] || [ $(OS) = "Debian" ]; then\
+		cd gnu-efi;make bootloader;cd ../kernel;make kernel; make buildimg; make run;\
+    fi
+
 usb:
 	@-cp /Users/fire/Documents/GitHub/Hydra/kernel/bin/kernel.elf /Volumes/ESD-USB/kernel.elf
 	@-cp /Users/fire/Documents/GitHub/Hydra/kernel/bin/font.psf /Volumes/ESD-USB/font.psf
