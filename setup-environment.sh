@@ -9,7 +9,6 @@ esac
 
 if [ $OS -eq 2 ]; then
     echo "Please use Windows, macOS, Arch, or Ubuntu!"
-    return
 fi
 if [ $OS -eq 0 ]; then
     which -s brew
@@ -51,7 +50,6 @@ if [ $OS -eq 0 ]; then
     echo "Done!"
     echo "Build and run with the 'make' command"
     echo "Make a USB with 'make usb'"
-    return
 fi
 if [ "$(uname -s)" = "Linux" ]; then
 	KERNEL=$(uname -r)
@@ -65,5 +63,4 @@ if [ "$(uname -s)" = "Linux" ]; then
 		DIST="Arch"
 	fi
   echo ${DIST}
-  return
 fi
