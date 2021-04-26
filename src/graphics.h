@@ -31,7 +31,9 @@ class GUI {
 		void SetXY(unsigned int x, unsigned int y);
 		unsigned int GetX();
 		unsigned int GetY();
+		void putchar(char c, unsigned int xOff, unsigned int yOff, unsigned int initCursorPosX);
 		void printf(const char* str);
+		void printf(char* str);
 		unsigned int *png_parse(unsigned char *ptr, int size);
 		void DrawCircle(int x0, int y0, int radius, unsigned int color, bool filled);
 		void SwapBuffers();
@@ -42,7 +44,6 @@ class GUI {
 		size_t GetSize();
 	private:
 		void DrawRectangleNoCorners(int x, int y, int width, int height, unsigned int color, int radiusL, int radiusR, int radiusBL, int radiusBR);
-		void putchar(char c, unsigned int xOff, unsigned int yOff, unsigned int initCursorPosX);
 		Framebuffer* framebuffer;
 		Point PointPosition;
 		Cursor CursorPosition;

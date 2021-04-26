@@ -140,6 +140,20 @@ void GUI::printf(const char* str) {
     }
 }
 
+void GUI::printf(char* str) {
+    char* chr = (char*) str;
+    unsigned int initCursorPosX = GetY()-8;
+    while (*chr != 0) {
+        putchar(*chr, PointPosition.X, PointPosition.Y, initCursorPosX);
+        PointPosition.X+=8;
+        if (PointPosition.X+8 > framebuffer->Width) {
+            PointPosition.X = 0;
+            PointPosition.Y += 16;
+        }
+        chr++;
+    }
+}
+
 void GUI::SetX(unsigned int x) {
     PointPosition.X = x;
 }

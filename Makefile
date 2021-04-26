@@ -1,3 +1,5 @@
+OS = macOS
+RAM = 512M
 GNUEFI = bootloader
 OVMFDIR = etc
 LDS = src/kernel.ld
@@ -63,4 +65,4 @@ buildimg:
 	@-mcopy -i $(BUILDDIR)/Hydra.img etc/font.psf ::
 
 run:
-	@-qemu-system-x86_64 -drive file=$(BUILDDIR)/Hydra.img,format=raw -m 8G -cpu qemu64 -drive if=pflash,format=raw,unit=0,file="$(OVMFDIR)/OVMF_CODE-pure-efi.fd",readonly=on -drive if=pflash,format=raw,unit=1,file="$(OVMFDIR)/OVMF_VARS-pure-efi.fd" -net none
+	@-qemu-system-x86_64 -drive file=$(BUILDDIR)/Hydra.img,format=raw -m $(RAM) -cpu qemu64 -drive if=pflash,format=raw,unit=0,file="$(OVMFDIR)/OVMF_CODE-pure-efi.fd",readonly=on -drive if=pflash,format=raw,unit=1,file="$(OVMFDIR)/OVMF_VARS-pure-efi.fd" -net none

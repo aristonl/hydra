@@ -1,6 +1,8 @@
 #include "interrupts.h"
 #include "../panic.h"
 #include "../io.h"
+#include "../string.h"
+#include "keyboard.h"
 
 __attribute__((interrupt)) void PageFault_Handler(struct interrupt_frame* frame) {
     Panic("Page Fault Detected");
@@ -19,7 +21,14 @@ __attribute__((interrupt)) void GPFault_Handler(struct interrupt_frame* frame) {
 
 __attribute__((interrupt)) void KeyboardInt_Handler(struct interrupt_frame* frame) {
     // Keypress
-    uint8_t scancode = inb(0x60);
+    uint8_t keycode = inb(0x60);
+    
+    gui->SetXY(0,0);
+    gui->DrawRectangleFromTo(0,0,16,16,0);
+    gui->printf(to_hstring((uint8_t)keycode));
+    gui->SetXY(0,16);
+    gui->DrawRectangleFromTo(0,16,150,32,0);
+    gui->printf(getName(keycode));
     PIC_EndMaster();
 }
 
