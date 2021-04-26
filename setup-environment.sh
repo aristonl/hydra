@@ -24,6 +24,14 @@ if [ $OS -eq 0 ]; then
         echo "Installing Docker..."
         brew install docker > /dev/null 2>&1
     fi
+    echo "Starting docker..."
+    open -g -a Docker.app || exit
+    i=0
+    while ! docker system info &>/dev/null; do
+        (( i++ == 0 )) && printf %s 'Waiting...' || printf '.'
+        sleep 1
+    done
+    (( i )) && printf '\n'
     if docker images | grep -q 'hbm'; then
         echo "HBM image already exists skipping for now..."
     else
