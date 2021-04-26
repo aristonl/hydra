@@ -8,8 +8,9 @@ case "$OSTYPE" in
 esac
 
 if [ $OS -eq 2 ]; then
-    echo "Please use Windows, macOS, Arch, or Ubuntu!"
+    echo "Please use macOS or Ubuntu/Debain!"
 fi
+mkdir Hydra bin
 if [ $OS -eq 0 ]; then
     which -s brew
     if [[ $? != 0 ]] ; then
