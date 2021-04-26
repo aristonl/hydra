@@ -50,7 +50,6 @@ if [ $OS -eq 0 ]; then
     echo -e "OS = macOS\n$(cat Makefile)" > Makefile
     echo "Done!"
     echo "Build and run with the 'make' command"
-    echo "Make a USB with 'make usb'"
     exit
 fi
 if [ "$(uname -s)" = "Linux" ]; then
@@ -63,6 +62,7 @@ if [ "$(uname -s)" = "Linux" ]; then
 		fi
 	elif [ -f /etc/arch-release ]; then
 		DIST="Arch"
+        echo "Arch Linux is currently not available for building Hydra."
 	fi
 fi
 if [ $DIST == "Ubuntu" ] || [ $DIST == "Debian" ]; then
@@ -102,6 +102,5 @@ if [ $DIST == "Ubuntu" ] || [ $DIST == "Debian" ]; then
 	echo -e "OS = $DIST\n$(cat Makefile)" > Makefile
 	echo "Done!"
     echo "Build and run with the 'make' command"
-    echo "Make a USB with 'make usb'"
     exit
 fi
