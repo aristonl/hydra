@@ -13,8 +13,8 @@ void GUI::SetColor(unsigned int newColor) {
 
 void GUI::SetFramebuffer(Framebuffer* newFramebuffer) {
     framebuffer = newFramebuffer;
-    CursorPosition.X = framebuffer->Width/2;
-    CursorPosition.Y = framebuffer->Height/2;
+    x = framebuffer->Width/2;
+    y = framebuffer->Height/2;
 }
 
 void GUI::putpixel(int x, int y, unsigned int color) {
@@ -104,8 +104,8 @@ void GUI::DrawCursor(int x, int y, int64_t style) {
         printf(to_string((uint64_t) style));
         printf("\", was not found!");
     }
-    CursorPosition.X = x;
-    CursorPosition.Y = y;
+    x = x;
+    y = y;
 }
 
 void GUI::putchar(char c, unsigned int xOff, unsigned int yOff, unsigned int initCursorPosX) {

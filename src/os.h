@@ -8,7 +8,6 @@
 #include "interrupts/idt.h"
 #include "interrupts/interrupts.h"
 #include "io.h"
-#include "keyboard.h"
 #include <stdint.h>
 
 extern uint64_t KernelStart;

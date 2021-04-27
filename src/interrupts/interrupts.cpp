@@ -2,6 +2,7 @@
 #include "../panic.h"
 #include "../io.h"
 #include "../string.h"
+#include "../memory.h"
 #include "keyboard.h"
 
 __attribute__((interrupt)) void PageFault_Handler(struct interrupt_frame* frame) {
@@ -22,13 +23,19 @@ __attribute__((interrupt)) void GPFault_Handler(struct interrupt_frame* frame) {
 __attribute__((interrupt)) void KeyboardInt_Handler(struct interrupt_frame* frame) {
     // Keypress
     uint8_t keycode = inb(0x60);
+    char keychar, *keystr;
+    getInfo(keycode, &keychar, &keystr);
     
-    gui->SetXY(0,0);
-    gui->DrawRectangleFromTo(0,0,16,16,0);
-    gui->printf(to_hstring((uint8_t)keycode));
-    gui->SetXY(0,16);
-    gui->DrawRectangleFromTo(0,16,150,32,0);
-    gui->printf(getName(keycode));
+    memset(gui->GetBaseAddress(), gui->x, gui->y);
+    if (keystr == (char*) "Keypad 8") {
+        gui->DrawCursor(gui->x,gui->y--,0);
+    } else if (keystr == (char*) "Keypad 4") {
+        gui->DrawCursor(gui->x--,gui->y,0);
+    } else if (keystr == (char*) "Keypad 2") {
+        gui->DrawCursor(gui->x,gui->y++,0);
+    } else if (keystr == (char*) "Keypad 6") {
+        gui->DrawCursor(gui->x++,gui->y,0);
+    }
     PIC_EndMaster();
 }
 
@@ -73,5 +80,4 @@ void RemapPIC() {
     outb(PIC1_DATA, a1);
     io_wait();
     outb(PIC2_DATA, a2);
-
 }

@@ -9,11 +9,6 @@ struct Point {
     unsigned int Y = 0;
 };
 
-struct Cursor {
-    unsigned int X = 0;
-    unsigned int Y = 0;
-};
-
 class GUI {
 	public:
 		void DrawRectangle(int x, int y, int width, int height, unsigned int color);
@@ -42,11 +37,11 @@ class GUI {
 		void* GetBaseAddress();
 		unsigned int GetPPSL();
 		size_t GetSize();
+		unsigned int x,y;
 	private:
 		void DrawRectangleNoCorners(int x, int y, int width, int height, unsigned int color, int radiusL, int radiusR, int radiusBL, int radiusBR);
 		Framebuffer* framebuffer;
 		Point PointPosition;
-		Cursor CursorPosition;
 		PSF1_FONT* font;
 		unsigned int color = 0xFFFFFF;
 };
