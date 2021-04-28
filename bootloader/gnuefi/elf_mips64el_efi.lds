@@ -1,8 +1,7 @@
 OUTPUT_FORMAT("elf64-tradlittlemips", "elf64-tradbigmips", "elf64-tradlittlemips")
 OUTPUT_ARCH(mips)
 ENTRY(_start)
-SECTIONS
-{
+SECTIONS {
   .text 0x0 : {
     _text = .;
     *(.text.head)
@@ -16,8 +15,7 @@ SECTIONS
   _etext = .;
   _text_size = . - _text;
   .dynamic  : { *(.dynamic) }
-  .data :
-  {
+  .data : {
    _data = .;
    *(.sdata)
    *(.data)
@@ -26,9 +24,6 @@ SECTIONS
    *(.got.plt)
    HIDDEN (_gp = ALIGN (16) + 0x7ff0);
    *(.got)
-
-   /* the EFI loader doesn't seem to like a .bss section, so we stick
-      it all into .data: */
    . = ALIGN(16);
    _bss = .;
    *(.sbss)
@@ -53,8 +48,7 @@ SECTIONS
   .dynstr   : { *(.dynstr) }
   . = ALIGN(4096);
   .note.gnu.build-id : { *(.note.gnu.build-id) }
-  /DISCARD/ :
-  {
+  /DISCARD/ : {
     *(.rel.reloc)
     *(.eh_frame)
     *(.MIPS.abiflags)

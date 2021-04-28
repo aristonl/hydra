@@ -1,7 +1,7 @@
+OS=macOS
 RAM = 512M
 GNUEFI = bootloader
 OVMFDIR = etc
-LDS = src/kernel.ld
 CC = gcc
 ASMC = nasm
 LD = ld
@@ -14,6 +14,7 @@ SRCDIR := Kernel
 OBJDIR := bin
 BUILDDIR = Hydra
 BOOTEFI := $(GNUEFI)/x86_64/bootloader/main.efi
+LDS = $(SRCDIR)/kernel.ld
 
 all:
 	@-if [ $(OS) = "macOS" ]; then\

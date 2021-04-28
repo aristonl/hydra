@@ -2,21 +2,17 @@
 OUTPUT_FORMAT("elf64-x86-64", "elf64-x86-64", "elf64-x86-64")
 OUTPUT_ARCH(i386:x86-64)
 ENTRY(_start)
-SECTIONS
-{
+SECTIONS {
   . = 0;
   ImageBase = .;
-  /* .hash and/or .gnu.hash MUST come first! */
   .hash : { *(.hash) }
   .gnu.hash : { *(.gnu.hash) }
   . = ALIGN(4096);
-  .eh_frame : 
-  { 
+  .eh_frame : { 
     *(.eh_frame)
   }
   . = ALIGN(4096);
-  .text :
-  {
+  .text : {
    _text = .;
    *(.text)
    *(.text.*)
@@ -26,21 +22,17 @@ SECTIONS
   _etext = .;
   _text_size = . - _text;
   . = ALIGN(4096);
-  .reloc :
-  {
+  .reloc : {
    *(.reloc)
   }
   . = ALIGN(4096);
-  .data :
-  {
+  .data : {
    _data = .;
    *(.rodata*)
    *(.got.plt)
    *(.got)
    *(.data*)
    *(.sdata)
-   /* the EFI loader doesn't seem to like a .bss section, so we stick
-      it all into .data: */
    *(.sbss)
    *(.scommon)
    *(.dynbss)
@@ -55,8 +47,7 @@ SECTIONS
   . = ALIGN(4096);
   .dynamic  : { *(.dynamic) }
   . = ALIGN(4096);
-  .rela :
-  {
+  .rela : {
     *(.rela.data*)
     *(.rela.got)
     *(.rela.stab)
@@ -66,8 +57,7 @@ SECTIONS
   . = ALIGN(4096);
   .dynstr   : { *(.dynstr) }
   . = ALIGN(4096);
-  .ignored.reloc :
-  {
+  .ignored.reloc : {
     *(.rela.reloc)
     *(.eh_frame)
     *(.note.GNU-stack)

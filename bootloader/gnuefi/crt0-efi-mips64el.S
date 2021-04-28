@@ -1,125 +1,84 @@
-/*
- * crt0-efi-mips64el.S - PE/COFF header for MIPS64 EFI applications
- *
- * Copright (C) 2014 Linaro Ltd. <ard.biesheuvel@linaro.org>
- * Copright (C) 2017 Heiher <r@hev.cc>
- *
- * Redistribution and use in source and binary forms, with or without
- * modification, are permitted provided that the following conditions
- * are met:
- * 1. Redistributions of source code must retain the above copyright
- *    notice and this list of conditions, without modification.
- * 2. The name of the author may not be used to endorse or promote products
- *    derived from this software without specific prior written permission.
- *
- * Alternatively, this software may be distributed under the terms of the
- * GNU General Public License as published by the Free Software Foundation;
- * either version 2 of the License, or (at your option) any later version.
- */
-
-	.section	.text.head
-
-	/*
-	 * Magic "MZ" signature for PE/COFF
-	 */
-	.globl	ImageBase
+.section	.text.head
+.globl	ImageBase
 ImageBase:
 	.ascii	"MZ"
-	.skip	58				// 'MZ' + pad + offset == 64
-	.long	pe_header - ImageBase		// Offset to the PE header.
+	.skip	58
+	.long	pe_header - ImageBase
 pe_header:
 	.ascii	"PE"
 	.short 	0
 coff_header:
-	.short	0x166				// MIPS little endian
-	.short	2				// nr_sections
-	.long	0 				// TimeDateStamp
-	.long	0				// PointerToSymbolTable
-	.long	1				// NumberOfSymbols
-	.short	section_table - optional_header	// SizeOfOptionalHeader
-	.short	0x206				// Characteristics.
-						// IMAGE_FILE_DEBUG_STRIPPED |
-						// IMAGE_FILE_EXECUTABLE_IMAGE |
-						// IMAGE_FILE_LINE_NUMS_STRIPPED
+	.short	0x166
+	.short	2
+	.long	0
+	.long	0
+	.long	1
+	.short	section_table - optional_header	
+	.short	0x206
 optional_header:
-	.short	0x20b				// PE32+ format
-	.byte	0x02				// MajorLinkerVersion
-	.byte	0x14				// MinorLinkerVersion
-	.long	_edata - _start			// SizeOfCode
-	.long	0				// SizeOfInitializedData
-	.long	0				// SizeOfUninitializedData
-	.long	_start - ImageBase		// AddressOfEntryPoint
-	.long	_start - ImageBase		// BaseOfCode
-
+	.short	0x20b
+	.byte	0x02
+	.byte	0x14
+	.long	_edata - _start
+	.long	0
+	.long	0
+	.long	_start - ImageBase
+	.long	_start - ImageBase
 extra_header_fields:
-	.quad	0				// ImageBase
-	.long	0x20				// SectionAlignment
-	.long	0x8				// FileAlignment
-	.short	0				// MajorOperatingSystemVersion
-	.short	0				// MinorOperatingSystemVersion
-	.short	0				// MajorImageVersion
-	.short	0				// MinorImageVersion
-	.short	0				// MajorSubsystemVersion
-	.short	0				// MinorSubsystemVersion
-	.long	0				// Win32VersionValue
-
-	.long	_edata - ImageBase		// SizeOfImage
-
-	// Everything before the kernel image is considered part of the header
-	.long	_start - ImageBase		// SizeOfHeaders
-	.long	0				// CheckSum
-	.short	EFI_SUBSYSTEM			// Subsystem
-	.short	0				// DllCharacteristics
-	.quad	0				// SizeOfStackReserve
-	.quad	0				// SizeOfStackCommit
-	.quad	0				// SizeOfHeapReserve
-	.quad	0				// SizeOfHeapCommit
-	.long	0				// LoaderFlags
-	.long	0x6				// NumberOfRvaAndSizes
-
-	.quad	0				// ExportTable
-	.quad	0				// ImportTable
-	.quad	0				// ResourceTable
-	.quad	0				// ExceptionTable
-	.quad	0				// CertificationTable
-	.quad	0				// BaseRelocationTable
-
-	// Section table
+	.quad	0
+	.long	0x20
+	.long	0x8
+	.short	0
+	.short	0
+	.short	0
+	.short	0
+	.short	0
+	.short	0
+	.long	0
+	.long	_edata - ImageBase
+	.long	_start - ImageBase
+	.long	0
+	.short	EFI_SUBSYSTEM
+	.short	0
+	.quad	0
+	.quad	0
+	.quad	0
+	.quad	0
+	.long	0
+	.long	0x6
+	.quad	0
+	.quad	0
+	.quad	0
+	.quad	0
+	.quad	0
+	.quad	0
 section_table:
-
-	/*
-	 * The EFI application loader requires a relocation section
-	 * because EFI applications must be relocatable.  This is a
-	 * dummy section as far as we are concerned.
-	 */
 	.ascii	".reloc"
 	.byte	0
-	.byte	0			// end of 0 padding of section name
+	.byte	0
 	.long	0
 	.long	0
-	.long	0			// SizeOfRawData
-	.long	0			// PointerToRawData
-	.long	0			// PointerToRelocations
-	.long	0			// PointerToLineNumbers
-	.short	0			// NumberOfRelocations
-	.short	0			// NumberOfLineNumbers
-	.long	0x42100040		// Characteristics (section flags)
-
-
+	.long	0
+	.long	0
+	.long	0
+	.long	0
+	.short	0
+	.short	0
+	.long	0x42100040
 	.ascii	".text"
 	.byte	0
 	.byte	0
-	.byte	0        		// end of 0 padding of section name
-	.long	_edata - _start		// VirtualSize
-	.long	_start - ImageBase	// VirtualAddress
-	.long	_edata - _start		// SizeOfRawData
-	.long	_start - ImageBase	// PointerToRawData
+	.byte	0
+	.long	_edata - _start
+	.long	_start - ImageBase
+	.long	_edata - _start
+	.long	_start - ImageBase
 
-	.long	0		// PointerToRelocations (0 for executables)
-	.long	0		// PointerToLineNumbers (0 for executables)
-	.short	0		// NumberOfRelocations  (0 for executables)
-	.short	0		// NumberOfLineNumbers  (0 for executables)
-	.long	0xe0500020	// Characteristics (section flags)
+	.long	0
+	.long	0
+	.short	0
+	.short	0
+	.long	0xe0500020
 
 	.set		push
 	.set		noreorder

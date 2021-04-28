@@ -1,8 +1,7 @@
 OUTPUT_FORMAT("elf32-littlearm", "elf32-littlearm", "elf32-littlearm")
 OUTPUT_ARCH(arm)
 ENTRY(_start)
-SECTIONS
-{
+SECTIONS {
   .text 0x0 : {
     _text = .;
     *(.text.head)
@@ -16,8 +15,7 @@ SECTIONS
   _etext = .;
   _text_size = . - _text;
   .dynamic  : { *(.dynamic) }
-  .data :
-  {
+  .data : {
    _data = .;
    *(.sdata)
    *(.data)
@@ -25,9 +23,6 @@ SECTIONS
    *(.data.*)
    *(.got.plt)
    *(.got)
-
-   /* the EFI loader doesn't seem to like a .bss section, so we stick
-      it all into .data: */
    . = ALIGN(16);
    _bss = .;
    *(.sbss)
@@ -53,8 +48,7 @@ SECTIONS
   .dynstr   : { *(.dynstr) }
   . = ALIGN(4096);
   .note.gnu.build-id : { *(.note.gnu.build-id) }
-  /DISCARD/ :
-  {
+  /DISCARD/ : {
     *(.rel.reloc)
     *(.eh_frame)
     *(.note.GNU-stack)
