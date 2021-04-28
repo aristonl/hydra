@@ -10,7 +10,7 @@ CFLAGS = -ffreestanding -fshort-wchar
 ASMFLAGS = 
 LDFLAGS = -T $(LDS) -static -Bsymbolic -nostdlib
 
-SRCDIR := src
+SRCDIR := Kernel
 OBJDIR := bin
 BUILDDIR = Hydra
 BOOTEFI := $(GNUEFI)/x86_64/bootloader/main.efi
