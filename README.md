@@ -20,4 +20,4 @@ You can also contact Ariston and Levi directly at:
  - [Levi Cowan](https://github.com/FiReLScar)
  
 ## License
-Currently undecided. [Ariston's fork](https://github.com/aristonlorenzo/Hydra-1) is currently licensed under the 2-Clause BSD License. It's likely that we'll use our own license soon.
+Hydra is licensed under the [Null Public License](https://github.com/Null-LLC/Hydra/tree/main/LICENSE).
