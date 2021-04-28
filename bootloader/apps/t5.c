@@ -1,9 +1,7 @@
 #include <efi.h>
 #include <efilib.h>
 
-EFI_STATUS
-efi_main (EFI_HANDLE image, EFI_SYSTEM_TABLE *systab)
-{
+EFI_STATUS efi_main(EFI_HANDLE image, EFI_SYSTEM_TABLE *systab) {
 	InitializeLib(image, systab);
 	Print(L"HelloLib application started\n");
 	Print(L"\n\n\nHit any key to exit this image\n");

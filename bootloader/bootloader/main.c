@@ -139,12 +139,12 @@ EFI_STATUS efi_main (EFI_HANDLE ImageHandle, EFI_SYSTEM_TABLE* SystemTable) {
 	Framebuffer* framebuffer = InitializeGOP();
 	PSF1_FONT* newFont = LoadPSF1Font(NULL, L"font.psf", ImageHandle, SystemTable);
 	if (newFont == NULL) Print(L"Error whilst loading font file!\n\r");
-	for (unsigned int y=0;y<framebuffer->Height;y++) {
+	/*for (unsigned int y=0;y<framebuffer->Height;y++) {
 		for (unsigned int x=0;x<framebuffer->Height;x++) {
 			*(unsigned int*)(x + (y * framebuffer->PixelsPerScanLine * 4) + framebuffer->BaseAddress) = 0x000000;
 		}
-	}
-	uefi_call_wrapper(SystemTable->ConOut->ClearScreen, 1, ST->ConOut);
+	}*/
+	//uefi_call_wrapper(SystemTable->ConOut->ClearScreen, 1, ST->ConOut);
 	EFI_MEMORY_DESCRIPTOR* Map = NULL;
 	UINTN MapSize, MapKey, DescriptorSize;
 	UINT32 DescriptorVersion; {
