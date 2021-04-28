@@ -23,19 +23,8 @@ __attribute__((interrupt)) void GPFault_Handler(struct interrupt_frame* frame) {
 __attribute__((interrupt)) void KeyboardInt_Handler(struct interrupt_frame* frame) {
     // Keypress
     uint8_t keycode = inb(0x60);
-    char keychar, *keystr;
-    getInfo(keycode, &keychar, &keystr);
-    
-    memset(gui->GetBaseAddress(), gui->x, gui->y);
-    if (keystr == (char*) "Keypad 8") {
-        gui->DrawCursor(gui->x,gui->y--,0);
-    } else if (keystr == (char*) "Keypad 4") {
-        gui->DrawCursor(gui->x--,gui->y,0);
-    } else if (keystr == (char*) "Keypad 2") {
-        gui->DrawCursor(gui->x,gui->y++,0);
-    } else if (keystr == (char*) "Keypad 6") {
-        gui->DrawCursor(gui->x++,gui->y,0);
-    }
+
+    char key = updateKey(keycode);
     PIC_EndMaster();
 }
 

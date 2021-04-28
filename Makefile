@@ -21,7 +21,7 @@ all:
         docker exec HBM /bin/bash -c "cd /home/HydraOS/;make kernel";\
 		make buildimg;make run;\
 	elif [ $(OS) = "Ubuntu" ] || [ $(OS) = "Debian" ]; then\
-		cd bootloader;make bootloader;cd ../kernel;make kernel; make buildimg; make run;\
+		cd bootloader;make bootloader;cd ../;make kernel; make buildimg; make run;\
     fi
 
 clean:
