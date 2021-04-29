@@ -1,3 +1,4 @@
+OS = Debian
 OS=macOS
 RAM = 512M
 GNUEFI = bootloader
