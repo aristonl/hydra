@@ -1,4 +1,3 @@
-OS=macOS
 RAM = 512M
 GNUEFI = bootloader
 OVMFDIR = etc
