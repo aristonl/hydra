@@ -1,33 +1,33 @@
 #include "graphics.h"
 #include "string.h"
 
-GUI* gui;
+Graphics* graphics;
 
-void GUI::SetFont(PSF1_FONT* newFont) {
+void Graphics::SetFont(PSF1_FONT* newFont) {
     font = newFont;
 }
 
-void GUI::SetColor(unsigned int newColor) {
+void Graphics::SetColor(unsigned int newColor) {
     color = newColor;
 }
 
-void GUI::SetFramebuffer(Framebuffer* newFramebuffer) {
+void Graphics::SetFramebuffer(Framebuffer* newFramebuffer) {
     framebuffer = newFramebuffer;
     x = framebuffer->Width/2;
     y = framebuffer->Height/2;
 }
 
-void GUI::putpixel(int x, int y, unsigned int color) {
+void Graphics::putpixel(int x, int y, unsigned int color) {
     unsigned int* pixPtr = (unsigned int*) framebuffer->BaseAddress;
     *(unsigned int*)(pixPtr + x + (y * framebuffer->PixelsPerScanLine)) = color;
 }
 
-unsigned int GUI::getpixel(unsigned int x, unsigned int y) {
+unsigned int Graphics::getpixel(unsigned int x, unsigned int y) {
     unsigned int* pixPtr = (unsigned int*) framebuffer->BaseAddress;
     return *(unsigned int*)(pixPtr + x + (y * framebuffer->PixelsPerScanLine));
 }
 
-void GUI::DrawRectangle(int x, int y, int width, int height, unsigned int color) {
+void Graphics::DrawRectangle(int x, int y, int width, int height, unsigned int color) {
     for (int j = y; j < y+height; j++) {
         for (int i = x; i < x+width; i++) {
             putpixel(i,j,color);
@@ -35,7 +35,7 @@ void GUI::DrawRectangle(int x, int y, int width, int height, unsigned int color)
     }
 }
 
-void GUI::DrawRectangleFromTo(int x, int y, int toX, int toY, unsigned int color) {
+void Graphics::DrawRectangleFromTo(int x, int y, int toX, int toY, unsigned int color) {
     for (int j = y; j < toY; j++) {
         for (int i = x; i < toX; i++) {
             putpixel(i,j,color);
@@ -43,7 +43,7 @@ void GUI::DrawRectangleFromTo(int x, int y, int toX, int toY, unsigned int color
     }
 }
 
-void GUI::DrawCursor(int x, int y, int64_t style) {
+void Graphics::DrawCursor(int x, int y, int64_t style) {
     if (style == 0) {
         // Outline
         for (int i=0; i<=16; i++) putpixel(x,y+i,0x000000);
@@ -108,7 +108,7 @@ void GUI::DrawCursor(int x, int y, int64_t style) {
     y = y;
 }
 
-void GUI::putchar(char c, unsigned int xOff, unsigned int yOff, unsigned int initCursorPosX) {
+void Graphics::putchar(char c, unsigned int xOff, unsigned int yOff, unsigned int initCursorPosX) {
     if (c == '\n') {
         SetXY(initCursorPosX, GetY() + 16);
     } else {
@@ -126,7 +126,7 @@ void GUI::putchar(char c, unsigned int xOff, unsigned int yOff, unsigned int ini
     
 }
 
-void GUI::printf(const char* str) {
+void Graphics::printf(const char* str) {
     char* chr = (char*) str;
     unsigned int initCursorPosX = GetY()-8;
     while (*chr != 0) {
@@ -140,7 +140,7 @@ void GUI::printf(const char* str) {
     }
 }
 
-void GUI::printf(char* str) {
+void Graphics::printf(char* str) {
     char* chr = (char*) str;
     unsigned int initCursorPosX = GetY()-8;
     while (*chr != 0) {
@@ -154,28 +154,28 @@ void GUI::printf(char* str) {
     }
 }
 
-void GUI::SetX(unsigned int x) {
+void Graphics::SetX(unsigned int x) {
     PointPosition.X = x;
 }
 
-void GUI::SetY(unsigned int y) {
+void Graphics::SetY(unsigned int y) {
     PointPosition.Y = y;
 }
 
-unsigned int GUI::GetX() {
+unsigned int Graphics::GetX() {
     return PointPosition.X;
 }
 
-unsigned int GUI::GetY() {
+unsigned int Graphics::GetY() {
     return PointPosition.Y;
 }
 
-void GUI::SetXY(unsigned int x, unsigned int y) {
+void Graphics::SetXY(unsigned int x, unsigned int y) {
     PointPosition.X = x;
     PointPosition.Y = y;
 }
 
-void GUI::DrawCircle(int x0, int y0, int radius, unsigned int color, bool filled) {
+void Graphics::DrawCircle(int x0, int y0, int radius, unsigned int color, bool filled) {
     if (filled) {
         int x = radius;
         int y = 0;
@@ -230,7 +230,7 @@ void GUI::DrawCircle(int x0, int y0, int radius, unsigned int color, bool filled
     }
 }
 
-void GUI::DrawRectangleNoCorners(int x, int y, int width, int height, unsigned int color, int radiusL, int radiusR, int radiusBL, int radiusBR) {
+void Graphics::DrawRectangleNoCorners(int x, int y, int width, int height, unsigned int color, int radiusL, int radiusR, int radiusBL, int radiusBR) {
     for (int j = y; j < y+height; j++) {
         for (int i = x; i < x+width; i++) {
             if (i < x+radiusL && j < y+radiusL) {}
@@ -242,7 +242,7 @@ void GUI::DrawRectangleNoCorners(int x, int y, int width, int height, unsigned i
     }
 }
 
-void GUI::DrawBox(int x, int y, int width, int height, unsigned int color, int radiusL, int radiusR, int radiusBL, int radiusBR) {
+void Graphics::DrawBox(int x, int y, int width, int height, unsigned int color, int radiusL, int radiusR, int radiusBL, int radiusBR) {
     radiusL++;radiusR++;radiusBL++;radiusBR++;
     DrawRectangleNoCorners(x, y, width, height, color, radiusL, radiusR, radiusBL, radiusBR);
     DrawCircle(x+radiusL, y+radiusL, radiusL, color, true);
@@ -251,22 +251,26 @@ void GUI::DrawBox(int x, int y, int width, int height, unsigned int color, int r
     DrawCircle(x+width-radiusBR-1, y+height-radiusBR-1, radiusBR, color, true);
 }
 
-unsigned int GUI::GetWidth() {
+unsigned int Graphics::GetWidth() {
     return framebuffer->Width;
 }
 
-unsigned int GUI::GetHeight() {
+unsigned int Graphics::GetHeight() {
     return framebuffer->Height;
 }
 
-void* GUI::GetBaseAddress() {
+void* Graphics::GetBaseAddress() {
     return framebuffer->BaseAddress;
 }
 
-unsigned int GUI::GetPPSL() {
+unsigned int Graphics::GetPPSL() {
     return framebuffer->PixelsPerScanLine;
 }
 
-size_t GUI::GetSize() {
+size_t Graphics::GetSize() {
     return framebuffer->Size;
+}
+
+void Graphics::test() {
+    printf("Hello, world!");
 }

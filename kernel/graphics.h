@@ -9,7 +9,7 @@ struct Point {
     unsigned int Y = 0;
 };
 
-class GUI {
+class Graphics {
 	public:
 		void DrawRectangle(int x, int y, int width, int height, unsigned int color);
 		void DrawRectangleFromTo(int x, int y, int width, int height, unsigned int color);
@@ -38,6 +38,7 @@ class GUI {
 		unsigned int GetPPSL();
 		size_t GetSize();
 		unsigned int x,y;
+		void test();
 	private:
 		void DrawRectangleNoCorners(int x, int y, int width, int height, unsigned int color, int radiusL, int radiusR, int radiusBL, int radiusBR);
 		Framebuffer* framebuffer;
@@ -46,4 +47,4 @@ class GUI {
 		unsigned int color = 0xFFFFFF;
 };
 
-extern GUI* gui;
+extern Graphics* graphics;

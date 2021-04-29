@@ -21,7 +21,6 @@ __attribute__((interrupt)) void GPFault_Handler(struct interrupt_frame* frame) {
 }
 
 __attribute__((interrupt)) void KeyboardInt_Handler(struct interrupt_frame* frame) {
-    // Keypress
     uint8_t keycode = inb(0x60);
 
     char key = updateKey(keycode);

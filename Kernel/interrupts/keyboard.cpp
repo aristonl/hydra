@@ -1,11 +1,12 @@
 #include "../graphics.h"
 #include "keyboard.h"
 #include "../string.h"
+#include "../GUI/Display.h"
 
 bool shifted = false;
 bool ctrl = false;
 
-bool keys[175] = { false, false, false, false, false,
+bool keys[86] = { false, false, false, false, false,
                 false, false, false, false, false,
                 false, false, false, false, false,
                 false, false, false, false, false,
@@ -22,24 +23,7 @@ bool keys[175] = { false, false, false, false, false,
                 false, false, false, false, false,
                 false, false, false, false, false,
                 false, false, false, false, false,
-                false, false, false, false, false,
-                false, false, false, false, false,
-                false, false, false, false, false,
-                false, false, false, false, false,
-                false, false, false, false, false,
-                false, false, false, false, false,
-                false, false, false, false, false,
-                false, false, false, false, false,
-                false, false, false, false, false,
-                false, false, false, false, false,
-                false, false, false, false, false,
-                false, false, false, false, false,
-                false, false, false, false, false,
-                false, false, false, false, false,
-                false, false, false, false, false,
-                false, false, false, false, false,
-                false, false, false, false, false,
-                false, false, false, false, false};
+                false};
 
 char* getInfo(uint8_t keycode, char *keychar, char **keystr, bool *isKeyPressed) {
     *keychar = '\0';
@@ -1099,13 +1083,20 @@ char* getInfo(uint8_t keycode, char *keychar, char **keystr, bool *isKeyPressed)
     return *keystr;
 }
 
+bool man = false;
+
 char updateKey(uint8_t keycode) {
     char keychar, *keystr;
     bool isKeyPressed;
     getInfo(keycode, &keychar, &keystr, &isKeyPressed);
     if (keys[27] && (keys[52] || keys[40]) && keys[0]) {
-        // Pull up display
-        gui->printf("TEST");
+        if (man) {
+            display->manager.HideWindow();
+            man = false;
+        } else {
+            display->manager.ShowWindow();
+            man = true;
+        }
         return ' ';
     }
     if (keys[52] || keys[40]) shifted = true;

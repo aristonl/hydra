@@ -59,9 +59,9 @@ int InitOS(BootData* bootdata) {
 
     asm ("sti");
 
-    gui->SetFramebuffer(bootdata->framebuffer);
-    gui->SetFont(bootdata->font);
-    gui->SetXY(0,0);
+    graphics->SetFramebuffer(bootdata->framebuffer);
+    graphics->SetFont(bootdata->font);
+    graphics->SetXY(0,0);
 
     memset(bootdata->framebuffer->BaseAddress, 0, bootdata->framebuffer->Size);
 
@@ -69,7 +69,7 @@ int InitOS(BootData* bootdata) {
 }
 
 int StartOS(BootData* bootdata) {
-    //gui->printf("root@Hydra (/) > ");
+    //graphics->printf("root@Hydra (/) > ");
 
     // asm("int $0x0e");            Force Panic
     
