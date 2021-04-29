@@ -56,7 +56,7 @@ if [ $OS -eq 0 ]; then
         echo "Installing qemu..."
         brew install qemu > /dev/null 2>&1
     fi
-    echo -e "OS = macOS\n$(cat Makefile)" > Makefile
+    echo -e "OS=macOS" > hbm
     echo "Done!"
     echo "Build and run with the 'make' command"
     exit
@@ -108,7 +108,7 @@ if [ $DIST == "Ubuntu" ] || [ $DIST == "Debian" ]; then
             echo "Installing qemu-system..."
             sudo apt install qemu-system -y > /dev/null 2>&1
     fi
-	echo -e "OS = $DIST\n$(cat Makefile)" > Makefile
+    echo -e "OS=Debian" > hbm
 	echo "Done!"
     echo "Build and run with the 'make' command"
     exit

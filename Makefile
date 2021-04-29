@@ -16,12 +16,14 @@ BOOTEFI := $(GNUEFI)/x86_64/bootloader/main.efi
 LDS = $(SRCDIR)/kernel.ld
 
 all:
-	@-if [ $(OS) = "macOS" ]; then\
+	@-if [ `head -n 1 hbm` = "OS=macOS" ]; then\
         docker exec HBM /bin/bash -c "cd /home/HydraOS/bootloader/;make bootloader";\
         docker exec HBM /bin/bash -c "cd /home/HydraOS/;make kernel";\
 		make buildimg;make run;\
-	elif [ $(OS) = "Ubuntu" ] || [ $(OS) = "Debian" ]; then\
+	elif [ `head -n 1 hbm` = "OS=Debian" ]; then\
 		cd bootloader;make bootloader;cd ../;make kernel; make buildimg; make run;\
+	else\
+		echo "Please run ./setup-environment.sh";\
     fi
 
 clean:
