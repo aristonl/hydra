@@ -1,3 +1,4 @@
+Set StartupDelay 0
 @echo -off
 mode 80 25
 

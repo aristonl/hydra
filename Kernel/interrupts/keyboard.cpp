@@ -1084,6 +1084,7 @@ char* getInfo(uint8_t keycode, char *keychar, char **keystr, bool *isKeyPressed)
 }
 
 bool man = false;
+bool caps = false;
 
 char updateKey(uint8_t keycode) {
     char keychar, *keystr;
@@ -1099,8 +1100,14 @@ char updateKey(uint8_t keycode) {
         }
         return ' ';
     }
+    if (keys[56]) caps = !caps;
     if (keys[52] || keys[40]) shifted = true;
     else if (!keys[52] && !keys[40]) shifted = false;
+    if (caps && (!keys[52] && !keys[40])) shifted = true;
+    else if (caps && (keys[52] || keys[40])) shifted = false;
+
+    if (keys[12]) graphics->DrawRectangleFromTo(graphics->GetX()-8, graphics->GetY(), graphics->GetX(), graphics->GetY()+16, 0x000000);
+    if (keys[12]) graphics->SetX(graphics->GetX()-8);
 
     char c = '\0';
     switch (keychar) {
@@ -1306,6 +1313,12 @@ char updateKey(uint8_t keycode) {
             c = '\0';
             break;
     }
-    
+    if (isKeyPressed && c != '\0') {
+        if (c == '\t') graphics->SetX(graphics->GetX()+56);
+        if (c == '\t') return c;
+        graphics->SetColor(0x00FF00);
+        graphics->putchar(c, graphics->GetX(), graphics->GetY(), 0);
+        graphics->SetX(graphics->GetX()+8);
+    }
     return c;
 }

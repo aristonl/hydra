@@ -69,7 +69,7 @@ int InitOS(BootData* bootdata) {
 }
 
 int StartOS(BootData* bootdata) {
-    //graphics->printf("root@Hydra (/) > ");
+    graphics->printf("root@Hydra (/) > ");
 
     // asm("int $0x0e");            Force Panic
     

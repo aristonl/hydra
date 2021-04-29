@@ -55,14 +55,14 @@ link:
 	@-$(LD) $(LDFLAGS) -o $(BUILDDIR)/kernel.elf $(OBJS)
 
 buildimg:
-	@-dd if=/dev/zero of=$(BUILDDIR)/Hydra.img bs=512 count=93750
-	@-mformat -i $(BUILDDIR)/Hydra.img -f 1440 ::
-	@-mmd -i $(BUILDDIR)/Hydra.img ::/EFI
-	@-mmd -i $(BUILDDIR)/Hydra.img ::/EFI/BOOT
-	@-mcopy -i $(BUILDDIR)/Hydra.img $(BOOTEFI) ::/EFI/BOOT
-	@-mcopy -i $(BUILDDIR)/Hydra.img startup.nsh ::
-	@-mcopy -i $(BUILDDIR)/Hydra.img $(BUILDDIR)/kernel.elf ::
-	@-mcopy -i $(BUILDDIR)/Hydra.img etc/font.psf ::
+	@-dd if=/dev/zero of=$(BUILDDIR)/Hydra.iso bs=512 count=93750
+	@-mformat -i $(BUILDDIR)/Hydra.iso -f 1440 ::
+	@-mmd -i $(BUILDDIR)/Hydra.iso ::/EFI
+	@-mmd -i $(BUILDDIR)/Hydra.iso ::/EFI/BOOT
+	@-mcopy -i $(BUILDDIR)/Hydra.iso $(BOOTEFI) ::/EFI/BOOT
+	@-mcopy -i $(BUILDDIR)/Hydra.iso startup.nsh ::
+	@-mcopy -i $(BUILDDIR)/Hydra.iso $(BUILDDIR)/kernel.elf ::
+	@-mcopy -i $(BUILDDIR)/Hydra.iso etc/font.psf ::
 
 run:
-	@-qemu-system-x86_64 -drive file=$(BUILDDIR)/Hydra.img,format=raw -m $(RAM) -cpu qemu64 -drive if=pflash,format=raw,unit=0,file="$(OVMFDIR)/OVMF_CODE-pure-efi.fd",readonly=on -drive if=pflash,format=raw,unit=1,file="$(OVMFDIR)/OVMF_VARS-pure-efi.fd" -net none
+	@-qemu-system-x86_64 -drive file=$(BUILDDIR)/Hydra.iso,format=raw -m $(RAM) -cpu qemu64 -drive if=pflash,format=raw,unit=0,file="$(OVMFDIR)/OVMF_CODE-pure-efi.fd",readonly=on -drive if=pflash,format=raw,unit=1,file="$(OVMFDIR)/OVMF_VARS-pure-efi.fd" -net none -boot order=d
