@@ -50,7 +50,7 @@ CFLAGS += -Wno-error=unused-parameter -Wno-error=unused-variable
 all:	$(TARGETS)
 
 clean:
-	rm -f $(TARGETS) *~ *.o *.so
+	@-rm -f $(TARGETS) *~ *.o *.so
 
 .PHONY: install
 

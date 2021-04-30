@@ -17,11 +17,25 @@ LDS = $(SRCDIR)/kernel.ld
 
 all:
 	@-if [ `head -n 1 hbm` = "OS=macOS" ]; then\
-        docker exec HBM /bin/bash -c "cd /home/HydraOS/bootloader/;make bootloader";\
+		printf "Compiling Bootloader...\r";\
+        cd bootloader/ > /dev/null 2>&1;make bootloader -s;cd ../ > /dev/null 2>&1\
+		printf "Compiling Kernel...     \r";\
         docker exec HBM /bin/bash -c "cd /home/HydraOS/;make kernel";\
-		make buildimg;make run;\
+		printf "Creating Image...       \r";\
+		make buildimg;\
+		printf "Running...              \r";\
+		make run;\
+		printf "                        \n";\
 	elif [ `head -n 1 hbm` = "OS=Debian" ]; then\
-		cd bootloader;make bootloader;cd ../;make kernel; make buildimg; make run;\
+		printf "Compiling Bootloader...\r";\
+		cd bootloader > /dev/null 2>&1;make bootloader;\
+		printf "Compiling Kernel...    \r";\
+		cd ../ > /dev/null 2>&1;make kernel;\
+		printf "Creating Image...     \r";\
+		make buildimg;\
+		printf "Running...            \r";\
+		make run;\
+		printf "                       \n";\
 	else\
 		echo "Please run ./setup-environment.sh";\
     fi
@@ -56,7 +70,7 @@ link:
 	@-$(LD) $(LDFLAGS) -o $(BUILDDIR)/kernel.elf $(OBJS)
 
 buildimg:
-	@-dd if=/dev/zero of=$(BUILDDIR)/Hydra.iso bs=512 count=93750
+	@-dd if=/dev/zero of=$(BUILDDIR)/Hydra.iso bs=512 count=93750 > /dev/null 2>&1
 	@-mformat -i $(BUILDDIR)/Hydra.iso -f 1440 ::
 	@-mmd -i $(BUILDDIR)/Hydra.iso ::/EFI
 	@-mmd -i $(BUILDDIR)/Hydra.iso ::/EFI/BOOT

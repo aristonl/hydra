@@ -46,34 +46,35 @@ include $(SRCDIR)/Make.defaults
 SUBDIRS = lib gnuefi inc apps bootloader
 gnuefi: lib
 
+
 all:	check_gcc $(SUBDIRS)
 
 mkvars:
-	@echo AR=$(AR)
-	@echo ARCH=$(ARCH)
-	@echo ARCH3264=$(ARCH3264)
-	@echo AS=$(AS)
-	@echo ASFLAGS=$(ASFLAGS)
-	@echo CC=$(CC)
-	@echo CFLAGS=$(CFLAGS)
-	@echo CPPFLAGS=$(CPPFLAGS)
-	@echo GCCMINOR=$(GCCMINOR)
-	@echo GCCNEWENOUGH=$(GCCNEWENOUGH)
-	@echo GCCVERSION=$(GCCVERSION)
-	@echo HOSTARCH=$(HOSTARCH)
-	@echo INCDIR=$(INCDIR)
-	@echo INSTALL=$(INSTALL)
-	@echo INSTALLROOT=$(INSTALLROOT)
-	@echo LD=$(LD)
-	@echo LDFLAGS=$(LDFLAGS)
-	@echo LIBDIR=$(LIBDIR)
-	@echo OBJCOPY=$(OBJCOPY)
-	@echo OS=$(OS)
-	@echo prefix=$(prefix)
-	@echo PREFIX=$(PREFIX)
-	@echo RANLIB=$(RANLIB)
-	@echo SRCDIR=$(SRCDIR)
-	@echo TOPDIR=$(TOPDIR)
+	@-echo AR=$(AR)
+	@-echo ARCH=$(ARCH)
+	@-echo ARCH3264=$(ARCH3264)
+	@-echo AS=$(AS)
+	@-echo ASFLAGS=$(ASFLAGS)
+	@-echo CC=$(CC)
+	@-echo CFLAGS=$(CFLAGS)
+	@-echo CPPFLAGS=$(CPPFLAGS)
+	@-echo GCCMINOR=$(GCCMINOR)
+	@-echo GCCNEWENOUGH=$(GCCNEWENOUGH)
+	@-echo GCCVERSION=$(GCCVERSION)
+	@-echo HOSTARCH=$(HOSTARCH)
+	@-echo INCDIR=$(INCDIR)
+	@-echo INSTALL=$(INSTALL)
+	@-echo INSTALLROOT=$(INSTALLROOT)
+	@-echo LD=$(LD)
+	@-echo LDFLAGS=$(LDFLAGS)
+	@-echo LIBDIR=$(LIBDIR)
+	@-echo OBJCOPY=$(OBJCOPY)
+	@-echo OS=$(OS)
+	@-echo prefix=$(prefix)
+	@-echo PREFIX=$(PREFIX)
+	@-echo RANLIB=$(RANLIB)
+	@-echo SRCDIR=$(SRCDIR)
+	@-echo TOPDIR=$(TOPDIR)
 
 $(SUBDIRS):
 	@-mkdir -p $(OBJDIR)/$@
@@ -106,24 +107,24 @@ endif
 include $(SRCDIR)/Make.rules
 
 test-archive:
-	@rm -rf /tmp/gnu-efi-$(VERSION) /tmp/gnu-efi-$(VERSION)-tmp
-	@mkdir -p /tmp/gnu-efi-$(VERSION)-tmp
-	@git archive --format=tar $(shell git branch | awk '/^*/ { print $$2 }') | ( cd /tmp/gnu-efi-$(VERSION)-tmp/ ; tar x )
-	@git diff | ( cd /tmp/gnu-efi-$(VERSION)-tmp/ ; patch -s -p1 -b -z .gitdiff )
-	@mv /tmp/gnu-efi-$(VERSION)-tmp/ /tmp/gnu-efi-$(VERSION)/
-	@dir=$$PWD; cd /tmp; tar -c --bzip2 -f $$dir/gnu-efi-$(VERSION).tar.bz2 gnu-efi-$(VERSION)
-	@rm -rf /tmp/gnu-efi-$(VERSION)
-	@echo "The archive is in gnu-efi-$(VERSION).tar.bz2"
+	@-rm -rf /tmp/gnu-efi-$(VERSION) /tmp/gnu-efi-$(VERSION)-tmp
+	@-mkdir -p /tmp/gnu-efi-$(VERSION)-tmp
+	@-git archive --format=tar $(shell git branch | awk '/^*/ { print $$2 }') | ( @-cd /tmp/gnu-efi-$(VERSION)-tmp/ ; tar x )
+	@-git diff | ( cd /tmp/gnu-efi-$(VERSION)-tmp/ ; patch -s -p1 -b -z .gitdiff )
+	@-mv /tmp/gnu-efi-$(VERSION)-tmp/ /tmp/gnu-efi-$(VERSION)/
+	@-dir=$$PWD; cd /tmp; tar -c --bzip2 -f $$dir/gnu-efi-$(VERSION).tar.bz2 gnu-efi-$(VERSION)
+	@-rm -rf /tmp/gnu-efi-$(VERSION)
+	@-echo "The archive is in gnu-efi-$(VERSION).tar.bz2"
 
 tag:
 	git tag $(VERSION) refs/heads/master
 
 archive: tag
-	@rm -rf /tmp/gnu-efi-$(VERSION) /tmp/gnu-efi-$(VERSION)-tmp
-	@mkdir -p /tmp/gnu-efi-$(VERSION)-tmp
-	@git archive --format=tar $(VERSION) | ( cd /tmp/gnu-efi-$(VERSION)-tmp/ ; tar x )
-	@mv /tmp/gnu-efi-$(VERSION)-tmp/ /tmp/gnu-efi-$(VERSION)/
-	@dir=$$PWD; cd /tmp; tar -c --bzip2 -f $$dir/gnu-efi-$(VERSION).tar.bz2 gnu-efi-$(VERSION)
-	@rm -rf /tmp/gnu-efi-$(VERSION)
-	@echo "The archive is in gnu-efi-$(VERSION).tar.bz2"
+	@-rm -rf /tmp/gnu-efi-$(VERSION) /tmp/gnu-efi-$(VERSION)-tmp
+	@-mkdir -p /tmp/gnu-efi-$(VERSION)-tmp
+	@-git archive --format=tar $(VERSION) | ( cd /tmp/gnu-efi-$(VERSION)-tmp/ ; tar x )
+	@-mv /tmp/gnu-efi-$(VERSION)-tmp/ /tmp/gnu-efi-$(VERSION)/
+	@-dir=$$PWD; cd /tmp; tar -c --bzip2 -f $$dir/gnu-efi-$(VERSION).tar.bz2 gnu-efi-$(VERSION)
+	@-rm -rf /tmp/gnu-efi-$(VERSION)
+	@-echo "The archive is in gnu-efi-$(VERSION).tar.bz2"
 
