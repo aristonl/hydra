@@ -5,26 +5,30 @@
 #include "../memory.h"
 #include "keyboard.h"
 
-__attribute__((interrupt)) void PageFault_Handler(struct interrupt_frame* frame) {
+__attribute__((interrupt)) void PageFault_Handler(interrupt_frame* frame) {
     Panic("Page Fault Detected");
     while(true);
 }
 
-__attribute__((interrupt)) void DoubleFault_Handler(struct interrupt_frame* frame) {
+__attribute__((interrupt)) void DoubleFault_Handler(interrupt_frame* frame) {
     Panic("Double Fault Detected");
     while(true);
 }
 
-__attribute__((interrupt)) void GPFault_Handler(struct interrupt_frame* frame) {
+__attribute__((interrupt)) void GPFault_Handler(interrupt_frame* frame) {
     Panic("General Protection Fault Detected");
     while(true);
 }
 
-__attribute__((interrupt)) void KeyboardInt_Handler(struct interrupt_frame* frame) {
+__attribute__((interrupt)) void KeyboardInt_Handler(interrupt_frame* frame) {
     uint8_t keycode = inb(0x60);
 
     char key = updateKey(keycode);
     PIC_EndMaster();
+}
+
+__attribute__((interrupt)) void MouseInt_Handler(interrupt_frame* frame) {
+    PIC_EndSlave();
 }
 
 void PIC_EndMaster() {
