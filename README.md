@@ -4,6 +4,19 @@ A complex Operating System built on the Inferno kernel for AMD64 and ARM.
 ## About
 Hydra is an AMD64 / ARM based operating system built on top of the Inferno kernel.
 
+## Install HBM
+# macOS
+git clone https://github.com/Null-LLC/Hydra
+cd Hydra
+chmod +x setup-environment.sh
+./setup-environment.sh
+
+# Debian
+same as macOS
+
+# Windows
+Install WSL and preferably Ubuntu and follow the Ubuntu steps and run make.bat to run and compile.
+
 ## Documentation
 You can find the documentation in [Hydra/Documentation](https://github.com/Null-LLC/Hydra/tree/main/Documentation)
 
