@@ -34,11 +34,15 @@ all:
 		printf "Creating Image...     \r";\
 		make buildimg;\
 		printf "Running...            \r";\
-		make run;\
+		if [ -d "/mnt/c/" ]; then\
+			cmd.exe /C qemu-system-x86_64 -drive file=Hydra/Hydra.iso,format=raw -m 512M -cpu qemu64 -drive if=pflash,format=raw,unit=0,file=etc/OVMF_CODE-pure-efi.fd,readonly=on -drive if=pflash,format=raw,unit=1,file=etc/OVMF_VARS-pure-efi.fd -net none -boot order=d;\
+		else\
+			make run;\
+		fi;\
 		printf "                       \n";\
 	else\
 		echo "Please run ./setup-environment.sh";\
-    fi
+    	fi
 
 clean:
 	@-rm -r bin Hydra
