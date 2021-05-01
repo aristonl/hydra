@@ -4,22 +4,6 @@ A complex Operating System built on the Inferno kernel for AMD64 and ARM.
 ## About
 Hydra is an AMD64 / ARM based operating system built on top of the Inferno kernel.
 
-## Install HBM
-## macOS
-git clone https://github.com/Null-LLC/Hydra
-cd Hydra
-chmod +x setup-environment.sh
-./setup-environment.sh
-
-### Debian
-same as macOS
-
-### Windows
-Install WSL and preferably Ubuntu and follow the Ubuntu steps and run 'make' in the WSL machine.
-Please install Qemu as well but ensure that qemu is added to the environment path.
-You will need to download the linux kernel update too
-https://docs.microsoft.com/en-us/windows/wsl/install-win10#step-4---download-the-linux-kernel-update-package
-
 ## Documentation
 You can find the documentation in [Hydra/Documentation](https://github.com/Null-LLC/Hydra/tree/main/Documentation)
 

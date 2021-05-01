@@ -1,8 +1,48 @@
 # Hydra Build Instructions
 ## Prerequisites
 ### Linux
-There are no *prerequisites* as everything will be installed for you through a script. All that is required is that you are using any Debian-based distro.
+You will need to install G++, GCC, make, NASM, mtools, and QEMU to install Hydra.
+
+#### Debian/Ubuntu
+You can either `apt install` or run `setup-environment.sh`
+`sudo apt install build-essential nasm mtools qemu-system` 
+
+#### Arch Linux
+`setup-environment.sh` has no current support for Arch. 
+`sudo pacman -Sy base-devel nasm mtools qemu`
+
 ### macOS
-Again, there are no *prerequisites* to macOS.
-## Windows
-There is no official Windows support for Hydra Build Machine (HBM) at the moment. All you can do now is get a WSL version of Ubuntu, install QEMU on your machine and link them up. More info on this coming soon.
+Before getting the packages listed above, you must have Xcode Tools to install `brew` which is needed to install the packages.
+Once you have Xcode Tools, you can install Homebrew.
+`brew install docker mtools qemu`
+
+### Windows
+Hydra can be built and ran under WSL Version 2 *only*.
+
+WSL Version 2 requires Windows version 2004 or higher, with OS Build 19041 or greater. Here is a guide on how to [get WSL2](https://docs.microsoft.com/en-us/windows/wsl/install-win10).
+Once installed, you will need to make sure the distribution you want to use (and the new default) is using Version 2:
+- `wsl -l -v` will list distros and versions,<br/>
+- `wsl --set-version <distro> <version>` is used to convert a distro to another version, and<br/>
+- `wsl --set-default-version 2` will set the default version for all new distros (if desired.)<br/>
+
+The installation then proceeds as usual.
+
+WSL2 does not natively support graphical applications.
+You can either install QEMU natively on windows and allow WSL to talk to it, or you can install an X Server for windows.
+
+#### Setting up an X server with WSL:
+
+- Install [Vcxsrv](https://sourceforge.net/projects/vcxsrv/) on Windows.
+- When you start up Vcxsrv, make sure to set the Display number to 0, and to Disable access control.
+- Before actually doing **make**, you need to set the DISPLAY environmental variable as such:
+
+```bash
+export DISPLAY=$(cat /etc/resolv.conf | grep nameserver | awk '{print $2}'):0
+```
+This is due to a bug in WSL2. For more information, microsoft/WSL#4106.
+- Connect to the window server from WSL.
+
+Now you can finally, **make**.
+
+## Build
+To build Hydra, all that's needed is to run `make`.
