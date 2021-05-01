@@ -16,6 +16,7 @@ same as macOS
 
 # Windows
 Install WSL and preferably Ubuntu and follow the Ubuntu steps and run make.bat to run and compile.
+Please install Qemu as well but ensure that qemu is added to the environment path.
 
 ## Documentation
 You can find the documentation in [Hydra/Documentation](https://github.com/Null-LLC/Hydra/tree/main/Documentation)
