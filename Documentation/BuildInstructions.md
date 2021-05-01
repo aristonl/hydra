@@ -4,17 +4,20 @@
 You will need to install G++, GCC, make, NASM, mtools, and QEMU to install Hydra.
 
 #### Debian/Ubuntu
-You can either `apt install` or run `setup-environment.sh`
 `sudo apt install build-essential nasm mtools qemu-system` 
 
 #### Arch Linux
-`setup-environment.sh` has no current support for Arch. 
-`sudo pacman -Sy base-devel nasm mtools qemu`
+`setup-environment.sh` has no current support for Arch at the moment. 
+```bash
+sudo pacman -Sy base-devel nasm mtools qemu
+```
 
 ### macOS
 Before getting the packages listed above, you must have Xcode Tools to install `brew` which is needed to install the packages.
 Once you have Xcode Tools, you can install Homebrew.
-`brew install docker mtools qemu`
+```bash
+brew install docker mtools qemu
+```
 
 ### Windows
 Hydra can be built and ran under WSL Version 2 *only*.
@@ -45,4 +48,4 @@ This is due to a bug in WSL2. For more information, microsoft/WSL#4106.
 Now you can finally, **make**.
 
 ## Build
-To build Hydra, all that's needed is to run `make`.
+To build Hydra, make sure you run `./setup-environment.sh` as it will create all the necessary files and config's needed to build. After, you can finally run `make`.
