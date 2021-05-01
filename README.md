@@ -17,6 +17,8 @@ same as macOS
 ### Windows
 Install WSL and preferably Ubuntu and follow the Ubuntu steps and run make.bat to run and compile.
 Please install Qemu as well but ensure that qemu is added to the environment path.
+You will need to download the linux kernel update too
+https://docs.microsoft.com/en-us/windows/wsl/install-win10#step-4---download-the-linux-kernel-update-package
 
 ## Documentation
 You can find the documentation in [Hydra/Documentation](https://github.com/Null-LLC/Hydra/tree/main/Documentation)
