@@ -1,9 +1,7 @@
 #include "interrupts.h"
 #include "../panic.h"
-#include "../io.h"
-#include "../string.h"
-#include "../memory.h"
-#include "keyboard.h"
+#include "../IO.h"
+#include "mouse.h"
 
 __attribute__((interrupt)) void PageFault_Handler(interrupt_frame* frame) {
     Panic("Page Fault Detected");
@@ -21,15 +19,16 @@ __attribute__((interrupt)) void GPFault_Handler(interrupt_frame* frame) {
 }
 
 __attribute__((interrupt)) void KeyboardInt_Handler(interrupt_frame* frame) {
-    uint8_t keycode = inb(0x60);
-
-    char key = updateKey(keycode);
+    uint8_t keyCode = inb(0x60);
     PIC_EndMaster();
 }
 
 __attribute__((interrupt)) void MouseInt_Handler(interrupt_frame* frame) {
+    uint8_t mouseData = inb(0x60);
+    HandlePS2Mouse(mouseData);
     PIC_EndSlave();
 }
+
 
 void PIC_EndMaster() {
     outb(PIC1_COMMAND, PIC_EOI);
@@ -43,7 +42,6 @@ void PIC_EndSlave() {
 
 void RemapPIC() {
     uint8_t a1, a2; 
-
     a1 = inb(PIC1_DATA);
     io_wait();
     a2 = inb(PIC2_DATA);
