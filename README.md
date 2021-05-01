@@ -15,7 +15,7 @@ chmod +x setup-environment.sh
 same as macOS
 
 ### Windows
-Install WSL and preferably Ubuntu and follow the Ubuntu steps and run make.bat to run and compile.
+Install WSL and preferably Ubuntu and follow the Ubuntu steps and run 'make' in the WSL machine.
 Please install Qemu as well but ensure that qemu is added to the environment path.
 You will need to download the linux kernel update too
 https://docs.microsoft.com/en-us/windows/wsl/install-win10#step-4---download-the-linux-kernel-update-package
