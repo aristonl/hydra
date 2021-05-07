@@ -60,7 +60,7 @@ int InitOS(BootData* bootdata) {
 
     graphics->SetFramebuffer(bootdata->framebuffer);
     graphics->SetFont(bootdata->font);
-    graphics->SetXY(0,0);
+    graphics->SetXY(5,1);
     graphics->SetColor(0x00FF00);
     memset(bootdata->framebuffer->BaseAddress, 0, bootdata->framebuffer->Size);
 
@@ -68,6 +68,11 @@ int InitOS(BootData* bootdata) {
 }
 
 int StartOS(BootData* bootdata) {
+    graphics->DrawRectangleFromTo(0, 0, graphics->GetWidth(), 1, 0xFFFFFF);
+    graphics->DrawRectangleFromTo(0, 0, 1, graphics->GetHeight(), 0xFFFFFF);
+    graphics->DrawRectangleFromTo(graphics->GetWidth()-1, 0, graphics->GetWidth(), graphics->GetHeight(), 0xFFFFFF);
+    graphics->DrawRectangleFromTo(0, graphics->GetHeight()-1, graphics->GetWidth(), graphics->GetHeight(), 0xFFFFFF);
+    
     graphics->printf("root@Hydra (/) > ");
 
     // asm("int $0x0e");            Force Panic

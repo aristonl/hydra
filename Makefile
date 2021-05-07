@@ -1,6 +1,6 @@
 RAM = 512M
 GNUEFI = bootloader
-OVMFDIR = etc
+OVMFDIR = Build/OVMF
 CC = gcc
 ASMC = nasm
 LD = ld
@@ -10,15 +10,15 @@ ASMFLAGS =
 LDFLAGS = -T $(LDS) -static -Bsymbolic -nostdlib
 
 SRCDIR := Kernel
-OBJDIR := bin
-BUILDDIR = Hydra
+OBJDIR := Build/binaries
+BUILDDIR = Build
 BOOTEFI := $(GNUEFI)/x86_64/bootloader/main.efi
 LDS = $(SRCDIR)/kernel.ld
 
 all:
 	@-if [ `head -n 1 hbm` = "OS=macOS" ]; then\
 		printf "Compiling Bootloader...\r";\
-        cd bootloader/ > /dev/null 2>&1;make bootloader -s;cd ../ > /dev/null 2>&1\
+        docker exec HBM /bin/bash -c "cd /home/HydraOS/bootloader/ > /dev/null 2>&1;make bootloader -s;cd ../ > /dev/null 2>&1"\
 		printf "Compiling Kernel...     \r";\
         docker exec HBM /bin/bash -c "cd /home/HydraOS/;make kernel";\
 		printf "Creating Image...       \r";\
@@ -43,10 +43,6 @@ all:
 	else\
 		echo "Please run ./setup-environment.sh";\
     	fi
-
-clean:
-	@-rm -r bin Hydra
-	@-mkdir bin Hydra
 
 rwildcard=$(foreach d,$(wildcard $(1:=/*)),$(call rwildcard,$d,$2) $(filter $(subst *,%,$2),$d))
 
@@ -81,7 +77,7 @@ buildimg:
 	@-mcopy -i $(BUILDDIR)/Hydra.iso $(BOOTEFI) ::/EFI/BOOT
 	@-mcopy -i $(BUILDDIR)/Hydra.iso startup.nsh ::
 	@-mcopy -i $(BUILDDIR)/Hydra.iso $(BUILDDIR)/kernel.elf ::
-	@-mcopy -i $(BUILDDIR)/Hydra.iso etc/font.psf ::
+	@-mcopy -i $(BUILDDIR)/Hydra.iso $(BUILDDIR)/font.psf ::
 
 run:
 	@-qemu-system-x86_64 -drive file=$(BUILDDIR)/Hydra.iso,format=raw -m $(RAM) -cpu qemu64 -drive if=pflash,format=raw,unit=0,file="$(OVMFDIR)/OVMF_CODE-pure-efi.fd",readonly=on -drive if=pflash,format=raw,unit=1,file="$(OVMFDIR)/OVMF_VARS-pure-efi.fd" -net none -boot order=d

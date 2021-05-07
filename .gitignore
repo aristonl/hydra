@@ -19,8 +19,9 @@
 *.cxxflags
 *.autosave
 
-bin/
-Hydra/
+*.iso
+*.elf
+Hydra/Binaries/*.o
 
 .DS_Store
 .vim/
