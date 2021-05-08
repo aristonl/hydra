@@ -1,6 +1,6 @@
 #include "interrupts.h"
-#include "../panic.h"
-#include "../IO.h"
+#include "../../events/panic/panic.h"
+#include "../../misc/InputOutput.h"
 #include "mouse.h"
 
 __attribute__((interrupt)) void PageFault_Handler(interrupt_frame* frame) {

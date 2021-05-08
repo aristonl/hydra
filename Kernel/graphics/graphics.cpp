@@ -1,5 +1,5 @@
 #include "graphics.h"
-#include "string.h"
+#include "../misc/string.h"
 
 Graphics* graphics;
 

@@ -1,8 +1,8 @@
 #pragma once
 #include <stddef.h>
 #include <stdint.h>
-#include "math.h"
-#include "bootloader.h"
+#include "../misc/math.h"
+#include "../misc/bootloader.h"
 
 struct Point {
     unsigned int X = 0;

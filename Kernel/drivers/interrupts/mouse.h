@@ -1,7 +1,7 @@
 #pragma once
-#include "../io.h"
-#include "../math.h"
-#include "../graphics.h"
+#include "../../misc/InputOutput.h"
+#include "../../misc/math.h"
+#include "../../graphics/graphics.h"
 
 #define PS2Leftbutton 0b00000001
 #define PS2Middlebutton 0b00000010

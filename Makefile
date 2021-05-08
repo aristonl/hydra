@@ -1,4 +1,4 @@
-RAM = 512M
+RAM = 1G
 GNUEFI = bootloader
 OVMFDIR = Build/OVMF
 CC = gcc
@@ -54,7 +54,7 @@ DIRS = $(wildcard $(SRCDIR)/*)
 
 kernel: $(OBJS) link
 
-$(OBJDIR)/interrupts/interrupts.o: $(SRCDIR)/interrupts/interrupts.cpp
+$(OBJDIR)/drivers/interrupts/interrupts.o: $(SRCDIR)/drivers/interrupts/interrupts.cpp
 	@-mkdir -p $(@D)
 	@-$(CC) -mno-red-zone -mgeneral-regs-only -ffreestanding -c $^ -o $@
 

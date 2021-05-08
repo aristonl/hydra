@@ -1,5 +1,5 @@
 #include "mouse.h"
-#include "../string.h"
+#include "../../misc/string.h"
 
 void MouseWait() {
     uint64_t timeout = 100000;

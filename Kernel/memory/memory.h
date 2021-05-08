@@ -1,6 +1,6 @@
 #pragma once
 #include <stdint.h>
-#include "bootloader.h"
+#include "../misc/bootloader.h"
 #include "bitmap.h"
 
 extern const char* EFI_MEMORY_TYPE_STRINGS[];
