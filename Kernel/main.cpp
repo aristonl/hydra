@@ -1,14 +1,26 @@
-#include "graphics/graphics.h"
-#include "misc/string.h"
-#include "misc/math.h"
-#include "misc/bootloader.h"
-#include "memory/memory.h"
-#include "drivers/interrupts/gdt.h"
-#include "drivers/interrupts/idt.h"
-#include "drivers/interrupts/interrupts.h"
-#include "drivers/interrupts/mouse.h"
-#include "memory/memory.h"
-#include "misc/InputOutput.h"
+/*
+ * Copyright Null LLC
+ * Please read the License!
+ *  _     _           _ 
+ * | |   | |         | |
+ * | |__ | |_   _  _ | | ____ ____
+ * |  __)| | | | |/ || |/ ___) _  |     main.cpp
+ * | |   | | |_| ( (_| | |  ( ( | |     Absolute beginning of kernel.
+ * |_|   |_|\__  |\____|_|   \_||_|
+ *         (____/
+ */
+
+#include "graphics/graphics.hpp"
+#include "misc/string.hpp"
+#include "misc/math.hpp"
+#include "misc/bootloader.hpp"
+#include "memory/memory.hpp"
+#include "drivers/GDT/gdt.hpp"
+#include "drivers/interrupts/idt.hpp"
+#include "drivers/interrupts/interrupts.hpp"
+#include "drivers/interrupts/mouse.hpp"
+#include "memory/memory.hpp"
+#include "misc/InputOutput.hpp"
 
 extern uint64_t KernelStart;
 extern uint64_t KernelEnd;
@@ -49,30 +61,25 @@ void initialize(BootData* bootdata) {
     uint64_t fbSize = (uint64_t) bootdata->framebuffer->Size + 0x1000;
     Allocator.LockPages((void*) fbBase, fbSize/ 0x1000 + 1);
     for (uint64_t t = fbBase; t < fbBase + fbSize; t += 4096) pageTableManager.MapMemory((void*) t, (void*) t);
-    memset(bootdata->framebuffer->BaseAddress, 0, bootdata->framebuffer->Size);
     asm ("mov %0, %%cr3" : : "r" (PML4));
     idtr.Limit = 0x0FFF;
     idtr.Offset = (uint64_t) Allocator.RequestPage();
-    SetIDTGate((void*) PageFault_Handler, 0xE, IDT_TA_InterruptGate, 0x08);
-    SetIDTGate((void*) DoubleFault_Handler, 0x8, IDT_TA_InterruptGate, 0x08);
-    SetIDTGate((void*) GPFault_Handler, 0xD, IDT_TA_InterruptGate, 0x08);
-    SetIDTGate((void*) KeyboardInt_Handler, 0x21, IDT_TA_InterruptGate, 0x08);
-    SetIDTGate((void*) MouseInt_Handler, 0x2C, IDT_TA_InterruptGate, 0x08);
+    SetIDTGate((void*) PageFaultHandler, 0xE, IDT_TA_InterruptGate, 0x08);
+    SetIDTGate((void*) DoublePageFaultHandler, 0x8, IDT_TA_InterruptGate, 0x08);
+    SetIDTGate((void*) GeneralPageFaultHandler, 0xD, IDT_TA_InterruptGate, 0x08);
+    SetIDTGate((void*) KeyboardHandler, 0x21, IDT_TA_InterruptGate, 0x08);
+    SetIDTGate((void*) MouseHandler, 0x2C, IDT_TA_InterruptGate, 0x08);
     asm ("lidt %0" : : "m" (idtr));
     RemapPIC();
     InitPS2Mouse();
     outb(PIC1_DATA, 0b11111001);
     outb(PIC2_DATA, 0b11101111);
     asm ("sti");
+    memset(bootdata->framebuffer->BaseAddress, 0, bootdata->framebuffer->Size);
 }
 
 extern "C" int main(BootData* bootdata) {
     initialize(bootdata);
-    
-    /*
-     * asm("int $0x0e");
-     *  | Kernel Panic
-     */
     while(true) ProcessMousePacket();
     return 300;
 }

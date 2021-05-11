@@ -1,3 +1,15 @@
+/*
+ * Copyright Null LLC
+ * Please read the License!
+ *  _     _           _ 
+ * | |   | |         | |
+ * | |__ | |_   _  _ | | ____ ____
+ * |  __)| | | | |/ || |/ ___) _  |     bootloader.hpp
+ * | |   | | |_| ( (_| | |  ( ( | |     Contains structs required for passing data from bootloader to kernel.
+ * |_|   |_|\__  |\____|_|   \_||_|
+ *         (____/
+ */
+
 #pragma once
 #include <stddef.h>
 

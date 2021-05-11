@@ -1,7 +1,19 @@
+/*
+ * Copyright Null LLC
+ * Please read the License!
+ *  _     _           _ 
+ * | |   | |         | |
+ * | |__ | |_   _  _ | | ____ ____
+ * |  __)| | | | |/ || |/ ___) _  |     memory.hpp
+ * | |   | | |_| ( (_| | |  ( ( | |     Controls memory/ram usage and permissions.
+ * |_|   |_|\__  |\____|_|   \_||_|
+ *         (____/
+ */
+
 #pragma once
 #include <stdint.h>
-#include "../misc/bootloader.h"
-#include "bitmap.h"
+#include "../misc/bootloader.hpp"
+#include "bitmap.hpp"
 
 extern const char* EFI_MEMORY_TYPE_STRINGS[];
 uint64_t getMemorySize(EFI_MEMORY_DESCRIPTOR* Map, uint64_t MapEntries, uint64_t MapDescriptorSize);

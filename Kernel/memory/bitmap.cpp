@@ -1,4 +1,16 @@
-#include "bitmap.h"
+/*
+ * Copyright Null LLC
+ * Please read the License!
+ *  _     _           _ 
+ * | |   | |         | |
+ * | |__ | |_   _  _ | | ____ ____
+ * |  __)| | | | |/ || |/ ___) _  |     bitmap.cpp
+ * | |   | | |_| ( (_| | |  ( ( | |     Array of bits.
+ * |_|   |_|\__  |\____|_|   \_||_|
+ *         (____/
+ */
+
+#include "bitmap.hpp"
 
 bool Bitmap::operator[](uint64_t index) {
     if (index > Size * 8) return false;

@@ -1,4 +1,16 @@
-#include "string.h"
+/*
+ * Copyright Null LLC
+ * Please read the License!
+ *  _     _           _ 
+ * | |   | |         | |
+ * | |__ | |_   _  _ | | ____ ____
+ * |  __)| | | | |/ || |/ ___) _  |     string.cpp
+ * | |   | | |_| ( (_| | |  ( ( | |     Basic string operations.
+ * |_|   |_|\__  |\____|_|   \_||_|         Will be removed soon!
+ *         (____/
+ */
+
+#include "string.hpp"
 
 int64_t _strlen(const char *str) {
     int len = 0;

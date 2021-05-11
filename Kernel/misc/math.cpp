@@ -1,3 +1,17 @@
+/*
+ * Copyright Null LLC
+ * Please read the License!
+ *  _     _           _ 
+ * | |   | |         | |
+ * | |__ | |_   _  _ | | ____ ____
+ * |  __)| | | | |/ || |/ ___) _  |     math.cpp
+ * | |   | | |_| ( (_| | |  ( ( | |     Contains simple mathematical functions.
+ * |_|   |_|\__  |\____|_|   \_||_|			Will be replaced soon!
+ *         (____/
+ */
+
+#include "math.hpp"
+
 int pow(int x, unsigned int y) {
     int res = x;
     for (int i=0;i<y-1;i++) {

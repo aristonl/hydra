@@ -4,16 +4,12 @@
  *  _     _           _ 
  * | |   | |         | |
  * | |__ | |_   _  _ | | ____ ____
- * |  __)| | | | |/ || |/ ___) _  |     panic.cpp
+ * |  __)| | | | |/ || |/ ___) _  |     panic.hpp
  * | |   | | |_| ( (_| | |  ( ( | |     Controls the functions called during a kernel panic event.
  * |_|   |_|\__  |\____|_|   \_||_|
  *         (____/
  */
 
-#include "panic.hpp"
-#include "../../graphics/graphics.hpp"
-#include "../../misc/string.hpp"
+#pragma once
 
-void Panic(const char* panicMessage) {
-    graphics->DrawRectangleFromTo(0, 0, graphics->GetWidth(), graphics->GetHeight(), 0xff0000);
-}
+void Panic(const char* panicMessage);

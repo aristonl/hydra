@@ -1,5 +1,17 @@
-#include "mouse.h"
-#include "../../misc/string.h"
+/*
+ * Copyright Null LLC
+ * Please read the License!
+ *  _     _           _ 
+ * | |   | |         | |
+ * | |__ | |_   _  _ | | ____ ____
+ * |  __)| | | | |/ || |/ ___) _  |     mouse.cpp
+ * | |   | | |_| ( (_| | |  ( ( | |     Controls the Cursor
+ * |_|   |_|\__  |\____|_|   \_||_|         Will be replaced soon!
+ *         (____/
+ */
+
+#include "mouse.hpp"
+#include "../../misc/string.hpp"
 
 void MouseWait() {
     uint64_t timeout = 100000;

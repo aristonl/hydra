@@ -1,5 +1,17 @@
-#include "graphics.h"
-#include "../misc/string.h"
+/*
+ * Copyright Null LLC
+ * Please read the License!
+ *  _     _           _ 
+ * | |   | |         | |
+ * | |__ | |_   _  _ | | ____ ____
+ * |  __)| | | | |/ || |/ ___) _  |     graphics.cpp
+ * | |   | | |_| ( (_| | |  ( ( | |     Controls basic GUI functions.
+ * |_|   |_|\__  |\____|_|   \_||_|         Will be replaced soon!
+ *         (____/
+ */
+
+#include "graphics.hpp"
+#include "../misc/string.hpp"
 
 Graphics* graphics;
 

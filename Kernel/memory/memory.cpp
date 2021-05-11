@@ -1,4 +1,16 @@
-#include "memory.h"
+/*
+ * Copyright Null LLC
+ * Please read the License!
+ *  _     _           _ 
+ * | |   | |         | |
+ * | |__ | |_   _  _ | | ____ ____
+ * |  __)| | | | |/ || |/ ___) _  |     memory.cpp
+ * | |   | | |_| ( (_| | |  ( ( | |     Controls memory/ram usage and permissions.
+ * |_|   |_|\__  |\____|_|   \_||_|
+ *         (____/
+ */
+
+#include "memory.hpp"
 
 uint64_t freeMemory;
 uint64_t reservedMemory;

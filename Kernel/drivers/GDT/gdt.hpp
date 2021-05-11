@@ -1,3 +1,15 @@
+/*
+ * Copyright Null LLC
+ * Please read the License!
+ *  _     _           _ 
+ * | |   | |         | |
+ * | |__ | |_   _  _ | | ____ ____
+ * |  __)| | | | |/ || |/ ___) _  |     gdt.hpp
+ * | |   | | |_| ( (_| | |  ( ( | |     Info about the CPU
+ * |_|   |_|\__  |\____|_|   \_||_|
+ *         (____/
+ */
+
 #pragma once
 #include <stdint.h>
 

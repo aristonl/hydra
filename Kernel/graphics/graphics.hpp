@@ -1,8 +1,20 @@
+/*
+ * Copyright Null LLC
+ * Please read the License!
+ *  _     _           _ 
+ * | |   | |         | |
+ * | |__ | |_   _  _ | | ____ ____
+ * |  __)| | | | |/ || |/ ___) _  |     graphics.hpp
+ * | |   | | |_| ( (_| | |  ( ( | |     Controls basic GUI functions.
+ * |_|   |_|\__  |\____|_|   \_||_|         Will be replaced soon!
+ *         (____/
+ */
+
 #pragma once
 #include <stddef.h>
 #include <stdint.h>
-#include "../misc/math.h"
-#include "../misc/bootloader.h"
+#include "../misc/math.hpp"
+#include "../misc/bootloader.hpp"
 
 struct Point {
     unsigned int X = 0;

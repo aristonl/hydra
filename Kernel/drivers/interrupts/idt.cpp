@@ -1,4 +1,16 @@
-#include "idt.h"
+/*
+ * Copyright Null LLC
+ * Please read the License!
+ *  _     _           _ 
+ * | |   | |         | |
+ * | |__ | |_   _  _ | | ____ ____
+ * |  __)| | | | |/ || |/ ___) _  |     idt.cpp
+ * | |   | | |_| ( (_| | |  ( ( | |     Info about Interrupts
+ * |_|   |_|\__  |\____|_|   \_||_|
+ *         (____/
+ */
+
+#include "idt.hpp"
 
 void IDTDescEntry::SetOffset(uint64_t offset) {
     offset0 = (uint16_t) (offset & 0x000000000000ffff);
