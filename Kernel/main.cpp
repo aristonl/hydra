@@ -68,15 +68,6 @@ void initialize(BootData* bootdata) {
 
 extern "C" int main(BootData* bootdata) {
     initialize(bootdata);
-    graphics->DrawRectangleFromTo(0, 0, graphics->GetWidth(), graphics->GetHeight(), 0x00FF00);
-
-    graphics->SetColor(0x7b7b7b);
-    graphics->SetXY(graphics->GetWidth()/2-_strlen("No, it's not. Please refrain from even remotely touching my pc.")*8/2, graphics->GetHeight()/2);
-    graphics->printf("Is this your computer?");
-    graphics->SetXY(graphics->GetWidth()/2-_strlen("No, it's not. Please refrain from even remotely touching my pc.")*8/2, graphics->GetHeight()/2+16);
-    graphics->printf("No, it's not. Please refrain from even remotely touching my pc.");
-    graphics->SetXY(graphics->GetWidth()/2+_strlen("No, it's not. Please refrain from even remotely touching my pc.")*8/2-_strlen("- Levi Scott Hicks")*8, graphics->GetHeight()/2+48);
-    graphics->printf("- Levi Scott Hicks");
     /*
      * asm("int $0x0e");
      *  | Kernel Panic
