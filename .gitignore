@@ -27,4 +27,6 @@ Hydra/Binaries/*.o
 .vim/
 .vscode/
 
+bootloader/
+
 hbm

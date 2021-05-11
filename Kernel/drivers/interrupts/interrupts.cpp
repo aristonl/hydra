@@ -1,25 +1,30 @@
 #include "interrupts.h"
-#include "../../events/panic/panic.h"
 #include "../../misc/InputOutput.h"
+#include "../../misc/string.h"
 #include "mouse.h"
 
 __attribute__((interrupt)) void PageFault_Handler(interrupt_frame* frame) {
-    Panic("Page Fault Detected");
+    graphics->DrawRectangleFromTo(0, 0, graphics->GetWidth(), graphics->GetHeight(), 0xff0000);
     while(true);
 }
 
 __attribute__((interrupt)) void DoubleFault_Handler(interrupt_frame* frame) {
-    Panic("Double Fault Detected");
+    graphics->DrawRectangleFromTo(0, 0, graphics->GetWidth(), graphics->GetHeight(), 0xff0000);
     while(true);
 }
 
 __attribute__((interrupt)) void GPFault_Handler(interrupt_frame* frame) {
-    Panic("General Protection Fault Detected");
+    graphics->DrawRectangleFromTo(0, 0, graphics->GetWidth(), graphics->GetHeight(), 0xff0000);
     while(true);
 }
 
 __attribute__((interrupt)) void KeyboardInt_Handler(interrupt_frame* frame) {
-    uint8_t keyCode = inb(0x60);
+    uint8_t keycode = inb(0x60);
+    
+    graphics->DrawRectangleFromTo(128,128,160,144,0);
+    graphics->SetXY(128, 128);
+    graphics->printf("0x");
+    graphics->printf(to_hstring(keycode));
     PIC_EndMaster();
 }
 
@@ -28,7 +33,6 @@ __attribute__((interrupt)) void MouseInt_Handler(interrupt_frame* frame) {
     HandlePS2Mouse(mouseData);
     PIC_EndSlave();
 }
-
 
 void PIC_EndMaster() {
     outb(PIC1_COMMAND, PIC_EOI);

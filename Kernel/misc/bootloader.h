@@ -13,6 +13,7 @@ struct Framebuffer {
 	void* BaseAddress;
 	size_t Size;
 	unsigned int Width, Height, PixelsPerScanLine;
+	int maxMode, nativeMode, version;
 };
 
 struct PSF1_HEADER {

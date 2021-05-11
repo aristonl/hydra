@@ -79,11 +79,13 @@ void ProcessMousePacket() {
         if (yOverflow) MousePosition.Y += 255;
     }
 
-    if (MousePosition.X <= 1) MousePosition.X = old.X;
-    if (MousePosition.X > graphics->GetWidth()-11) old.X;
+    if (MousePosition.X < 0) MousePosition.X = old.X;
+    if (MousePosition.X > graphics->GetWidth()-12) MousePosition.X = old.X;
     
-    if (MousePosition.Y <= 1) old.Y;
-    if (MousePosition.Y > graphics->GetHeight()-32) old.Y;
+    if (MousePosition.Y < 0) MousePosition.Y = old.Y;
+    if (MousePosition.Y > graphics->GetHeight()-19) MousePosition.Y = old.Y;
+
+    graphics->DrawCursor(MousePosition.X, MousePosition.Y, 0);
 
     MousePacketReady = false;
 }
@@ -103,4 +105,5 @@ void InitPS2Mouse() {
     MouseRead();
     MouseWrite(0xF4);
     MouseRead();
+    graphics->DrawCursor(MousePosition.X, MousePosition.Y, 0);
 }

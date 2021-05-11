@@ -10,32 +10,59 @@ ASMFLAGS =
 LDFLAGS = -T $(LDS) -static -Bsymbolic -nostdlib
 
 SRCDIR := Kernel
-OBJDIR := Build/binaries
+OBJDIR := Build/Binaries
 BUILDDIR = Build
-BOOTEFI := $(GNUEFI)/x86_64/bootloader/main.efi
+BOOTEFI := $(BUILDDIR)/bootloader.efi
 LDS = $(SRCDIR)/kernel.ld
 
 all:
 	@-if [ `head -n 1 hbm` = "OS=macOS" ]; then\
 		printf "Compiling Bootloader...\r";\
-        docker exec HBM /bin/bash -c "cd /home/HydraOS/bootloader/ > /dev/null 2>&1;make bootloader -s;cd ../ > /dev/null 2>&1"\
+		d=$$(date +%s);\
+        docker exec HBM /bin/bash -c "cd /home/HydraOS/bootloader/ > /dev/null 2>&1;make bootloader -s;cd ../ > /dev/null 2>&1";\
+		time=$$(($$(date +%s)-d));\
+		if [ $$time -eq 1 ]; then\
+			echo "Bootloader took $$((time)) second to compile!";\
+		else\
+			echo "Bootloader took $$((time)) seconds to compile!";\
+		fi;\
 		printf "Compiling Kernel...     \r";\
+		d=$$(date +%s);\
         docker exec HBM /bin/bash -c "cd /home/HydraOS/;make kernel";\
+		time=$$(($$(date +%s)-d));\
+		if [ $$time -eq 1 ]; then\
+			echo "Kernel took $$((time)) second to compile!";\
+		else\
+			echo "Kernel took $$((time)) seconds to compile!";\
+		fi;\
 		printf "Creating Image...       \r";\
-		make buildimg;\
+		make image;\
 		printf "Running...              \r";\
 		make run;\
-		printf "                        \n";\
 	elif [ `head -n 1 hbm` = "OS=Debian" ]; then\
 		printf "Compiling Bootloader...\r";\
+		d=$$(date +%s);\
 		cd bootloader > /dev/null 2>&1;make bootloader;\
+		time=$$(($$(date +%s)-d));\
+		if [ $$time -eq 1 ]; then\
+			echo "Bootloader took $$((time)) second to compile!";\
+		else\
+			echo "Bootloader took $$((time)) seconds to compile!";\
+		fi;\
 		printf "Compiling Kernel...    \r";\
+		d=$$(date +%s);\
 		cd ../ > /dev/null 2>&1;make kernel;\
+		time=$$(($$(date +%s)-d));\
+		if [ $$time -eq 1 ]; then\
+			echo "Bootloader took $$((time)) second to compile!";\
+		else\
+			echo "Bootloader took $$((time)) seconds to compile!";\
+		fi;\
 		printf "Creating Image...     \r";\
-		make buildimg;\
+		make image;\
 		printf "Running...            \r";\
 		if [ -d "/mnt/c/" ]; then\
-			cmd.exe /C qemu-system-x86_64 -drive file=Hydra/Hydra.iso,format=raw -m 512M -cpu qemu64 -drive if=pflash,format=raw,unit=0,file=etc/OVMF_CODE-pure-efi.fd,readonly=on -drive if=pflash,format=raw,unit=1,file=etc/OVMF_VARS-pure-efi.fd -net none -boot order=d;\
+			cmd.exe /C qemu-system-x86_64 -drive file=Build/Hydra.iso,format=raw -m 512M -cpu qemu64 -drive if=pflash,format=raw,unit=0,file=Build/OVMF/OVMF_CODE-pure-efi.fd,readonly=on -drive if=pflash,format=raw,unit=1,file=Build/OVMF//OVMF_VARS-pure-efi.fd -net none -boot order=d;\
 		else\
 			make run;\
 		fi;\
@@ -69,15 +96,18 @@ $(OBJDIR)/%_asm.o: $(SRCDIR)/%.asm
 link:
 	@-$(LD) $(LDFLAGS) -o $(BUILDDIR)/kernel.elf $(OBJS)
 
-buildimg:
+image:
 	@-dd if=/dev/zero of=$(BUILDDIR)/Hydra.iso bs=512 count=93750 > /dev/null 2>&1
 	@-mformat -i $(BUILDDIR)/Hydra.iso -f 1440 ::
 	@-mmd -i $(BUILDDIR)/Hydra.iso ::/EFI
 	@-mmd -i $(BUILDDIR)/Hydra.iso ::/EFI/BOOT
 	@-mcopy -i $(BUILDDIR)/Hydra.iso $(BOOTEFI) ::/EFI/BOOT
-	@-mcopy -i $(BUILDDIR)/Hydra.iso startup.nsh ::
+	@-mcopy -i $(BUILDDIR)/Hydra.iso $(BUILDDIR)/startup.nsh ::
 	@-mcopy -i $(BUILDDIR)/Hydra.iso $(BUILDDIR)/kernel.elf ::
 	@-mcopy -i $(BUILDDIR)/Hydra.iso $(BUILDDIR)/font.psf ::
 
 run:
 	@-qemu-system-x86_64 -drive file=$(BUILDDIR)/Hydra.iso,format=raw -m $(RAM) -cpu qemu64 -drive if=pflash,format=raw,unit=0,file="$(OVMFDIR)/OVMF_CODE-pure-efi.fd",readonly=on -drive if=pflash,format=raw,unit=1,file="$(OVMFDIR)/OVMF_VARS-pure-efi.fd" -net none -boot order=d
+
+clean:
+	@-rm -r Build/Binaries/*
