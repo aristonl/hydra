@@ -53,17 +53,17 @@ void initialize(BootData* bootdata) {
     asm ("mov %0, %%cr3" : : "r" (PML4));
     idtr.Limit = 0x0FFF;
     idtr.Offset = (uint64_t) Allocator.RequestPage();
-    //SetIDTGate((void*) PageFault_Handler, 0xE, IDT_TA_InterruptGate, 0x08);
-    //SetIDTGate((void*) DoubleFault_Handler, 0x8, IDT_TA_InterruptGate, 0x08);
-    //SetIDTGate((void*) GPFault_Handler, 0xD, IDT_TA_InterruptGate, 0x08);
-    //SetIDTGate((void*) KeyboardInt_Handler, 0x21, IDT_TA_InterruptGate, 0x08);
-    //SetIDTGate((void*) MouseInt_Handler, 0x2C, IDT_TA_InterruptGate, 0x08);
-    //asm ("lidt %0" : : "m" (idtr));
-    //RemapPIC();
-    //InitPS2Mouse();
-    //outb(PIC1_DATA, 0b11111001);
-    //outb(PIC2_DATA, 0b11101111);
-    //asm ("sti");
+    SetIDTGate((void*) PageFault_Handler, 0xE, IDT_TA_InterruptGate, 0x08);
+    SetIDTGate((void*) DoubleFault_Handler, 0x8, IDT_TA_InterruptGate, 0x08);
+    SetIDTGate((void*) GPFault_Handler, 0xD, IDT_TA_InterruptGate, 0x08);
+    SetIDTGate((void*) KeyboardInt_Handler, 0x21, IDT_TA_InterruptGate, 0x08);
+    SetIDTGate((void*) MouseInt_Handler, 0x2C, IDT_TA_InterruptGate, 0x08);
+    asm ("lidt %0" : : "m" (idtr));
+    RemapPIC();
+    InitPS2Mouse();
+    outb(PIC1_DATA, 0b11111001);
+    outb(PIC2_DATA, 0b11101111);
+    asm ("sti");
 }
 
 extern "C" int main(BootData* bootdata) {

@@ -17,15 +17,6 @@ LDS = $(SRCDIR)/kernel.ld
 
 all:
 	@-if [ `head -n 1 hbm` = "OS=macOS" ]; then\
-		printf "Compiling Bootloader...\r";\
-		d=$$(date +%s);\
-        docker exec HBM /bin/bash -c "cd /home/HydraOS/bootloader/ > /dev/null 2>&1;make bootloader -s;cd ../ > /dev/null 2>&1";\
-		time=$$(($$(date +%s)-d));\
-		if [ $$time -eq 1 ]; then\
-			echo "Bootloader took $$((time)) second to compile!";\
-		else\
-			echo "Bootloader took $$((time)) seconds to compile!";\
-		fi;\
 		printf "Compiling Kernel...     \r";\
 		d=$$(date +%s);\
         docker exec HBM /bin/bash -c "cd /home/HydraOS/;make kernel";\
@@ -40,15 +31,6 @@ all:
 		printf "Running...              \r";\
 		make run;\
 	elif [ `head -n 1 hbm` = "OS=Debian" ]; then\
-		printf "Compiling Bootloader...\r";\
-		d=$$(date +%s);\
-		cd bootloader > /dev/null 2>&1;make bootloader;\
-		time=$$(($$(date +%s)-d));\
-		if [ $$time -eq 1 ]; then\
-			echo "Bootloader took $$((time)) second to compile!";\
-		else\
-			echo "Bootloader took $$((time)) seconds to compile!";\
-		fi;\
 		printf "Compiling Kernel...    \r";\
 		d=$$(date +%s);\
 		cd ../ > /dev/null 2>&1;make kernel;\
