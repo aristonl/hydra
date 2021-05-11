@@ -68,6 +68,7 @@ void initialize(BootData* bootdata) {
 
 extern "C" int main(BootData* bootdata) {
     initialize(bootdata);
+    
     /*
      * asm("int $0x0e");
      *  | Kernel Panic

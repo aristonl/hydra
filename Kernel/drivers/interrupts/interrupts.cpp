@@ -4,7 +4,14 @@
 #include "mouse.h"
 
 __attribute__((interrupt)) void PageFault_Handler(interrupt_frame* frame) {
-    graphics->DrawRectangleFromTo(0, 0, graphics->GetWidth(), graphics->GetHeight(), 0xff0000);
+    graphics->DrawRectangleFromTo(0, 0, graphics->GetWidth(), graphics->GetHeight(), 0x0000ff);
+    graphics->SetColor(16777215);
+    graphics->SetXY(graphics->GetWidth()/2-(_strlen("Page Fault")*8)/2, graphics->GetHeight()/2-48);
+    graphics->printf("Page Fault");
+    graphics->SetXY(graphics->GetWidth()/2-(_strlen("Hydra encountered an error whilst paging!")*8)/2, graphics->GetHeight()/2-16);
+    graphics->printf("Hydra encountered an error whilst paging!");
+    graphics->SetXY(graphics->GetWidth()-_strlen("Error code: 0x0000")*8, graphics->GetHeight()-16);
+    graphics->printf("Error code: 0x0000");
     while(true);
 }
 
