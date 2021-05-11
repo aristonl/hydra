@@ -44,7 +44,7 @@ build:
 	@-if [ `head -n 1 hbm` = "OS=macOS" ]; then\
 		docker exec HBM /bin/bash -c "cd /home/HydraOS/;make kernel";\
 	elif [ `head -n 1 hbm` = "OS=Debian" ]; then\
-		cd ../ > /dev/null 2>&1;make kernel;\
+		make kernel;\
 	else\
 		echo "Please run ./setup-environment.sh";\
 	fi
