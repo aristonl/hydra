@@ -1,4 +1,4 @@
-# Hydra
+# Hydra [![Hydra](https://github.com/Null-LLC/Hydra/actions/workflows/c-cpp.yml/badge.svg)](https://github.com/Null-LLC/Hydra/actions/workflows/c-cpp.yml)
 A complex Operating System built on the Inferno kernel for AMD64 and ARM.
 
 ## About
