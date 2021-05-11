@@ -16,42 +16,19 @@ BOOTEFI := $(BUILDDIR)/bootloader.efi
 LDS = $(SRCDIR)/kernel.ld
 
 all:
-	@-if [ `head -n 1 hbm` = "OS=macOS" ]; then\
-		printf "Compiling Kernel...     \r";\
-		d=$$(date +%s);\
-        docker exec HBM /bin/bash -c "cd /home/HydraOS/;make kernel";\
-		time=$$(($$(date +%s)-d));\
-		if [ $$time -eq 1 ]; then\
-			echo "Kernel took $$((time)) second to compile!";\
-		else\
-			echo "Kernel took $$((time)) seconds to compile!";\
-		fi;\
-		printf "Creating Image...       \r";\
-		make image;\
-		printf "Running...              \r";\
-		make run;\
-	elif [ `head -n 1 hbm` = "OS=Debian" ]; then\
-		printf "Compiling Kernel...    \r";\
-		d=$$(date +%s);\
-		cd ../ > /dev/null 2>&1;make kernel;\
-		time=$$(($$(date +%s)-d));\
-		if [ $$time -eq 1 ]; then\
-			echo "Bootloader took $$((time)) second to compile!";\
-		else\
-			echo "Bootloader took $$((time)) seconds to compile!";\
-		fi;\
-		printf "Creating Image...     \r";\
-		make image;\
-		printf "Running...            \r";\
-		if [ -d "/mnt/c/" ]; then\
-			cmd.exe /C qemu-system-x86_64 -drive file=Build/Hydra.iso,format=raw -m 512M -cpu qemu64 -drive if=pflash,format=raw,unit=0,file=Build/OVMF/OVMF_CODE-pure-efi.fd,readonly=on -drive if=pflash,format=raw,unit=1,file=Build/OVMF//OVMF_VARS-pure-efi.fd -net none -boot order=d;\
-		else\
-			make run;\
-		fi;\
-		printf "                       \n";\
+	@-printf "Building Kernel...\r"
+	@-d=$$(date +%s);\
+        make build;\
+	time=$$(($$(date +%s)-d));\
+	if [ $$time -eq 1 ]; then\
+		echo "Kernel took $$((time)) second to compile!";\
 	else\
-		echo "Please run ./setup-environment.sh";\
-    	fi
+		echo "Kernel took $$((time)) seconds to compile!";\
+	fi
+	@-printf "Making ISO...     \r"
+	@-make image
+	@-printf "Starting Qemu...  \r"
+	@-make run
 
 rwildcard=$(foreach d,$(wildcard $(1:=/*)),$(call rwildcard,$d,$2) $(filter $(subst *,%,$2),$d))
 
@@ -60,6 +37,17 @@ ASMSRC = $(call rwildcard,$(SRCDIR),*.asm)
 OBJS = $(patsubst $(SRCDIR)/%.cpp, $(OBJDIR)/%.o, $(SRC))
 OBJS += $(patsubst $(SRCDIR)/%.asm, $(OBJDIR)/%_asm.o, $(ASMSRC))
 DIRS = $(wildcard $(SRCDIR)/*)
+
+.PHONY: build
+
+build:
+	@-if [ `head -n 1 hbm` = "OS=macOS" ]; then\
+		docker exec HBM /bin/bash -c "cd /home/HydraOS/;make kernel";\
+	elif [ `head -n 1 hbm` = "OS=Debian" ]; then\
+		cd ../ > /dev/null 2>&1;make kernel;\
+	else\
+		echo "Please run ./setup-environment.sh";\
+	fi
 
 kernel: $(OBJS) link
 
@@ -89,7 +77,17 @@ image:
 	@-mcopy -i $(BUILDDIR)/Hydra.iso $(BUILDDIR)/font.psf ::
 
 run:
-	@-qemu-system-x86_64 -drive file=$(BUILDDIR)/Hydra.iso,format=raw -m $(RAM) -cpu qemu64 -drive if=pflash,format=raw,unit=0,file="$(OVMFDIR)/OVMF_CODE-pure-efi.fd",readonly=on -drive if=pflash,format=raw,unit=1,file="$(OVMFDIR)/OVMF_VARS-pure-efi.fd" -net none -boot order=d
+	@-if [ `head -n 1 hbm` = "OS=macOS" ]; then\
+		qemu-system-x86_64 -drive file=$(BUILDDIR)/Hydra.iso,format=raw -m $(RAM) -cpu qemu64 -drive if=pflash,format=raw,unit=0,file="$(OVMFDIR)/OVMF_CODE-pure-efi.fd",readonly=on -drive if=pflash,format=raw,unit=1,file="$(OVMFDIR)/OVMF_VARS-pure-efi.fd" -net none -boot order=d;\
+	elif [ `head -n 1 hbm` = "OS=Debian" ]; then\
+		if [ -d "/mnt/c/" ]; then\
+			cmd.exe /C qemu-system-x86_64 -drive file=$(BUILDDIR)/Hydra.iso,format=raw -m $(RAM) -cpu qemu64 -drive if=pflash,format=raw,unit=0,file=$(OVMFDIR)/OVMF_CODE-pure-efi.fd,readonly=on -drive if=pflash,format=raw,unit=1,file=$(OVMFDIR)/OVMF_VARS-pure-efi.fd -net none -boot order=d;\
+		else\
+			qemu-system-x86_64 -drive file=$(BUILDDIR)/Hydra.iso,format=raw -m $(RAM) -cpu qemu64 -drive if=pflash,format=raw,unit=0,file="$(OVMFDIR)/OVMF_CODE-pure-efi.fd",readonly=on -drive if=pflash,format=raw,unit=1,file="$(OVMFDIR)/OVMF_VARS-pure-efi.fd" -net none -boot order=d;\
+		fi;\
+	else\
+		echo "Please run ./setup-environment.sh";\
+	fi
 
 clean:
 	@-rm -r Build/Binaries/*

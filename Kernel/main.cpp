@@ -61,6 +61,7 @@ void initialize(BootData* bootdata) {
     uint64_t fbSize = (uint64_t) bootdata->framebuffer->Size + 0x1000;
     Allocator.LockPages((void*) fbBase, fbSize/ 0x1000 + 1);
     for (uint64_t t = fbBase; t < fbBase + fbSize; t += 4096) pageTableManager.MapMemory((void*) t, (void*) t);
+    memset(bootdata->framebuffer->BaseAddress, 0, bootdata->framebuffer->Size);
     asm ("mov %0, %%cr3" : : "r" (PML4));
     idtr.Limit = 0x0FFF;
     idtr.Offset = (uint64_t) Allocator.RequestPage();
@@ -75,7 +76,6 @@ void initialize(BootData* bootdata) {
     outb(PIC1_DATA, 0b11111001);
     outb(PIC2_DATA, 0b11101111);
     asm ("sti");
-    memset(bootdata->framebuffer->BaseAddress, 0, bootdata->framebuffer->Size);
 }
 
 extern "C" int main(BootData* bootdata) {
