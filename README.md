@@ -7,7 +7,7 @@ Hydra is an AMD64 / ARM based operating system built on top of the Inferno kerne
 ## Documentation
 You can find the documentation in [Hydra/Documentation](https://github.com/Null-LLC/Hydra/tree/main/Documentation)
 
-Looking how to build the Operating System? Find the Instructions [here](https://github.com/Null-LLC/Hydra/tree/main/Documentation/BuildInstructions.md).
+Looking how to build the Operating System? Find the Instructions [here](https://github.com/Null-LLC/Hydra/tree/main/Documentation/Compilation/BuildInstructions.md).
 
 ## Get in touch
 Submit a contact form: https://null-llc.com/contact
