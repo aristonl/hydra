@@ -21,11 +21,9 @@ void Graphics::Initialize(Framebuffer* framebuffer, PSF1_FONT* font) {
 }
 
 void Graphics::putpixel(int x, int y, unsigned int color) {
-    if (getpixel(x, y) != color) {
-        if ((x >= 0 && x < this->framebuffer->Width && y < this->framebuffer->Height && y >= 0)) {
-            unsigned int* pixPtr = (unsigned int*) this->framebuffer->BaseAddress;
-            *(unsigned int*)(pixPtr + x + (y * this->framebuffer->PixelsPerScanLine)) = color;
-        }
+    if ((x >= 0 && x < this->framebuffer->Width) && (y < this->framebuffer->Height && y >= 0)) {
+        unsigned int* pixPtr = (unsigned int*) this->framebuffer->BaseAddress;
+        *(unsigned int*)(pixPtr + x + (y * this->framebuffer->PixelsPerScanLine)) = color;
     }
 }
 

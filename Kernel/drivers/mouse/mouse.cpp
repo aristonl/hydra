@@ -95,13 +95,9 @@ void Mouse::StepPacket() {
     if (MousePosition.Y < 0) MousePosition.Y = old.Y;
     if (MousePosition.Y > graphics->framebuffer->Height-1) MousePosition.Y = old.Y;
 
-    if (MousePacket[0] & LeftMouseButton) {
-        graphics->putpixel(MousePosition.X, MousePosition.Y, 0xFF0000);
-    } else if (MousePacket[0] & RightMouseButton) {
-        graphics->putpixel(MousePosition.X, MousePosition.Y, 0x00FF00);
-    } else {
-        graphics->DrawCursor(MousePosition.X, MousePosition.Y);
-    }
+    if (MousePacket[0] & LeftMouseButton) graphics->putpixel(MousePosition.X, MousePosition.Y, 0xFF0000);
+    else if (MousePacket[0] & RightMouseButton) graphics->putpixel(MousePosition.X, MousePosition.Y, 0x00FF00);
+    else graphics->DrawCursor(MousePosition.X, MousePosition.Y);
 
     MousePacketReady = false;
 }
