@@ -6,40 +6,38 @@
  * | |__ | |_   _  _ | | ____ ____
  * |  __)| | | | |/ || |/ ___) _  |     mouse.cpp
  * | |   | | |_| ( (_| | |  ( ( | |     Controls the Cursor
- * |_|   |_|\__  |\____|_|   \_||_|         Will be replaced soon!
+ * |_|   |_|\__  |\____|_|   \_||_|
  *         (____/
  */
 
 #include "mouse.hpp"
 #include "../../misc/string.hpp"
 
-void MouseWait() {
+Mouse mouse = Mouse();
+
+void Mouse::MouseWait() {
     uint64_t timeout = 100000;
     while (timeout--) if ((inb(0x64) & 0b10) == 0) return;
 }
 
-void MouseWaitInput() {
+void Mouse::MouseWaitInput() {
     uint64_t timeout = 100000;
     while (timeout--) if (inb(0x64) & 0b1) return;
 }
 
-void MouseWrite(uint8_t value) {
+void Mouse::MouseWrite(uint8_t value) {
     MouseWait();
     outb(0x64, 0xD4);
     MouseWait();
     outb(0x60, value);
 }
 
-uint8_t MouseRead() {
+uint8_t Mouse::MouseRead() {
     MouseWaitInput();
     return inb(0x60);
 }
 
-uint8_t MouseCycle = 0;
-uint8_t MousePacket[4];
-bool MousePacketReady = false;
-Point MousePosition;
-void HandlePS2Mouse(uint8_t data) {
+void Mouse::HandleData(uint8_t data) {
     switch(MouseCycle) {
         case 0:
             if (MousePacketReady) break;
@@ -61,17 +59,17 @@ void HandlePS2Mouse(uint8_t data) {
     }
 }
 
-void ProcessMousePacket() {
+void Mouse::StepPacket() {
     Point old = MousePosition;
     if (!MousePacketReady) return;
     bool xNegative, yNegative, xOverflow, yOverflow;
-    if (MousePacket[0] & PS2XSign) xNegative = true;
+    if (MousePacket[0] & MouseXSign) xNegative = true;
     else xNegative = false;
-    if (MousePacket[0] & PS2YSign) yNegative = true;
+    if (MousePacket[0] & MouseYSign) yNegative = true;
     else yNegative = false;
-    if (MousePacket[0] & PS2XOverflow) xOverflow = true;
+    if (MousePacket[0] & MouseXOverflow) xOverflow = true;
     else xOverflow = false;
-    if (MousePacket[0] & PS2YOverflow) yOverflow = true;
+    if (MousePacket[0] & MouseYOverflow) yOverflow = true;
     else yOverflow = false;
 
     if (!xNegative) {
@@ -92,22 +90,23 @@ void ProcessMousePacket() {
     }
 
     if (MousePosition.X < 0) MousePosition.X = old.X;
-    if (MousePosition.X > graphics->GetWidth()-12) MousePosition.X = old.X;
+    if (MousePosition.X > graphics->framebuffer->Width-1) MousePosition.X = old.X;
     
     if (MousePosition.Y < 0) MousePosition.Y = old.Y;
-    if (MousePosition.Y > graphics->GetHeight()-19) MousePosition.Y = old.Y;
+    if (MousePosition.Y > graphics->framebuffer->Height-1) MousePosition.Y = old.Y;
 
-
-    if (MousePacket[0] & PS2Leftbutton) {
+    if (MousePacket[0] & LeftMouseButton) {
         graphics->putpixel(MousePosition.X, MousePosition.Y, 0xFF0000);
-    } else if (MousePacket[0] & PS2Rightbutton) {
+    } else if (MousePacket[0] & RightMouseButton) {
         graphics->putpixel(MousePosition.X, MousePosition.Y, 0x00FF00);
+    } else {
+        graphics->DrawCursor(MousePosition.X, MousePosition.Y);
     }
 
     MousePacketReady = false;
 }
 
-void InitPS2Mouse() {
+Mouse::Mouse() {
     outb(0x64, 0xA8);
     MouseWait();
     outb(0x64, 0x20);
@@ -122,5 +121,4 @@ void InitPS2Mouse() {
     MouseRead();
     MouseWrite(0xF4);
     MouseRead();
-    graphics->DrawCursor(MousePosition.X, MousePosition.Y, 0);
 }

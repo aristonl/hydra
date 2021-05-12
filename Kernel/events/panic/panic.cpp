@@ -14,6 +14,4 @@
 #include "../../graphics/graphics.hpp"
 #include "../../misc/string.hpp"
 
-void Panic(const char* panicMessage) {
-    graphics->DrawRectangleFromTo(0, 0, graphics->GetWidth(), graphics->GetHeight(), 0xff0000);
-}
+void Panic(const char* panicMessage) {}

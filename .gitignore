@@ -21,7 +21,9 @@
 
 *.iso
 *.elf
-Hydra/Binaries/*.o
+Build/Binaries/*
+Build/qemu-720p-bootloader.efi
+
 
 .DS_Store
 .vim/

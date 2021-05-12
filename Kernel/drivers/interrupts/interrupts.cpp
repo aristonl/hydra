@@ -13,40 +13,49 @@
 #include "interrupts.hpp"
 #include "../../misc/InputOutput.hpp"
 #include "../../misc/string.hpp"
-#include "mouse.hpp"
+#include "../mouse/mouse.hpp"
 
 __attribute__((interrupt)) void PageFaultHandler(interrupt_frame* frame) {
-    graphics->DrawRectangleFromTo(0, 0, graphics->GetWidth(), graphics->GetHeight(), 0x0000ff);
-    graphics->SetColor(16777215);
-    graphics->SetXY(graphics->GetWidth()/2-(_strlen("Page Fault")*8)/2, graphics->GetHeight()/2-48);
+    graphics->DrawRectangleFromTo(0, 0, graphics->framebuffer->Width, graphics->framebuffer->Height, 0x0000ff);
+    graphics->color = 16777215;
+    graphics->TextPosition.X = graphics->framebuffer->Width/2-_strlen("Page Fault")*8/2;
+    graphics->TextPosition.Y = graphics->framebuffer->Height/2-48;
     graphics->printf("Page Fault");
-    graphics->SetXY(graphics->GetWidth()/2-(_strlen("Hydra encountered an error whilst paging!")*8)/2, graphics->GetHeight()/2-16);
+    graphics->TextPosition.X = graphics->framebuffer->Width/2-_strlen("Hydra encountered an error whilst paging!")*8/2;
+    graphics->TextPosition.Y = graphics->framebuffer->Height/2-16;
     graphics->printf("Hydra encountered an error whilst paging!");
-    graphics->SetXY(graphics->GetWidth()-_strlen("Error code: 0x0000")*8, graphics->GetHeight()-16);
-    graphics->printf("Error code: 0x0000");
+    graphics->TextPosition.X = graphics->framebuffer->Width-_strlen("Error code: 0x0000")*8;
+    graphics->TextPosition.Y = graphics->framebuffer->Height-16;
+    graphics->printf("Error code: 0x000");
     while(true);
 }
 
 __attribute__((interrupt)) void DoublePageFaultHandler(interrupt_frame* frame) {
-    graphics->DrawRectangleFromTo(0, 0, graphics->GetWidth(), graphics->GetHeight(), 0x0000ff);
-    graphics->SetColor(16777215);
-    graphics->SetXY(graphics->GetWidth()/2-(_strlen("Double Page Fault")*8)/2, graphics->GetHeight()/2-48);
+    graphics->DrawRectangleFromTo(0, 0, graphics->framebuffer->Width, graphics->framebuffer->Height, 0x0000ff);
+    graphics->color = 16777215;
+    graphics->TextPosition.X = graphics->framebuffer->Width/2-_strlen("Double Page Fault")*8/2;
+    graphics->TextPosition.Y = graphics->framebuffer->Height/2-48;
     graphics->printf("Double Page Fault");
-    graphics->SetXY(graphics->GetWidth()/2-(_strlen("Hydra encountered an error whilst paging!")*8)/2, graphics->GetHeight()/2-16);
+    graphics->TextPosition.X = graphics->framebuffer->Width/2-_strlen("Hydra encountered an error whilst paging!")*8/2;
+    graphics->TextPosition.Y = graphics->framebuffer->Height/2-16;
     graphics->printf("Hydra encountered an error whilst paging!");
-    graphics->SetXY(graphics->GetWidth()-_strlen("Error code: 0x0001")*8, graphics->GetHeight()-16);
+    graphics->TextPosition.X = graphics->framebuffer->Width-_strlen("Error code: 0x0001")*8;
+    graphics->TextPosition.Y = graphics->framebuffer->Height-16;
     graphics->printf("Error code: 0x0001");
     while(true);
 }
 
 __attribute__((interrupt)) void GeneralPageFaultHandler(interrupt_frame* frame) {
-    graphics->DrawRectangleFromTo(0, 0, graphics->GetWidth(), graphics->GetHeight(), 0x0000ff);
-    graphics->SetColor(16777215);
-    graphics->SetXY(graphics->GetWidth()/2-(_strlen("General Page Fault")*8)/2, graphics->GetHeight()/2-48);
+    graphics->DrawRectangleFromTo(0, 0, graphics->framebuffer->Width, graphics->framebuffer->Height, 0x0000ff);
+    graphics->color = 16777215;
+    graphics->TextPosition.X = graphics->framebuffer->Width/2-_strlen("General Page Fault")*8/2;
+    graphics->TextPosition.Y = graphics->framebuffer->Height/2-48;
     graphics->printf("General Page Fault");
-    graphics->SetXY(graphics->GetWidth()/2-(_strlen("Hydra encountered an error whilst paging!")*8)/2, graphics->GetHeight()/2-16);
+    graphics->TextPosition.X = graphics->framebuffer->Width/2-_strlen("Hydra encountered an error whilst paging!")*8/2;
+    graphics->TextPosition.Y = graphics->framebuffer->Height/2-16;
     graphics->printf("Hydra encountered an error whilst paging!");
-    graphics->SetXY(graphics->GetWidth()-_strlen("Error code: 0x0002")*8, graphics->GetHeight()-16);
+    graphics->TextPosition.X = graphics->framebuffer->Width-_strlen("Error code: 0x0002")*8;
+    graphics->TextPosition.Y = graphics->framebuffer->Height-16;
     graphics->printf("Error code: 0x0002");
     while(true);
 }
@@ -54,7 +63,7 @@ __attribute__((interrupt)) void GeneralPageFaultHandler(interrupt_frame* frame) 
 __attribute__((interrupt)) void KeyboardHandler(interrupt_frame* frame) {
     uint8_t keycode = inb(0x60);
     graphics->DrawRectangleFromTo(128,128,160,144,0);
-    graphics->SetXY(128, 128);
+    graphics->TextPosition = {128, 128};
     graphics->printf("0x");
     graphics->printf(to_hstring(keycode));
     PIC_EndMaster();
@@ -62,7 +71,7 @@ __attribute__((interrupt)) void KeyboardHandler(interrupt_frame* frame) {
 
 __attribute__((interrupt)) void MouseHandler(interrupt_frame* frame) {
     uint8_t mouseData = inb(0x60);
-    HandlePS2Mouse(mouseData);
+    mouse.HandleData(mouseData);
     PIC_EndSlave();
 }
 

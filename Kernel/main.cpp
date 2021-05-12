@@ -12,13 +12,12 @@
 
 #include "graphics/graphics.hpp"
 #include "misc/string.hpp"
-#include "misc/math.hpp"
 #include "misc/bootloader.hpp"
 #include "memory/memory.hpp"
 #include "drivers/GDT/gdt.hpp"
 #include "drivers/interrupts/idt.hpp"
 #include "drivers/interrupts/interrupts.hpp"
-#include "drivers/interrupts/mouse.hpp"
+#include "drivers/mouse/mouse.hpp"
 #include "memory/memory.hpp"
 #include "misc/InputOutput.hpp"
 #include "events/general/update/update.hpp"
@@ -42,10 +41,9 @@ bool isInitialized = false;
 
 void initialize(BootData* bootdata) {
     isInitialized = true;
-    graphics->SetFramebuffer(bootdata->framebuffer);
-    graphics->SetFont(bootdata->font);
-    graphics->SetXY(0,0);
-    graphics->SetColor(0xFFFFFF);
+    graphics->Initialize(bootdata->framebuffer, bootdata->font);
+    graphics->TextPosition = {0,0};
+    graphics->color = 0xFFFFFF;
     GDTDescriptor gdtDescriptor;
     gdtDescriptor.Size = sizeof(GDT)-1;
     gdtDescriptor.Offset = (uint64_t) &DefaultGDT;
@@ -64,7 +62,7 @@ void initialize(BootData* bootdata) {
     uint64_t fbSize = (uint64_t) bootdata->framebuffer->Size + 0x1000;
     Allocator.LockPages((void*) fbBase, fbSize/ 0x1000 + 1);
     for (uint64_t t = fbBase; t < fbBase + fbSize; t += 4096) pageTableManager.MapMemory((void*) t, (void*) t);
-    memset(bootdata->framebuffer->BaseAddress, 0, bootdata->framebuffer->Size);
+    memset(bootdata->framebuffer->BaseAddress, 255, bootdata->framebuffer->Size);
     asm ("mov %0, %%cr3" : : "r" (PML4));
     idtr.Limit = 0x0FFF;
     idtr.Offset = (uint64_t) Allocator.RequestPage();
@@ -75,7 +73,7 @@ void initialize(BootData* bootdata) {
     SetIDTGate((void*) MouseHandler, 0x2C, IDT_TA_InterruptGate, 0x08);
     asm ("lidt %0" : : "m" (idtr));
     RemapPIC();
-    InitPS2Mouse();
+    mouse = Mouse();
     outb(PIC1_DATA, 0b11111001);
     outb(PIC2_DATA, 0b11101111);
     asm ("sti");
@@ -85,7 +83,6 @@ void initialize(BootData* bootdata) {
 extern "C" KernelData main(BootData* bootdata) {
     KernelData kerneldata = {4664, 300};
     if (!initialized) initialize(bootdata);
-    MousePosition = {graphics->GetWidth()/2-graphics->GetWidth()/5, graphics->GetHeight()/2};
-    while(true) UpdateEvent();
+    while(true) mouse.StepPacket();
     return kerneldata;
 }

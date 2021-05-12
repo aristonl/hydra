@@ -11,10 +11,8 @@
  */
 
 #include "update.hpp"
-#include "../../../drivers/interrupts/mouse.hpp"
-#include "../../../memory/memory.hpp"
-#include "../../../graphics/graphics.hpp"
+#include "../../../drivers/mouse/mouse.hpp"
 
 void UpdateEvent() {
-    ProcessMousePacket();
+    mouse.StepPacket();
 }
