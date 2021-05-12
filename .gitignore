@@ -25,7 +25,6 @@ Hydra/Binaries/*.o
 
 .DS_Store
 .vim/
-.vscode/
 
 bootloader/
 
