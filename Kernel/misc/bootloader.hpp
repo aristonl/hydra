@@ -45,3 +45,7 @@ struct BootData {
 	EFI_MEMORY_DESCRIPTOR* Map;
 	uint64_t MapSize, MapDescriptorSize;
 };
+
+struct KernelData {
+	unsigned int mode, code;
+};

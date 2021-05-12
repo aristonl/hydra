@@ -21,6 +21,9 @@
 #include "drivers/interrupts/mouse.hpp"
 #include "memory/memory.hpp"
 #include "misc/InputOutput.hpp"
+#include "events/general/update/update.hpp"
+
+bool initialized = false;
 
 extern uint64_t KernelStart;
 extern uint64_t KernelEnd;
@@ -76,10 +79,13 @@ void initialize(BootData* bootdata) {
     outb(PIC1_DATA, 0b11111001);
     outb(PIC2_DATA, 0b11101111);
     asm ("sti");
+    initialized = true;
 }
 
-extern "C" int main(BootData* bootdata) {
-    initialize(bootdata);
-    while(true) ProcessMousePacket();
-    return 300;
+extern "C" KernelData main(BootData* bootdata) {
+    KernelData kerneldata = {4664, 300};
+    if (!initialized) initialize(bootdata);
+    MousePosition = {graphics->GetWidth()/2-graphics->GetWidth()/5, graphics->GetHeight()/2};
+    while(true) UpdateEvent();
+    return kerneldata;
 }

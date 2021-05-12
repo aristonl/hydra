@@ -97,7 +97,12 @@ void ProcessMousePacket() {
     if (MousePosition.Y < 0) MousePosition.Y = old.Y;
     if (MousePosition.Y > graphics->GetHeight()-19) MousePosition.Y = old.Y;
 
-    graphics->DrawCursor(MousePosition.X, MousePosition.Y, 0);
+
+    if (MousePacket[0] & PS2Leftbutton) {
+        graphics->putpixel(MousePosition.X, MousePosition.Y, 0xFF0000);
+    } else if (MousePacket[0] & PS2Rightbutton) {
+        graphics->putpixel(MousePosition.X, MousePosition.Y, 0x00FF00);
+    }
 
     MousePacketReady = false;
 }

@@ -1,5 +1,5 @@
 @echo -off
-mode 80 25
+mode 80 24
 
 cls
 if exist .\efi\boot\bootloader.efi then
