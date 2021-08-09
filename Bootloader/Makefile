@@ -5,10 +5,15 @@ Objects = $(patsubst Source/%.s, Build/Source/%.so, $(AssemblySource))
 Directories = $(wildcard Source/*)
 
 Build/Source/%.so: Source/%.s
-	@echo Compiling /$(subst Source/,,$^)
-	@nasm $^ -o $@
+	@printf "Compiling /$(subst Source/,,$^)...                    \r"
+	@cd Source;nasm $(subst Source/,,$^) -o ../$@
+
+clean:
+	@rm -r Build/Source
+	@mkdir Build/Source
 
 all: $(Objects)
+	@cat Build/Source/boot.so Build/Source/extension.so > Build/Bootloader.bin
 
 emulate:
-	@qemu-system-x86_64 Build/Source/boot.so
+	@qemu-system-x86_64 -drive file=Build/Bootloader.bin,format=raw
