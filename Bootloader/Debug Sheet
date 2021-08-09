@@ -1,4 +1,0 @@
-0 - Booted Properly - [Appends to video memory]
-1 - Failed to read disk - [Appends to video memory]
-2 - Successfully read disk - [Appends to video memory]
-3 - Entered 32 bit protected mode - [Replaces first byte in video memory]
