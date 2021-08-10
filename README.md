@@ -9,5 +9,9 @@ custom Inferno kernel.
 **Thomas Lim** (Ariston Lorenzo) - [@itsthomaslim](https://github.com/itsthomaslim)
 **Levi Cowan** - [@FiReLScar](https://github.com/FiReLScar)
 
+## Contributors
+**Joshua Torres** - [@jltorres11](https://github.com/jltorres11)
+**Genesis Banzon** - [@myst303](https://github.com/amist3301)
+
 ## License
-Echo and Inferno is licensed under the MIT License.
+Echo and Inferno are licensed under the MIT License.
