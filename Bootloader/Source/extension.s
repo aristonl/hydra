@@ -1,4 +1,3 @@
-[org 0x7e00]
 jmp EnterProtectedMode
 GDTNull:
   dd 0
@@ -140,6 +139,5 @@ NoCPUID:
   hlt
 [bits 64]
 Start64Bit:
-  
   jmp $
 times 2048-($-$$) db 0

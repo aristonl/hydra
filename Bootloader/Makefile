@@ -12,7 +12,10 @@ clean:
 	@rm -r Build/Source
 	@mkdir Build/Source
 
-all: $(Objects)
+all:
+	@cd Source;nasm boot.s -o ../Build/Source/boot.so
+	@cd Source;nasm extension.s -f elf64 -o ../Build/Source/extension.elf
+	@cd Build/Source;ld -o ../bootloader.bin -Ttext 0x7e00 extension.elf
 	@cat Build/Source/boot.so Build/Source/extension.so > Build/Bootloader.bin
 
 emulate:
