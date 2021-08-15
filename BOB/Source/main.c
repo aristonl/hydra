@@ -74,8 +74,8 @@ typedef struct EFI_SYSTEM_TABLE {
 
 EFI_STATUS efi_main(EFI_HANDLE ImageHandle, EFI_SYSTEM_TABLE *SystemTable) {
   SystemTable->ConOut->Reset(SystemTable->ConOut, 1);
-  SystemTable->ConOut->SetAttribute(SystemTable->ConOut, EFI_YELLOW);
-  SystemTable->ConOut->OutputString(SystemTable->ConOut, L"Testing...\r\n");
+  SystemTable->ConOut->SetAttribute(SystemTable->ConOut, 0x7e);
+  SystemTable->ConOut->OutputString(SystemTable->ConOut, L"Hello, world!\r\n");
   while(1);
   return 0;
 }
