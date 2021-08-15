@@ -1,4 +1,4 @@
-# Echo
+# Echo/Inferno
 A 64-Bit Operating System for ARM and x64 built in C++.
 
 ## About
