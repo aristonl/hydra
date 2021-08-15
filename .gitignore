@@ -2,3 +2,4 @@
 *.o
 *.so
 *.EFI
+!BOB/Misc/BIOS64.bin
