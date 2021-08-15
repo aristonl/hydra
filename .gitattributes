@@ -12,5 +12,8 @@
 *.h++   text diff=cpp
 *.hh    text diff=cpp
 
-*.bin binary # Compiled Binary File
-*.hdd binary # Hard Disk Drive File
+# Compiled Binary File
+*.bin binary
+
+# Hard Disk Drive File
+*.hdd binary
