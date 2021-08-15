@@ -14,7 +14,7 @@ build:
 	@x86_64-w64-mingw32-gcc Build/Source/main.o -Wall -Werror -m64 -mabi=ms -nostdlib -shared -Wl,-dll -Wl,--subsystem,10 -e efi_main -o Build/BOOTX64.EFI
 	@printf "Mounting...              \r"
 	@sudo mkdir -p /mnt/Echo
-	@loc=`sudo losetup Build/Drive.hdd -fP --show`;sudo mount --verbose -tvfat $$loc\p1 /mnt/Echo
+	@loc=`sudo losetup Build/Drive.hdd -fP --show`;sudo mount -tvfat $$loc\p1 /mnt/Echo
 	@printf "Moving...               \r"
 	@-sudo mv Build/BOOTX64.EFI /mnt/Echo/EFI/Boot/BOOTX64.EFI 2>/dev/null
 	@printf "Unmounting...          \r"
