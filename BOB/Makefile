@@ -1,6 +1,5 @@
 # Recommended that you use WSL 2 for the time being...
-# Installs: build-essential mingw-w64 mtools
-# Requirement: Please install QEMU 2020 on your Host system (Windows) https://qemu.weilnetz.de/w64/ (PLEASE ENSURE YOU DOWNLOAD A VERSION FROM 2020)
+# Installs: build-essential mtools qemu mingw-w64
 all: build emulate
 
 emulate:
@@ -10,8 +9,8 @@ emulate:
 build:
 	@mkdir -p Build/Source/
 	@printf "Compiling...             \r"
-	@x86_64-w64-mingw32-gcc -Wall -Werror -m64 -mabi=ms -ffreestanding -c Source/main.c -o Build/Source/main.o
-	@x86_64-w64-mingw32-gcc Build/Source/main.o -Wall -Werror -m64 -mabi=ms -nostdlib -shared -Wl,-dll -Wl,--subsystem,10 -e efi_main -o Build/bootx64.efi
+	@x86_64-w64-mingw32-g++ -Wall -Werror -m64 -mabi=ms -ffreestanding -c Source/main.cpp -o Build/Source/main.o
+	@x86_64-w64-mingw32-g++ Build/Source/main.o -Wall -Werror -m64 -mabi=ms -nostdlib -shared -Wl,-dll -Wl,--subsystem,10 -e boot -o Build/bootx64.efi
 	@printf "Creating Image...             \r"
 ifeq ($(shell [ -e Build/Echo.img ] && echo 1 || echo 0 ), 0)
 	@dd if=/dev/zero of=Build/Echo.img bs=512 count=93750 > /dev/null 2>&1

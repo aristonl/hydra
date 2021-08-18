@@ -1,31 +1,7 @@
 #define UNICODE
-#define EFI_BLACK 0x00
-#define EFI_BLUE 0x01
-#define EFI_GREEN 0x02
-#define EFI_CYAN 0x03
-#define EFI_RED 0x04
-#define EFI_MAGENTA 0x05
-#define EFI_BROWN 0x06
-#define EFI_LIGHTGRAY 0x07
-#define EFI_DARKGRAY 0x08
-#define EFI_LIGHTBLUE 0x09
-#define EFI_LIGHTGREEN 0x0A
-#define EFI_LIGHTCYAN 0x0B
-#define EFI_LIGHTRED 0x0C
-#define EFI_LIGHTMAGENTA 0x0D
-#define EFI_YELLOW 0x0E
-#define EFI_WHITE 0x0F                         
-#define EFI_BACKGROUND_BLACK 0x00
-#define EFI_BACKGROUND_BLUE 0x10
-#define EFI_BACKGROUND_GREEN 0x20
-#define EFI_BACKGROUND_CYAN 0x30
-#define EFI_BACKGROUND_RED 0x40
-#define EFI_BACKGROUND_MAGENTA 0x50
-#define EFI_BACKGROUND_BROWN 0x60
-#define EFI_BACKGROUND_LIGHTGRAY 0x70
 
-typedef unsigned short int  uint16_t;
-typedef unsigned short int  uint_least16_t;
+typedef unsigned short int uint16_t;
+typedef unsigned short int uint_least16_t;
 typedef uint_least16_t CHAR16;
 typedef unsigned int UINT32;
 typedef unsigned long long UINT64;
@@ -72,7 +48,7 @@ typedef struct EFI_SYSTEM_TABLE {
   EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL *ConOut;
 } EFI_SYSTEM_TABLE;
 
-EFI_STATUS efi_main(EFI_HANDLE ImageHandle, EFI_SYSTEM_TABLE *SystemTable) {
+extern "C" EFI_STATUS boot(EFI_HANDLE ImageHandle, EFI_SYSTEM_TABLE *SystemTable) {
   SystemTable->ConOut->Reset(SystemTable->ConOut, 1);
   SystemTable->ConOut->SetAttribute(SystemTable->ConOut, 0x7e);
   SystemTable->ConOut->OutputString(SystemTable->ConOut, (CHAR16*) L"Hello, world!\r\n");
