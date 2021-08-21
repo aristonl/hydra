@@ -17,8 +17,8 @@ ifeq ($(shell [ -e Build/ISO/Echo.img ] && echo 1 || echo 0 ), 0)
 	@dd if=/dev/zero of=Build/ISO/Echo.img bs=512 count=93750 > /dev/null 2>&1
 endif
 	@printf "Formatting Image...             \r"
-#@-mformat -i Build/ISO/Echo.img -f 1440 ::
-	@docker exec -it EBM sh -c "cd /home/Echo/BOB/;mformat -i Build/ISO/Echo.img -f 1440 ::"
+	@-mformat -i Build/ISO/Echo.img -f 1440 ::
+#@docker exec -it EBM sh -c "cd /home/Echo/BOB/;mformat -i Build/ISO/Echo.img -f 1440 ::"
 	@printf "Copying Files...             \r"
 	@-mmd -i Build/ISO/Echo.img ::/EFI
 	@-mmd -i Build/ISO/Echo.img ::/EFI/BOOT
