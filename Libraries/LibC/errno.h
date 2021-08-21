@@ -1,7 +1,7 @@
 #pragma once
 
 #include <sys/cdefs.h>
-#include <Kernel/errno.h>
+#include <Inferno/errno.h>
 
 #define __RETURN_WITH_ERRNO(rc, good_ret, bad_ret) \
     do { \
