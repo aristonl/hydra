@@ -3,3 +3,5 @@
 *.so
 *.EFI
 *.img
+*.iso
+*.DS_Store
