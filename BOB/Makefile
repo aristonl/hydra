@@ -4,7 +4,7 @@ all: build emulate
 
 emulate:
 	@printf "Emulating...               \r"
-	@qemu-system-x86_64 -drive file=Build/Echo.iso -drive if=pflash,format=raw,unit=0,file=Misc/ovmfc.fd,readonly=on -drive if=pflash,format=raw,unit=1,file=Misc/ovmfv.fd -m 256M  > /dev/null 2>&1
+	@qemu-system-x86_64.exe -drive file=Build/Echo.iso -drive if=pflash,format=raw,unit=0,file=Misc/ovmfc.fd,readonly=on -drive if=pflash,format=raw,unit=1,file=Misc/ovmfv.fd -m 256M  > /dev/null 2>&1
 
 build:
 	@mkdir -p Build/Source/
