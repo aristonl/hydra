@@ -1,5 +1,5 @@
 # Recommended that you use WSL 2 for the time being...
-# Installs: build-essential mtools qemu mingw-w64
+# Installs: build-essential mtools qemu mingw-w64 ovmf
 all: build emulate
 
 emulate:
