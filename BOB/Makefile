@@ -1,12 +1,9 @@
-### TEMP VARIABLES
-## WILL BE REMOVED IN NEXT COMMIT BY FIRELSCAR
-## DONT USE SETUP UNTIL NEXT COMMIT, IT'S NOT FINISHED!
-QEMU = normal
-QEMU_MEMORY = 512M
+QEMU = $(shell grep -n "^QEMU=" build.config | cut -d'=' -f 2)
+QEMU_MEMORY = $(shell grep -n "^QEMU_MEMORY=" build.config | cut -d'=' -f 2)
 
-DOCKER = false
-DOCKER_CONTAINER =
-DOCKER_ECHO_ROOT =
+DOCKER = $(shell grep -n "^DOCKER=" build.config | cut -d'=' -f 2)
+DOCKER_CONTAINER = $(shell grep -n "^DOCKER_CONTAINER=" build.config | cut -d'=' -f 2)
+DOCKER_ECHO_ROOT = $(shell grep -n "^DOCKER_ECHO_ROOT=" build.config | cut -d'=' -f 2)
 
 all: build image iso emulate
 
@@ -14,7 +11,37 @@ setup:
 	@mkdir -p Build/Source/
 	@mkdir -p Build/ISO/EFI/BOOT
 ifeq ($(shell echo $$WSL_DISTRO_NAME),)
-
+	@if [ "$$OSTYPE" == "linux-gnu"* ]; then \
+		touch build.config; \
+		echo "QEMU=normal" >> build.config; \
+		echo "QEMU_MEMORY=512M" >> build.config; \
+		echo "DOCKER=false" >> build.config; \
+		echo "DOCKER_CONTAINER=" >> build.config; \
+		echo "DOCKER_ECHO_ROOT=" >> build.config; \
+	else if [ `uname` == 'Darwin' ]; then \
+		echo "We've detected that this is running on macOS"; \
+		echo "Docker is required on macOS\n"; \
+		printf "What is the name of the container you'll use? "; \
+		read -r docker_name;if [ "$$docker_name" = "" ]; then \
+			echo "Please enter a docker container!"; \
+		else \
+			if [ -f build.config ]; then rm build.config; fi; \
+			touch build.config; \
+			echo "QEMU=normal" >> build.config; \
+			echo "QEMU_MEMORY=512M" >> build.config; \
+			echo "DOCKER=true" >> build.config; \
+			echo "DOCKER_CONTAINER=$$docker_name" >> build.config; \
+			printf "Where is the root of Echo in the container? "; \
+			read -r docker_root;if [ "$$docker_root" = "" ]; then \
+				echo "Please enter the Docker container root!"; \
+			else \
+				echo "DOCKER_ECHO_ROOT=$$docker_root" >> build.config; \
+			fi \
+		fi \
+		else \
+			echo "$$OSTYPE is not supported!"; \
+		fi \
+	fi
 else
 	@echo "We've detected that this is running on WSL\n"
 	@printf "Do you want to use QEMU on windows? [Y/"
@@ -26,6 +53,9 @@ else
 			touch build.config; \
 			echo "QEMU=windows" >> build.config; \
 			echo "QEMU_MEMORY=512M" >> build.config; \
+			echo "DOCKER=false" >> build.config; \
+			echo "DOCKER_CONTAINER=" >> build.config; \
+			echo "DOCKER_ECHO_ROOT=" >> build.config; \
 		fi \
 	else \
 		if [ -f build.config ]; then \
@@ -34,6 +64,9 @@ else
 			touch build.config; \
 			echo "QEMU=normal" >> build.config; \
 			echo "QEMU_MEMORY=512M" >> build.config; \
+			echo "DOCKER=false" >> build.config; \
+			echo "DOCKER_CONTAINER=" >> build.config; \
+			echo "DOCKER_ECHO_ROOT=" >> build.config; \
 		fi \
 	fi
 endif
@@ -47,7 +80,7 @@ ifeq ($(shell [ -e Build/ISO/Echo.img ] && echo 1 || echo 0), 0)
 	@dd if=/dev/zero of=Build/ISO/Echo.img bs=512 count=93750 > /dev/null 2>&1
 endif
 ifeq ($(DOCKER), true)
-	@docker exec -it $(DOCKER_CONTAINER) sh -c "cd $(DOCKER_ECHO_ROOT);mformat -i Build/ISO/Echo.img -f 1440 ::"
+	@docker exec -it $(DOCKER_CONTAINER) sh -c "cd $(DOCKER_ECHO_ROOT)/BOB/;mformat -i Build/ISO/Echo.img -f 1440 ::"
 else
 	@-mformat -i Build/ISO/Echo.img -f 1440 ::
 endif
