@@ -5,7 +5,7 @@
 #include <errno.h>
 #include <unistd.h>
 #include <Kernel/Syscall.h>
-#include <AK/printf.cpp>
+#include <std/printf.cpp>
 
 extern "C" {
 
