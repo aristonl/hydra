@@ -1,6 +1,6 @@
 #pragma once
 
-#include <AK/Types.h>
+#include <std/Types.h>
 
 #define DO_SYSCALL_A0(function) Syscall::invoke((dword)(function))
 #define DO_SYSCALL_A1(function, arg1) Syscall::invoke((dword)(function), (dword)(arg1))
