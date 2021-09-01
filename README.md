@@ -7,9 +7,10 @@ custom Inferno kernel. It is made for ARM64 and x64 BIOS Machines.
 <!-- TODO: Work on expanding this section. To me (Thomas Lim), it doesn't look that descriptive. -->
 
 ## Features
+- Custom Bootloader
+- Custom LibC Library
 
 ## Coming Soon
-- Custom Bootloader
 - UEFI Support
 
 ## Original Authors
