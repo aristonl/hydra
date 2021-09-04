@@ -32,7 +32,7 @@ typedef struct TimeCapabilities {
 	unsigned char SetsToZero;
 } TimeCapabilities;
 
-typedef enum ResetType { EfiResetCold, EfiResetWarm, EfiResetShutdown, EfiResetPlatformSpecific } ResetType;
+typedef enum ResetType { ResetCold, ResetWarm, EfiResetShutdown, ResetPlatformSpecific } ResetType;
 
 typedef struct ConfigurationTable {
   GUID VendorGuid;
@@ -58,7 +58,7 @@ typedef struct MemoryDescriptor {
   unsigned long long Attribute;
 } MemoryDescriptor;
 
-typedef enum InterfaceType { EFI_NATIVE_INTERFACE } InterfaceType;
+typedef enum InterfaceType { NativeInterface } InterfaceType;
 typedef enum LocateSearchType { AllHandles, ByRegisterNotify, ByProtocol } LocateSearchType;
 
 typedef struct OpenProtocolInformationEntry {
@@ -269,7 +269,7 @@ typedef struct SystemTable {
 	ConfigurationTable* ConfigurationTable;
 } SystemTable;
 
-typedef enum GOPBLTOP { EfiBltVideoFill, EfiBltVideoToBltBuffer, EfiBltBufferToVideo, EfiBltVideoToVideo, EfiGraphicsOutputBltOperationMax } GOPBLTOP;
+typedef enum GOPBLTOP { BLTVideoFill, BLTVideo2BLTBuffer, BLTBuffer2Video, BLTV2V, GOPBLTOPMax } GOPBLTOP;
 
 typedef struct GOPBLTPX {
   unsigned char Blue;
@@ -318,7 +318,8 @@ typedef struct GOP {
 
 extern "C" unsigned long long boot(void* ImageHandle, SystemTable* SystemTable) {
   SystemTable->ConOut->Reset(SystemTable->ConOut, 1);
-  SystemTable->ConOut->OutputString(SystemTable->ConOut, (unsigned short int*) L"BOB\r\n");
+  SystemTable->ConOut->OutputString(SystemTable->ConOut, (unsigned short int*) L"Better Opensource Bootloader (BOB)");
+  SystemTable->BootServices->Stall(5000000);
   SystemTable->BootServices->SetWatchdogTimer(0, 0, 0, 0);
   return 0;
 }
