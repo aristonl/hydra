@@ -49,7 +49,7 @@ endif
 endif
 
 setup:
-	@mkdir -p Build/Source/
+	@mkdir -p BOB/Build/
 	@mkdir -p Build/ISO/EFI/BOOT
 ifeq ($(shell echo $$WSL_DISTRO_NAME),)
 	@-if [ "$$OSTYPE" == "linux-gnu"* ]; then \
