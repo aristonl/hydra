@@ -17,6 +17,9 @@ This repository has 3 main sections, BOB (our bootloader), Inferno (the kernel),
 ## Coming Soon
 - N/A
 
+## Builds
+![Ubuntu](https://github.com/Null-LLC/Echo/actions/workflows/ubuntu.yml/badge.svg)
+
 ## Original Authors
 **Thomas Lim** (Ariston Lorenzo) - [@itsthomaslim](https://github.com/itsthomaslim)
 
