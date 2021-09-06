@@ -6,4 +6,4 @@
 *.iso
 *.DS_Store
 .vscode/
-BOB/build.config
+build.config
