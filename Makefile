@@ -52,37 +52,35 @@ setup:
 	@mkdir -p BOB/Build/
 	@mkdir -p Build/ISO/EFI/BOOT
 ifeq ($(shell echo $$WSL_DISTRO_NAME),)
-	@-if [ "$$OSTYPE" == "linux-gnu"* ]; then \
+ifeq ($(shell echo `uname`), Linux)
+	@-touch build.config
+	@-echo "QEMU=normal" >> build.config
+	@-echo "QEMU_MEMORY=512M" >> build.config
+	@-echo "DOCKER=false" >> build.config
+	@-echo "DOCKER_CONTAINER=" >> build.config
+	@-echo "DOCKER_ECHO_ROOT=" >> build.config
+endif
+ifeq ($(shell echo `uname`), Darwin)
+	@-echo "We've detected that this is running on macOS"; \
+	echo "Docker is required on macOS\n"; \
+	printf "What is the name of the container you'll use? "; \
+	read -r docker_name;if [ "$$docker_name" = "" ]; then \
+		echo "Please enter a docker container!"; \
+	else \
+		if [ -f build.config ]; then rm build.config; fi; \
 		touch build.config; \
 		echo "QEMU=normal" >> build.config; \
 		echo "QEMU_MEMORY=512M" >> build.config; \
-		echo "DOCKER=false" >> build.config; \
-		echo "DOCKER_CONTAINER=" >> build.config; \
-		echo "DOCKER_ECHO_ROOT=" >> build.config; \
-	else if [ `uname` == 'Darwin' ]; then \
-		echo "We've detected that this is running on macOS"; \
-		echo "Docker is required on macOS\n"; \
-		printf "What is the name of the container you'll use? "; \
-		read -r docker_name;if [ "$$docker_name" = "" ]; then \
-			echo "Please enter a docker container!"; \
+		echo "DOCKER=true" >> build.config; \
+		echo "DOCKER_CONTAINER=$$docker_name" >> build.config; \
+		printf "Where is the root of Echo in the container? "; \
+		read -r docker_root;if [ "$$docker_root" = "" ]; then \
+			echo "Please enter the Docker container root!"; \
 		else \
-			if [ -f build.config ]; then rm build.config; fi; \
-			touch build.config; \
-			echo "QEMU=normal" >> build.config; \
-			echo "QEMU_MEMORY=512M" >> build.config; \
-			echo "DOCKER=true" >> build.config; \
-			echo "DOCKER_CONTAINER=$$docker_name" >> build.config; \
-			printf "Where is the root of Echo in the container? "; \
-			read -r docker_root;if [ "$$docker_root" = "" ]; then \
-				echo "Please enter the Docker container root!"; \
-			else \
-				echo "DOCKER_ECHO_ROOT=$$docker_root" >> build.config; \
-			fi \
-		fi \
-		else \
-			echo "$$OSTYPE is not supported!"; \
+			echo "DOCKER_ECHO_ROOT=$$docker_root" >> build.config; \
 		fi \
 	fi
+endif
 else
 	@echo "We've detected that this is running on WSL\n"
 	@printf "Do you want to use QEMU on windows? [Y/"
