@@ -17,6 +17,9 @@ This repository has 3 main sections, BOB (our bootloader), Inferno (the kernel),
 ## Coming Soon
 - N/A
 
+## Links
+[Discord](https://discord.gg/MGHjJ2VjjC)
+
 ## Builds
 ![Ubuntu](https://github.com/Null-LLC/Echo/actions/workflows/ubuntu.yml/badge.svg)
 
