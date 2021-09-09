@@ -1,6 +1,10 @@
 # Echo/Inferno
 A 64-Bit Operating System for ARM and x64 built in C++.
 
+## Badges
+![Ubuntu](https://github.com/Null-LLC/Echo/actions/workflows/ubuntu.yml/badge.svg)
+[![CodeFactor](https://www.codefactor.io/repository/github/null-llc/echo/badge)](https://www.codefactor.io/repository/github/null-llc/echo)
+
 ## About
 Echo, originally started as Hydra, is a Operating System built in C++ built on top of the
 custom Inferno kernel. It is made for ARM64 and x64 UEFI Machines.
@@ -20,8 +24,7 @@ This repository has 3 main sections, BOB (our bootloader), Inferno (the kernel),
 ## Links
 [Discord](https://discord.gg/MGHjJ2VjjC)
 
-## Builds
-![Ubuntu](https://github.com/Null-LLC/Echo/actions/workflows/ubuntu.yml/badge.svg)
+
 
 ## Contributors
 **Thomas Lim** - [@itsthomaslim](https://github.com/itsthomaslim)
