@@ -23,13 +23,10 @@ This repository has 3 main sections, BOB (our bootloader), Inferno (the kernel),
 ## Builds
 ![Ubuntu](https://github.com/Null-LLC/Echo/actions/workflows/ubuntu.yml/badge.svg)
 
-## Original Authors
-**Thomas Lim** (Ariston Lorenzo) - [@itsthomaslim](https://github.com/itsthomaslim)
+## Contributors
+**Thomas Lim** - [@itsthomaslim](https://github.com/itsthomaslim)
 
 **FiRe** - [@FiReLScar](https://github.com/FiReLScar)
-
-## Contributors
-**Joshua Torres** - [@jltorres11](https://github.com/jltorres11)
 
 **Genesis Banzon** - [@myst303](https://github.com/amist3301)
 
