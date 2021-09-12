@@ -31,7 +31,7 @@ This repository has 3 main sections, BOB (our bootloader), Inferno (the kernel),
 
 **FiRe** - [@FiReLScar](https://github.com/FiReLScar)
 
-**Genesis Banzon** - [@myst303](https://github.com/amist3301)
+**Genesis Banzon** - [@myst330](https://github.com/myst330)
 
 ## License
 Echo and Inferno are licensed under the MIT License.
