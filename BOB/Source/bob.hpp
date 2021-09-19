@@ -1,6 +1,8 @@
 #ifndef BOB
 #define BOB
 
+#define UNICODE
+
 typedef struct GUID {
   unsigned int Data1;
   unsigned short Data2;
@@ -8,12 +10,20 @@ typedef struct GUID {
   unsigned char Data4[8];
 } GUID;
 
-struct GUID GOPGUID = { 0x9042a9de, 0x23dc, 0x4a38, { 0x96, 0xfb, 0x7a, 0xde, 0xd0, 0x80, 0x51, 0x6a } };
+struct GUID GOPGUID = {0x9042a9de, 0x23dc, 0x4a38, {0x96, 0xfb, 0x7a, 0xde, 0xd0, 0x80, 0x51, 0x6a}};
+struct GUID LoadedImageProtocolGUID = {0x5b1b31a1,  0x9562, 0x11d2, {0x8e, 0x3f, 0x00, 0xa0, 0xc9, 0x69, 0x72, 0x3b}};
+struct GUID FileSystemProtocolGUID = {0x0964e5b22, 0x6459, 0x11d2, {0x8e, 0x39, 0x00, 0xa0, 0xc9, 0x69, 0x72, 0x3b}};
+struct GUID DevicePathProtocolGUID = {0x09576e91, 0x6d3f, 0x11d2, {0x8e, 0x39, 0x00, 0xa0, 0xc9, 0x69, 0x72, 0x3b}};
 
 struct TextProtocol;
 struct InputProtocol;
 struct BootServices;
 struct GOP;
+struct FileSystemProtocol;
+struct FileProtocol;
+struct FileSystemProtocol;
+
+typedef enum MemoryType {ReservedMemoryType, LoaderCode, LoaderData, BootServicesCode, BootServicesData, RuntimeServicesCode, RuntimeServicesData, ConventionalMemory, UnusableMemory, ACPIReclaimMemory, ACPIMemoryNVS, MemoryMappedIO, MemoryMappedIOPortSpace, PalCode, PersistentMemory, UnacceptedMemoryType, MaxMemoryType} MemoryType;
 
 typedef struct Time {
 	unsigned short Year;
@@ -35,7 +45,7 @@ typedef struct TimeCapabilities {
 	unsigned char SetsToZero;
 } TimeCapabilities;
 
-typedef enum ResetType { ResetCold, ResetWarm, EfiResetShutdown, ResetPlatformSpecific } ResetType;
+typedef enum ResetType { ResetCold, ResetWarm, ResetShutdown, ResetPlatformSpecific } ResetType;
 
 typedef struct ConfigurationTable {
   GUID VendorGuid;
@@ -256,6 +266,32 @@ typedef struct RuntimeServices {
   QueryVariableInfo QueryVariableInfo;
 } RuntimeServices;
 
+typedef unsigned long long (*FileOpen)(struct FileProtocol *This, struct FileProtocol **NewHandle, unsigned short int *FileName, unsigned long long OpenMode, unsigned long long Attributes);
+typedef unsigned long long (*FileClose)(struct FileProtocol *This);
+typedef unsigned long long (*FileDelete)(struct FileProtocol *This);
+typedef unsigned long long (*FileRead)(struct FileProtocol *This, unsigned long long *BufferSize, void *Buffer);
+typedef unsigned long long (*FileWrite)(struct FileProtocol *This, unsigned long long *BufferSize, void *Buffer);
+typedef unsigned long long (*FileGetPosition)(struct FileProtocol *This, unsigned long long *Position);
+typedef unsigned long long (*FileSetPosition)(struct FileProtocol *This, unsigned long long Position);
+
+typedef struct FileProtocol {
+  unsigned long long Revision;
+  FileOpen Open;
+  FileClose Close;
+  FileDelete Delete;
+  FileRead Read;
+  FileWrite Write;
+  FileGetPosition GetPosition;
+  FileSetPosition SetPosition;
+} FileProtocol;
+
+typedef unsigned long long (*FileSystemProtocolOpenVolume)(struct FileSystemProtocol* This, FileProtocol** Root);
+
+typedef struct FileSystemProtocol {
+  unsigned long long Revision;
+  FileSystemProtocolOpenVolume OpenVolume;
+} FileSystemProtocol;
+
 typedef struct SystemTable {
 	TableHeaders hdr;
 	unsigned short int* FirmwareVendor;
@@ -271,6 +307,19 @@ typedef struct SystemTable {
 	unsigned long long NumberOfTableEntries;
 	ConfigurationTable* ConfigurationTable;
 } SystemTable;
+
+typedef struct LoadedImageProtocol {
+  unsigned int Revision;
+  void* ParentHandle;
+  SystemTable* SystemTable;
+  void* DeviceHandle;
+  DevicePathProtocol* FilePath;
+  void* Reserved;
+  unsigned int LoadOptionsSize;
+  void* LoadOptions;
+  void* ImageBase;
+  unsigned long long ImageSize;
+} LoadedImageProtocol;
 
 typedef enum GOPBLTOP { BLTVideoFill, BLTVideo2BLTBuffer, BLTBuffer2Video, BLTV2V, GOPBLTOPMax } GOPBLTOP;
 

@@ -5,12 +5,15 @@ DOCKER = $(shell grep -n "^DOCKER=" build.config | cut -d'=' -f 2)
 DOCKER_CONTAINER = $(shell grep -n "^DOCKER_CONTAINER=" build.config | cut -d'=' -f 2)
 DOCKER_ECHO_ROOT = $(shell grep -n "^DOCKER_ECHO_ROOT=" build.config | cut -d'=' -f 2)
 
-.PHONY: BOB
+.PHONY: BOB Inferno
 
-all: BOB image iso emulate
+all: BOB Inferno image iso emulate
 
 BOB:
 	@-make -C "BOB" > /dev/null >&1
+
+Inferno:
+	@-make -C "Inferno" > /dev/null >&1
 
 image:
 ifeq ($(shell [ -e Build/ISO/Echo.img ] && echo 1 || echo 0), 0)
@@ -24,6 +27,7 @@ endif
 	@-mmd -i Build/ISO/Echo.img ::/EFI
 	@-mmd -i Build/ISO/Echo.img ::/EFI/BOOT
 	@-mcopy -i Build/ISO/Echo.img Build/ISO/EFI/BOOT/bootx64.efi ::/EFI/BOOT
+	@-mcopy -i Build/ISO/Echo.img Build/ISO/inferno ::
 	@-mcopy -i Build/ISO/Echo.img Build/ISO/startup.nsh ::
 
 iso:
@@ -53,6 +57,7 @@ endif
 
 setup:
 	@mkdir -p BOB/Build/
+	@mkdir -p Inferno/Build/
 	@mkdir -p Build/ISO/EFI/BOOT
 ifeq ($(shell echo $$WSL_DISTRO_NAME),)
 ifeq ($(shell echo `uname`), Linux)
