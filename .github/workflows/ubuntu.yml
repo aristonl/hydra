@@ -16,4 +16,4 @@ jobs:
       - name: make setup
         run: make setup
       - name: make
-        run: make BOB image iso
+        run: make BOB Inferno image iso
