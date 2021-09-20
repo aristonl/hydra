@@ -1,9 +1,10 @@
 *.bin
 *.o
 *.so
-*.EFI
+*.efi
 *.img
 *.iso
 *.DS_Store
+Build/ISO/inferno
 .vscode/
 build.config
