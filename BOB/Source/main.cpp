@@ -78,7 +78,6 @@ extern "C" unsigned long long boot(void* ImageHandle, SystemTable* SystemTable) 
   SystemTable->BootServices->SetWatchdogTimer(0, 0, 0, 0);
   SystemTable->ConOut->Reset(SystemTable->ConOut, 1);
   SystemTable->ConOut->OutputString(SystemTable->ConOut, (unsigned short int*) L"Better Opensource Bootloader (BOB)\r\n");
-  // SystemTable->BootServices->Stall(5000000);
 
   // Init Filesystem
   LoadedImageProtocol* LoadedImage;
@@ -153,6 +152,5 @@ extern "C" unsigned long long boot(void* ImageHandle, SystemTable* SystemTable) 
   
   // Exit Boot Services
   SystemTable->BootServices->ExitBootServices(ImageHandle, MapKey);
-  while(1);
   return 0;
 }
