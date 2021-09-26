@@ -14,6 +14,7 @@ struct GUID GOPGUID = {0x9042a9de, 0x23dc, 0x4a38, {0x96, 0xfb, 0x7a, 0xde, 0xd0
 struct GUID LoadedImageProtocolGUID = {0x5b1b31a1,  0x9562, 0x11d2, {0x8e, 0x3f, 0x00, 0xa0, 0xc9, 0x69, 0x72, 0x3b}};
 struct GUID FileSystemProtocolGUID = {0x0964e5b22, 0x6459, 0x11d2, {0x8e, 0x39, 0x00, 0xa0, 0xc9, 0x69, 0x72, 0x3b}};
 struct GUID DevicePathProtocolGUID = {0x09576e91, 0x6d3f, 0x11d2, {0x8e, 0x39, 0x00, 0xa0, 0xc9, 0x69, 0x72, 0x3b}};
+struct GUID FileInfoGUID = {0x9576e92, 0x6d3f, 0x11d2, {0x8e, 0x39, 0x0, 0xa0, 0xc9, 0x69, 0x72, 0x3b}};
 
 struct TextProtocol;
 struct InputProtocol;
@@ -23,7 +24,7 @@ struct FileSystemProtocol;
 struct FileProtocol;
 struct FileSystemProtocol;
 
-typedef enum MemoryType {ReservedMemoryType, LoaderCode, LoaderData, BootServicesCode, BootServicesData, RuntimeServicesCode, RuntimeServicesData, ConventionalMemory, UnusableMemory, ACPIReclaimMemory, ACPIMemoryNVS, MemoryMappedIO, MemoryMappedIOPortSpace, PalCode, PersistentMemory, UnacceptedMemoryType, MaxMemoryType} MemoryType;
+typedef enum {ReservedMemoryType, LoaderCode, LoaderData, BootServicesCode, BootServicesData, RuntimeServicesCode, RuntimeServicesData, ConventionalMemory, UnusableMemory, ACPIReclaimMemory, ACPIMemoryNVS, MemoryMappedIO, MemoryMappedIOPortSpace, PalCode, MaxMemoryType} EFI_MEMORY_TYPE;
 
 typedef struct Time {
 	unsigned short Year;
@@ -149,11 +150,11 @@ typedef unsigned long long (*GetMemoryMap)(unsigned long long* MemoryMapSize, Me
 typedef unsigned long long (*AllocatePool)(unsigned long long PoolType, unsigned long long Size, void** Buffer);
 typedef unsigned long long (*FreePool)(void* Buffer);
 typedef unsigned long long (*CreateEvent)(unsigned int Type, unsigned long long NotifyTpl, EventNotify NotifyFunction, void* NotifyContext, GUID* EventGroup, void ** Event);
-typedef unsigned long long (*SetTimer)(void * Event, TimerDelay Type, unsigned long long TriggerTime);
+typedef unsigned long long (*SetTimer)(void* Event, TimerDelay Type, unsigned long long TriggerTime);
 typedef unsigned long long (*WaitForEvent)(unsigned long long NumberOfEvents, void ** Event, unsigned long long* Index);
-typedef unsigned long long (*SignalEvent)(void * Event);
-typedef unsigned long long (*CloseEvent)(void * Event);
-typedef unsigned long long (*CheckEvent)(void * Event);
+typedef unsigned long long (*SignalEvent)(void* Event);
+typedef unsigned long long (*CloseEvent)(void* Event);
+typedef unsigned long long (*CheckEvent)(void* Event);
 typedef unsigned long long (*InstallProtocolInterface)(void** Handle, GUID* Protocol, InterfaceType InterfaceType, void* Interface);
 typedef unsigned long long (*ReinstallProtocolInterface)(void* Handle, GUID* Protocol, void* OldInterface, void* NewInterface);
 typedef unsigned long long (*UninstallProtocolInterface)(void* Handle, GUID* Protocol, void* Interface);
@@ -266,6 +267,13 @@ typedef struct RuntimeServices {
   QueryVariableInfo QueryVariableInfo;
 } RuntimeServices;
 
+typedef struct FileToToken {
+  void* Event;
+  unsigned long long Status;
+  unsigned long long BufferSize;
+  void* Buffer;
+} FileToToken;
+
 typedef unsigned long long (*FileOpen)(struct FileProtocol *This, struct FileProtocol **NewHandle, unsigned short int *FileName, unsigned long long OpenMode, unsigned long long Attributes);
 typedef unsigned long long (*FileClose)(struct FileProtocol *This);
 typedef unsigned long long (*FileDelete)(struct FileProtocol *This);
@@ -273,6 +281,24 @@ typedef unsigned long long (*FileRead)(struct FileProtocol *This, unsigned long 
 typedef unsigned long long (*FileWrite)(struct FileProtocol *This, unsigned long long *BufferSize, void *Buffer);
 typedef unsigned long long (*FileGetPosition)(struct FileProtocol *This, unsigned long long *Position);
 typedef unsigned long long (*FileSetPosition)(struct FileProtocol *This, unsigned long long Position);
+typedef unsigned long long (*FileGetInfo)(struct FileProtocol *This, GUID* InformationType, unsigned long long BufferSize, void* Buffer);
+typedef unsigned long long (*FileSetInfo)(struct FileProtocol *This, GUID* InformationType, unsigned long long BufferSize, void* Buffer);
+typedef unsigned long long (*FileFlush)(struct FileProtocol *This);
+typedef unsigned long long (*FileOpenEx)(struct FileProtocol *This, struct FileProtocol** NewHandle, unsigned short int* FileName, unsigned long long OpenMode, unsigned long long Attributes, FileToToken* Token);
+typedef unsigned long long (*FileReadEx)(struct FileProtocol *This, FileToToken* Token);
+typedef unsigned long long (*FileWriteEx)(struct FileProtocol *This, FileToToken* Token);
+typedef unsigned long long (*FileFlushEx)(struct FileProtocol *This, FileToToken* Token);
+
+typedef struct FileInfo {
+  unsigned long long Size;
+  unsigned long long FileSize;
+  unsigned long long PhysicalSize;
+  Time CreateTime;
+  Time LastAccessTime;
+  Time ModificationTime;
+  unsigned long long Attribute;
+  unsigned short int FileName[];
+} FileInfo;
 
 typedef struct FileProtocol {
   unsigned long long Revision;
@@ -283,6 +309,13 @@ typedef struct FileProtocol {
   FileWrite Write;
   FileGetPosition GetPosition;
   FileSetPosition SetPosition;
+  FileGetInfo GetInfo;
+  FileSetInfo SetInfo;
+  FileFlush Flush;
+  FileOpenEx OpenEx;
+  FileReadEx ReadEx;
+  FileWriteEx WriteEx;
+  FileFlushEx FlushEx;
 } FileProtocol;
 
 typedef unsigned long long (*FileSystemProtocolOpenVolume)(struct FileSystemProtocol* This, FileProtocol** Root);

@@ -1,2 +1,3 @@
 all:
-	@x86_64-w64-mingw32-gcc -Wall -Werror -m64 -mabi=ms -ffreestanding -e main -c Source/main.cpp -o ../Build/ISO/inferno
+	@gcc -ffreestanding -fshort-wchar -no-pie -c Source/main.cpp -o Build/main.o
+	@ld -T linker.ld -static -Bsymbolic -nostdlib -o ../Build/ISO/inferno Build/main.o
