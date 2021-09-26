@@ -1,1 +1,4 @@
-int main() { return 349587; }
+int main() {
+    while(1);
+    return 349587;
+}
