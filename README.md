@@ -26,7 +26,7 @@ This repository has 3 main sections, BOB (our bootloader), Inferno (the kernel),
 
 
 ## Contributors
-**Thomas Lim** - [@itsthomaslim](https://github.com/itsthomaslim)
+**Ariston Lorenzo** - [@4tl0renz0](https://github.com/4tl0renz0)
 
 **FiRe** - [@FiReLScar](https://github.com/FiReLScar)
 
