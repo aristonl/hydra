@@ -11,6 +11,8 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
+      - name: Update apt
+        run: sudo apt update
       - name: Install Dependencies
         run: sudo apt install mtools xorriso qemu qemu-system mingw-w64 ovmf
       - name: make setup
