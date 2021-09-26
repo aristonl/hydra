@@ -44,25 +44,38 @@ extern "C" unsigned long long boot(void* ImageHandle, SystemTable* SystemTable) 
   SystemTable->ConOut->OutputString(SystemTable->ConOut, (unsigned short int*) L"Better Opensource Bootloader (BOB)\r\n");
   // SystemTable->BootServices->Stall(5000000);
 
-  // Init Filesystem
-  LoadedImageProtocol* LoadedImage;
-  SystemTable->BootServices->HandleProtocol(ImageHandle, &LoadedImageProtocolGUID, (void**)&LoadedImage);
-  DevicePathProtocol* DevicePath;
-  SystemTable->BootServices->HandleProtocol(LoadedImage->DeviceHandle, &DevicePathProtocolGUID, (void**)&DevicePath);
-  FileSystemProtocol* Volume;
-  SystemTable->BootServices->HandleProtocol(LoadedImage->DeviceHandle, &FileSystemProtocolGUID, (void**)&Volume);
+  /*
+    // Init Filesystem
+    LoadedImageProtocol* LoadedImage;
+    SystemTable->BootServices->HandleProtocol(ImageHandle, &LoadedImageProtocolGUID, (void**)&LoadedImage);
+    DevicePathProtocol* DevicePath;
+    SystemTable->BootServices->HandleProtocol(LoadedImage->DeviceHandle, &DevicePathProtocolGUID, (void**)&DevicePath);
+    FileSystemProtocol* Volume;
+    SystemTable->BootServices->HandleProtocol(LoadedImage->DeviceHandle, &FileSystemProtocolGUID, (void**)&Volume);
+    
+    // Open File
+    FileProtocol* FS;
+    Volume->OpenVolume(Volume, &FS);
+    FileProtocol* KernelFile;
+    FS->Open(FS, &KernelFile, (unsigned short*) L"inferno", 0x0000000000000001, 0);
+
+    Elf64_Ehdr header; {
+      unsigned long FileInfoSize;
+    }
+  */
+
+  // Initialize Memory Map
+  unsigned long long MemoryMapSize = 0, MapKey, DescriptorSize;
+  MemoryDescriptor* MemoryMap;
+  unsigned int DescriptorVersion;
+  SystemTable->BootServices->GetMemoryMap(&MemoryMapSize, MemoryMap, &MapKey, &DescriptorSize, &DescriptorVersion);
+  MemoryMapSize+=2*DescriptorSize;
+  SystemTable->BootServices->AllocatePool(LoaderData, MemoryMapSize, (void**)&MemoryMap);
+  SystemTable->BootServices->GetMemoryMap(&MemoryMapSize, MemoryMap, &MapKey, &DescriptorSize, &DescriptorVersion);
   
-  // Open File
-  FileProtocol* FS;
-  Volume->OpenVolume(Volume, &FS);
-  FileProtocol* KernelFile;
-  FS->Open(FS, &KernelFile, (unsigned short*) L"inferno", 0x0000000000000001, 0);
-
-  Elf64_Ehdr header; {
-    unsigned long FileInfoSize;
-  }
-
+  // Exit Boot Services
   SystemTable->BootServices->SetWatchdogTimer(0, 0, 0, 0);
+  SystemTable->BootServices->ExitBootServices(ImageHandle, MapKey);
   while(1);
   return 0;
 }
