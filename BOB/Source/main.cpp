@@ -2,19 +2,7 @@
 #include <stdint.h>
 #include <cstring>
 
-enum {
-  EI_MAG0 = 0,       // File identification index.
-  EI_MAG1 = 1,       // File identification index.
-  EI_MAG2 = 2,       // File identification index.
-  EI_MAG3 = 3,       // File identification index.
-  EI_CLASS = 4,      // File class.
-  EI_DATA = 5,       // Data encoding.
-  EI_VERSION = 6,    // File version.
-  EI_OSABI = 7,      // OS/ABI identification.
-  EI_ABIVERSION = 8, // ABI version.
-  EI_PAD = 9,        // Start of padding bytes.
-  EI_NIDENT = 16     // Number of bytes in e_ident.
-};
+enum { EI_MAG0 = 0, EI_MAG1 = 1, EI_MAG2 = 2, EI_MAG3 = 3, EI_CLASS = 4, EI_DATA = 5, EI_VERSION = 6, EI_OSABI = 7, EI_ABIVERSION = 8, EI_PAD = 9, EI_NIDENT = 16 };
 
 using Elf64_Addr = uint64_t;
 using Elf64_Off = uint64_t;
@@ -55,6 +43,17 @@ struct Elf64_Ehdr {
   unsigned char getDataEncoding() const { return e_ident[EI_DATA]; }
 };
 
+struct Elf64_Phdr {
+  Elf64_Word p_type;
+  Elf64_Word p_flags;
+  Elf64_Off p_offset;
+  Elf64_Addr p_vaddr;
+  Elf64_Addr p_paddr;
+  Elf64_Xword p_filesz;
+  Elf64_Xword p_memsz;
+  Elf64_Xword p_align;
+};
+
 void itoa(unsigned long int n, unsigned short int* buffer, int basenumber) {
   unsigned long int hold = n;
   int i=0, j;
@@ -76,6 +75,7 @@ void* memcpy(void* dst, const void* src, unsigned long long size) {
 }
 
 extern "C" unsigned long long boot(void* ImageHandle, SystemTable* SystemTable) {
+  SystemTable->BootServices->SetWatchdogTimer(0, 0, 0, 0);
   SystemTable->ConOut->Reset(SystemTable->ConOut, 1);
   SystemTable->ConOut->OutputString(SystemTable->ConOut, (unsigned short int*) L"Better Opensource Bootloader (BOB)\r\n");
   // SystemTable->BootServices->Stall(5000000);
@@ -88,26 +88,48 @@ extern "C" unsigned long long boot(void* ImageHandle, SystemTable* SystemTable) 
   FileSystemProtocol* Volume;
   SystemTable->BootServices->HandleProtocol(LoadedImage->DeviceHandle, &FileSystemProtocolGUID, (void**)&Volume);
   
-  // Open File
+  // Load Kernel File
   FileProtocol* FS;
   Volume->OpenVolume(Volume, &FS);
   FileProtocol* KernelFile;
   FS->Open(FS, &KernelFile, (unsigned short*) L"inferno", 0x0000000000000001, 0);
 
-  Elf64_Ehdr header; {
+  // Verify Kernel
+  Elf64_Ehdr KernelHeaders; {
     unsigned long long FileInfoSize;
     FileInfo* KernelInfo;
     KernelFile->GetInfo(KernelFile, &FileInfoGUID, FileInfoSize, (void*)0);
     SystemTable->BootServices->AllocatePool(LoaderData, FileInfoSize, (void**)&KernelInfo);
     KernelFile->GetInfo(KernelFile, &FileInfoGUID, FileInfoSize, (void**)&KernelInfo);
-    unsigned long long size = sizeof(header);
-    KernelFile->Read(KernelFile, &size, &header);
+    unsigned long long size = sizeof(KernelHeaders);
+    KernelFile->Read(KernelFile, &size, &KernelHeaders);
   }
 
-  if (memcmp(&header.e_ident[EI_MAG0], ElfMagic, 4) != 0 || header.e_ident[EI_CLASS] != 2 || header.e_ident[EI_DATA] != 1 || header.e_type != 2 || header.e_machine != 62 || header.e_version != 1) {
+  if (memcmp(&KernelHeaders.e_ident[EI_MAG0], ElfMagic, 4) != 0 || KernelHeaders.e_ident[EI_CLASS] != 2 || KernelHeaders.e_ident[EI_DATA] != 1 || KernelHeaders.e_type != 2 || KernelHeaders.e_machine != 62 || KernelHeaders.e_version != 1) {
     SystemTable->ConOut->OutputString(SystemTable->ConOut, (unsigned short int*) L"Error whilst loading Inferno!\r\nPlease DO NOT modify Inferno without experience!");
     SystemTable->BootServices->Stall(5000000);
     SystemTable->RuntimeServices->ResetSystem(ResetShutdown, 0x8000000000000000, 0, 0);
+  }
+
+  Elf64_Phdr* ProgramHeaders; {
+    KernelFile->SetPosition(KernelFile, KernelHeaders.e_phoff);
+    unsigned long long size = KernelHeaders.e_phnum*KernelHeaders.e_phentsize;
+    SystemTable->BootServices->AllocatePool(LoaderData, size, (void**)&ProgramHeaders);
+    KernelFile->Read(KernelFile, &size, ProgramHeaders);
+  }
+
+  for (Elf64_Phdr* ProgramHeader=ProgramHeaders;(char*)ProgramHeader<(char*)ProgramHeaders+KernelHeaders.e_phnum*KernelHeaders.e_phentsize;ProgramHeader=(Elf64_Phdr*)((char*)ProgramHeader+KernelHeaders.e_phentsize)) {
+    switch (ProgramHeader->p_type) {
+      case 1: {
+        int pages=(ProgramHeader->p_memsz+0x1000-1)/0x1000;
+        Elf64_Addr segment=ProgramHeader->p_paddr;
+        SystemTable->BootServices->AllocatePages(AllocateAddress, LoaderData, pages, &segment);
+        KernelFile->SetPosition(KernelFile, ProgramHeader->p_offset);
+        unsigned long long size = ProgramHeader->p_filesz;
+        KernelFile->Read(KernelFile, &size, (void*)segment);
+        break;
+      }
+    }
   }
 
   // Initialize Memory Map
@@ -119,10 +141,17 @@ extern "C" unsigned long long boot(void* ImageHandle, SystemTable* SystemTable) 
   SystemTable->BootServices->AllocatePool(LoaderData, MemoryMapSize, (void**)&MemoryMap);
   SystemTable->BootServices->GetMemoryMap(&MemoryMapSize, MemoryMap, &MapKey, &DescriptorSize, &DescriptorVersion);
 
-  SystemTable->ConOut->OutputString(SystemTable->ConOut, (unsigned short int*) L"\r\nIf all is well then this message should show up!\r\n");
+  // Load Kernel
+	int (*KernelMain)()=((__attribute__((ms_abi)) int (*)())KernelHeaders.e_entry);
+
+  int res = KernelMain();
+  unsigned short buffer[8];
+
+  itoa(res, buffer, 10);
+  SystemTable->ConOut->OutputString(SystemTable->ConOut, (unsigned short int*) L"The kernel return exit code ");
+  SystemTable->ConOut->OutputString(SystemTable->ConOut, (unsigned short int*) buffer);
   
   // Exit Boot Services
-  SystemTable->BootServices->SetWatchdogTimer(0, 0, 0, 0);
   SystemTable->BootServices->ExitBootServices(ImageHandle, MapKey);
   while(1);
   return 0;
