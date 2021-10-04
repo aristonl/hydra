@@ -18,4 +18,4 @@ jobs:
       - name: make setup
         run: make setup
       - name: make
-        run: make BOB Inferno image iso
+        run: make
