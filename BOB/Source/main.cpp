@@ -1,16 +1,4 @@
 #include "bob.hpp"
-#include <stdint.h>
-#include <cstring>
-
-enum { EI_MAG0 = 0, EI_MAG1 = 1, EI_MAG2 = 2, EI_MAG3 = 3, EI_CLASS = 4, EI_DATA = 5, EI_VERSION = 6, EI_OSABI = 7, EI_ABIVERSION = 8, EI_PAD = 9, EI_NIDENT = 16 };
-
-using Elf64_Addr = uint64_t;
-using Elf64_Off = uint64_t;
-using Elf64_Half = uint16_t;
-using Elf64_Word = uint32_t;
-using Elf64_Sword = int32_t;
-using Elf64_Xword = uint64_t;
-using Elf64_Sxword = int64_t;
 
 static const char ElfMagic[] = {0x7f, 'E', 'L', 'F', '\0'};
 
@@ -23,56 +11,44 @@ int memcmp(const void* aptr, const void* bptr, unsigned long long n) {
 	return 0;
 }
 
+typedef unsigned long long size_t;
+
+size_t strlen(const char *str) {
+  const char* s;
+  for (s=str;*s;++s);
+  return (s-str);
+}
+
 struct Elf64_Ehdr {
-  unsigned char e_ident[EI_NIDENT];
-  Elf64_Half e_type;
-  Elf64_Half e_machine;
-  Elf64_Word e_version;
-  Elf64_Addr e_entry;
-  Elf64_Off e_phoff;
-  Elf64_Off e_shoff;
-  Elf64_Word e_flags;
-  Elf64_Half e_ehsize;
-  Elf64_Half e_phentsize;
-  Elf64_Half e_phnum;
-  Elf64_Half e_shentsize;
-  Elf64_Half e_shnum;
-  Elf64_Half e_shstrndx;
+  unsigned char e_ident[16];
+  unsigned short e_type;
+  unsigned short e_machine;
+  unsigned int e_version;
+  unsigned long long e_entry;
+  unsigned long long e_phoff;
+  unsigned long long e_shoff;
+  unsigned int e_flags;
+  unsigned short e_ehsize;
+  unsigned short e_phentsize;
+  unsigned short e_phnum;
+  unsigned short e_shentsize;
+  unsigned short e_shnum;
+  unsigned short e_shstrndx;
   bool checkMagic() const { return (memcmp(e_ident, ElfMagic, strlen(ElfMagic))) == 0; }
-  unsigned char getFileClass() const { return e_ident[EI_CLASS]; }
-  unsigned char getDataEncoding() const { return e_ident[EI_DATA]; }
+  unsigned char getFileClass() const { return e_ident[4]; }
+  unsigned char getDataEncoding() const { return e_ident[5]; }
 };
 
 struct Elf64_Phdr {
-  Elf64_Word p_type;
-  Elf64_Word p_flags;
-  Elf64_Off p_offset;
-  Elf64_Addr p_vaddr;
-  Elf64_Addr p_paddr;
-  Elf64_Xword p_filesz;
-  Elf64_Xword p_memsz;
-  Elf64_Xword p_align;
+  unsigned int p_type;
+  unsigned int p_flags;
+  unsigned long long p_offset;
+  unsigned long long p_vaddr;
+  unsigned long long p_paddr;
+  unsigned long long p_filesz;
+  unsigned long long p_memsz;
+  unsigned long long p_align;
 };
-
-void itoa(unsigned long int n, unsigned short int* buffer, int basenumber) {
-  unsigned long int hold = n;
-  int i=0, j;
-  do {
-    hold = n % basenumber;
-    buffer[i++] = (hold<10) ? (hold+'0') : (hold+'a'-10);
-  } while (n /= basenumber);
-  buffer[i--] = 0;
-  for (j=0;j<i;j++,i--) {
-    hold=buffer[j];
-    buffer[j] = buffer[i];
-    buffer[i] = hold;
-  }
-}
-
-void* memcpy(void* dst, const void* src, unsigned long long size) {
-  for (unsigned long long i=0;i<size;i++) ((unsigned char*) dst)[i] = ((const unsigned char*) src)[i];
-  return dst;
-}
 
 class Framebuffer {
   public:
@@ -183,7 +159,7 @@ extern "C" unsigned long long boot(void* ImageHandle, SystemTable* SystemTable) 
     KernelFile->Read(KernelFile, &size, &KernelHeaders);
   }
 
-  if (memcmp(&KernelHeaders.e_ident[EI_MAG0], ElfMagic, 4) != 0 || KernelHeaders.e_ident[EI_CLASS] != 2 || KernelHeaders.e_ident[EI_DATA] != 1 || KernelHeaders.e_type != 2 || KernelHeaders.e_machine != 62 || KernelHeaders.e_version != 1) {
+  if (memcmp(&KernelHeaders.e_ident[0], ElfMagic, 4) != 0 || KernelHeaders.e_ident[4] != 2 || KernelHeaders.e_ident[5] != 1 || KernelHeaders.e_type != 2 || KernelHeaders.e_machine != 62 || KernelHeaders.e_version != 1) {
     SystemTable->ConOut->OutputString(SystemTable->ConOut, (unsigned short int*) L"Error whilst loading Inferno!\r\nPlease DO NOT modify Inferno without experience!");
     SystemTable->BootServices->Stall(5000000);
     SystemTable->RuntimeServices->ResetSystem(ResetShutdown, 0x8000000000000000, 0, 0);
@@ -200,7 +176,7 @@ extern "C" unsigned long long boot(void* ImageHandle, SystemTable* SystemTable) 
     switch (ProgramHeader->p_type) {
       case 1: {
         int pages=(ProgramHeader->p_memsz+0x1000-1)/0x1000;
-        Elf64_Addr segment=ProgramHeader->p_paddr;
+        unsigned long long segment=ProgramHeader->p_paddr;
         SystemTable->BootServices->AllocatePages(AllocateAddress, LoaderData, pages, &segment);
         KernelFile->SetPosition(KernelFile, ProgramHeader->p_offset);
         unsigned long long size = ProgramHeader->p_filesz;
