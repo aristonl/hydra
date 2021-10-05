@@ -18,7 +18,10 @@ This repository has 3 main sections, BOB (our bootloader), Inferno (the kernel),
 - Custom LibC Library
 
 ## Coming Soon
-- N/A
+- Panic Screen (blue screen)
+- PS2 Keyboard and Mouse drivers
+- PCI Driver
+- AHCI Driver
 
 ## Links
 [Discord](https://discord.gg/MGHjJ2VjjC)
