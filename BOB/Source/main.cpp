@@ -141,14 +141,16 @@ extern "C" unsigned long long boot(void* ImageHandle, SystemTable* SystemTable) 
   SystemTable->BootServices->GetMemoryMap(&MemoryMapSize, MemoryMap, &MapKey, &DescriptorSize, &DescriptorVersion);
 
   // Load Kernel
-	int (*KernelMain)()=((__attribute__((ms_abi)) int (*)())KernelHeaders.e_entry);
+	int (*KernelMain)(int)=((__attribute__((ms_abi)) int (*)(int))KernelHeaders.e_entry);
 
-  int res = KernelMain();
+  int res = KernelMain(8);
   unsigned short buffer[8];
 
   itoa(res, buffer, 10);
   SystemTable->ConOut->OutputString(SystemTable->ConOut, (unsigned short int*) L"The kernel return exit code ");
   SystemTable->ConOut->OutputString(SystemTable->ConOut, (unsigned short int*) buffer);
+  
+  SystemTable->BootServices->Stall(5000000);
   
   // Exit Boot Services
   SystemTable->BootServices->ExitBootServices(ImageHandle, MapKey);

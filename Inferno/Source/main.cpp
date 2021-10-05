@@ -1,4 +1,3 @@
-int main() {
-    while(1);
-    return 349587;
+int main(int test) {
+    return test*2;
 }
