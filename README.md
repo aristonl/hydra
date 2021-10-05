@@ -15,6 +15,7 @@ This repository has 3 main sections, BOB (our bootloader), Inferno (the kernel),
 
 ## Features
 - Custom EFI Bootloader
+- Custom Boot Logo
 - Custom LibC Library
 
 ## Coming Soon
