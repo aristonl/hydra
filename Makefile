@@ -22,11 +22,12 @@ endif
 ifeq ($(DOCKER), true)
 	@docker exec -it $(DOCKER_CONTAINER) sh -c "cd $(DOCKER_ECHO_ROOT)/;mformat -i Build/ISO/Echo.img -f 1440 ::"
 else
-	@-mformat -i Build/ISO/Echo.img -f 1440 ::
+	@-mformat -i Build/ISO/Echo.img -F ::
 endif
 	@-mmd -i Build/ISO/Echo.img ::/EFI
 	@-mmd -i Build/ISO/Echo.img ::/EFI/BOOT
 	@-mcopy -i Build/ISO/Echo.img Build/ISO/EFI/BOOT/bootx64.efi ::/EFI/BOOT
+	@-mcopy -i Build/ISO/Echo.img Build/ISO/Echo.tga ::
 	@-mcopy -i Build/ISO/Echo.img Build/ISO/inferno ::
 	@-mcopy -i Build/ISO/Echo.img Build/ISO/startup.nsh ::
 
@@ -38,7 +39,7 @@ ifeq ($(QEMU), windows)
 ifeq ($(shell [ -e /tmp/OVMF_VARS.fd ] && echo 1 || echo 0), 0)
 	@cp /usr/share/OVMF/OVMF_VARS.fd /tmp/OVMF_VARS.fd
 endif
-	@qemu-system-x86_64.exe -drive format=raw,file=Build/Echo.iso -drive if=pflash,format=raw,unit=0,file=\\\\wsl\$$\\\$(shell echo $$WSL_DISTRO_NAME)\\usr\\share\\OVMF\\OVMF_CODE.fd,readonly=on -drive if=pflash,format=raw,unit=1,file=\\\\wsl\$$\\\$(shell echo $$WSL_DISTRO_NAME)\\tmp\\OVMF_VARS.fd -m $(QEMU_MEMORY) > /dev/null 2>&1
+	@qemu-system-x86_64.exe -drive format=raw,file=Build/Echo.iso -drive if=pflash,format=raw,unit=0,file=\\\\wsl\$$\\\$(shell echo $$WSL_DISTRO_NAME)\\usr\\share\\OVMF\\OVMF_CODE.fd,readonly=on -drive if=pflash,format=raw,unit=1,file=\\\\wsl\$$\\\$(shell echo $$WSL_DISTRO_NAME)\\tmp\\OVMF_VARS.fd -m $(QEMU_MEMORY) -net none > /dev/null 2>&1
 endif
 ifeq ($(QEMU), normal)
 ifeq ($(shell echo `uname`), Darwin)
@@ -46,12 +47,12 @@ ifeq ($(shell [ -e /tmp/OVMF_CODE.fd ] && [ -e /tmp/OVMF_VARS.fd ] && echo 1 || 
 	@wget https://github.com/Null-LLC/OVMF/raw/main/OVMF_CODE.fd -O /tmp/OVMF_CODE.fd > /dev/null 2>&1
 	@wget https://github.com/Null-LLC/OVMF/raw/main/OVMF_VARS.fd -O /tmp/OVMF_VARS.fd > /dev/null 2>&1
 endif
-	@qemu-system-x86_64 -drive format=raw,file=Build/Echo.iso -drive if=pflash,format=raw,unit=0,file=/tmp/OVMF_CODE.fd,readonly=on -drive if=pflash,format=raw,unit=1,file=/tmp/OVMF_VARS.fd -m $(QEMU_MEMORY) > /dev/null 2>&1
+	@qemu-system-x86_64 -drive format=raw,file=Build/Echo.iso -drive if=pflash,format=raw,unit=0,file=/tmp/OVMF_CODE.fd,readonly=on -drive if=pflash,format=raw,unit=1,file=/tmp/OVMF_VARS.fd -m $(QEMU_MEMORY) -net none > /dev/null 2>&1
 else
 ifeq ($(shell [ -e /tmp/OVMF_VARS.fd ] && echo 1 || echo 0), 0)
 	@cp /usr/share/OVMF/OVMF_VARS.fd /tmp/OVMF_VARS.fd
 endif
-	@qemu-system-x86_64 -drive format=raw,file=Build/Echo.iso -drive if=pflash,format=raw,unit=0,file=/usr/share/OVMF/OVMF_CODE.fd,readonly=on -drive if=pflash,format=raw,unit=1,file=/tmp/OVMF_VARS.fd -m $(QEMU_MEMORY) > /dev/null 2>&1
+	@qemu-system-x86_64 -drive format=raw,file=Build/Echo.iso -drive if=pflash,format=raw,unit=0,file=/usr/share/OVMF/OVMF_CODE.fd,readonly=on -drive if=pflash,format=raw,unit=1,file=/tmp/OVMF_VARS.fd -m $(QEMU_MEMORY) -net none > /dev/null 2>&1
 endif
 endif
 

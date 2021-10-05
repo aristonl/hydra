@@ -74,11 +74,39 @@ void* memcpy(void* dst, const void* src, unsigned long long size) {
   return dst;
 }
 
-typedef struct Framebuffer {
-  void* Address;
-  size_t Size;
-  unsigned int Width, Height, PPSL;
-} Framebuffer;
+class Framebuffer {
+  public:
+    Framebuffer(unsigned long long Address, size_t Size, unsigned int Width, unsigned int Height, unsigned int PPSL) {
+      this->Address = (void*) Address;
+      this->Size = Size;
+      this->Width = Width;
+      this->Height = Height;
+      this->PPSL = PPSL;
+    }
+    void* Address;
+    size_t Size;
+    unsigned int Width, Height, PPSL;
+};
+
+struct TGAHeader {
+	unsigned char	id_length;
+	unsigned char	color_map_type;
+	unsigned char	image_type;
+	unsigned short color_map_index;
+	unsigned short color_map_length;
+	unsigned char	depth;
+	unsigned short xorg;
+	unsigned short yorg;
+	unsigned short width;
+	unsigned short height;
+	unsigned char	bbp;
+	unsigned char	descriptor;
+} __attribute__((packed));
+
+struct TGAImage {
+	struct TGAHeader*	header_ptr;
+	void* buffer;
+};
 
 extern "C" unsigned long long boot(void* ImageHandle, SystemTable* SystemTable) {
   SystemTable->BootServices->SetWatchdogTimer(0, 0, 0, 0);
@@ -92,10 +120,55 @@ extern "C" unsigned long long boot(void* ImageHandle, SystemTable* SystemTable) 
   SystemTable->BootServices->HandleProtocol(LoadedImage->DeviceHandle, &DevicePathProtocolGUID, (void**)&DevicePath);
   FileSystemProtocol* Volume;
   SystemTable->BootServices->HandleProtocol(LoadedImage->DeviceHandle, &FileSystemProtocolGUID, (void**)&Volume);
-  
-  // Load Kernel File
   FileProtocol* FS;
   Volume->OpenVolume(Volume, &FS);
+
+  // Init Graphics Output Protocol
+  GUID gopGUID = GOPGUID;
+  GOP* gop;
+  SystemTable->BootServices->LocateProtocol(&gopGUID, (void*)0, (void**)&gop);
+  Framebuffer framebuffer = Framebuffer(gop->Mode->FrameBufferBase, gop->Mode->FrameBufferSize, gop->Mode->Info->HorizontalResolution, gop->Mode->Info->VerticalResolution, gop->Mode->Info->PixelsPerScanLine);
+  
+  // Load Boot Logo
+  FileProtocol* image;
+  FS->Open(FS, &image, (unsigned short*) L"Echo.tga", 0x0000000000000001, 0);
+
+  struct TGAHeader* header;
+  unsigned long long headerSize = sizeof(struct TGAHeader);
+  SystemTable->BootServices->AllocatePool(LoaderData, headerSize, (void**)&header);
+  image->Read(image, &headerSize, header);
+  unsigned long long bufferSize = header->width*header->height*header->bbp/8;
+  void* buffer; {
+    image->SetPosition(image, headerSize);
+    SystemTable->BootServices->AllocatePool(LoaderData, bufferSize, (void**)&buffer);
+    image->Read(image, &bufferSize, buffer);
+  }
+  struct TGAImage* BootLogo;
+  SystemTable->BootServices->AllocatePool(LoaderData, sizeof(struct TGAImage), (void**)&BootLogo);
+  BootLogo->header_ptr = header;
+  BootLogo->buffer = buffer;
+
+  // Draw Boot Logo
+  unsigned int* pixel = (unsigned int*)framebuffer.Address;
+  for (unsigned int x=0;x<=framebuffer.Width;x++) {
+    for (unsigned int y=0;y<=framebuffer.Height;y++) {
+      *(unsigned int*)(pixel + x + (y * framebuffer.PPSL)) = 0x000000;
+    }
+  }
+  unsigned int* img = (unsigned int*)BootLogo->buffer;
+  unsigned int height = BootLogo->header_ptr->height;
+  unsigned int width = BootLogo->header_ptr->width;
+  for (size_t dy=0;dy<height;dy++) {
+    for (size_t dx=0;dx<width;dx++) {
+      size_t offset = dx+(height*dy);
+      unsigned int color = *(img+offset);
+      size_t x = dx+(framebuffer.Width/2)-(width/2);
+      size_t y = dy+(framebuffer.Height/2)-(height/2);
+      *(unsigned int*)(pixel+x+(y*framebuffer.PPSL)) = color;
+    }
+  }
+
+  // Load Kernel File
   FileProtocol* KernelFile;
   FS->Open(FS, &KernelFile, (unsigned short*) L"inferno", 0x0000000000000001, 0);
 
@@ -146,29 +219,13 @@ extern "C" unsigned long long boot(void* ImageHandle, SystemTable* SystemTable) 
   SystemTable->BootServices->AllocatePool(LoaderData, MemoryMapSize, (void**)&MemoryMap);
   SystemTable->BootServices->GetMemoryMap(&MemoryMapSize, MemoryMap, &MapKey, &DescriptorSize, &DescriptorVersion);
 
-  // Load Kernel
-	int (*KernelMain)(Framebuffer*)=((__attribute__((ms_abi)) int (*)(Framebuffer*))KernelHeaders.e_entry);
-
-  Framebuffer* framebuffer;
-  GUID gopGUID = GOPGUID;
-  GOP* gop;
-  SystemTable->BootServices->LocateProtocol(&gopGUID, (void*)0, (void**)&gop);
-  framebuffer->Address = (void*) gop->Mode->FrameBufferBase;
-  framebuffer->Size = gop->Mode->FrameBufferSize;
-  framebuffer->Width = gop->Mode->Info->HorizontalResolution;
-  framebuffer->Height = gop->Mode->Info->VerticalResolution;
-  framebuffer->PPSL = gop->Mode->Info->PixelsPerScanLine;
-
-  int res = KernelMain(framebuffer);
-  unsigned short buffer[8];
-
-  itoa(res, buffer, 10);
-  SystemTable->ConOut->OutputString(SystemTable->ConOut, (unsigned short int*) L"The kernel return exit code ");
-  SystemTable->ConOut->OutputString(SystemTable->ConOut, (unsigned short int*) buffer);
-  
-  while(1);
-  
   // Exit Boot Services
   SystemTable->BootServices->ExitBootServices(ImageHandle, MapKey);
+
+  // Load Kernel
+	void (*KernelMain)(Framebuffer*)=((__attribute__((ms_abi)) void (*)(Framebuffer*))KernelHeaders.e_entry);
+  KernelMain(&framebuffer);
+
+  SystemTable->RuntimeServices->ResetSystem(ResetShutdown, 0x8000000000000000, 0, 0);
   return 0;
 }

@@ -1,18 +1,19 @@
 typedef unsigned long long size_t;
 
-typedef struct Framebuffer {
-  void* Address;
-  size_t Size;
-  unsigned int Width, Height, PPSL;
-} Framebuffer;
-
-int main(Framebuffer* framebuffer) {
-  unsigned int* pixPtr = (unsigned int*)framebuffer->Address;
-  for (unsigned int x=0;x<=framebuffer->Width;x++) {
-    for (unsigned int y=0;y<=framebuffer->Height;y++) {
-      *(unsigned int*)(pixPtr + x + (y * framebuffer->PPSL)) = 0xFFFFFF;
+class Framebuffer {
+  public:
+    Framebuffer(void* Address, size_t Size, unsigned int Width, unsigned int Height, unsigned int PPSL) {
+      this->Address = Address;
+      this->Size = Size;
+      this->Width = Width;
+      this->Height = Height;
+      this->PPSL = PPSL;
     }
-  }
-  
-  return 0;
+    void* Address;
+    size_t Size;
+    unsigned int Width, Height, PPSL;
+};
+
+void main(Framebuffer* framebuffer) {
+  while(1);
 }
