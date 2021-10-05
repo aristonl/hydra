@@ -74,6 +74,12 @@ void* memcpy(void* dst, const void* src, unsigned long long size) {
   return dst;
 }
 
+typedef struct Framebuffer {
+  void* Address;
+  size_t Size;
+  unsigned int Width, Height, PPSL;
+} Framebuffer;
+
 extern "C" unsigned long long boot(void* ImageHandle, SystemTable* SystemTable) {
   SystemTable->BootServices->SetWatchdogTimer(0, 0, 0, 0);
   SystemTable->ConOut->Reset(SystemTable->ConOut, 1);
@@ -141,16 +147,26 @@ extern "C" unsigned long long boot(void* ImageHandle, SystemTable* SystemTable) 
   SystemTable->BootServices->GetMemoryMap(&MemoryMapSize, MemoryMap, &MapKey, &DescriptorSize, &DescriptorVersion);
 
   // Load Kernel
-	int (*KernelMain)(int)=((__attribute__((ms_abi)) int (*)(int))KernelHeaders.e_entry);
+	int (*KernelMain)(Framebuffer*)=((__attribute__((ms_abi)) int (*)(Framebuffer*))KernelHeaders.e_entry);
 
-  int res = KernelMain(8);
+  Framebuffer* framebuffer;
+  GUID gopGUID = GOPGUID;
+  GOP* gop;
+  SystemTable->BootServices->LocateProtocol(&gopGUID, (void*)0, (void**)&gop);
+  framebuffer->Address = (void*) gop->Mode->FrameBufferBase;
+  framebuffer->Size = gop->Mode->FrameBufferSize;
+  framebuffer->Width = gop->Mode->Info->HorizontalResolution;
+  framebuffer->Height = gop->Mode->Info->VerticalResolution;
+  framebuffer->PPSL = gop->Mode->Info->PixelsPerScanLine;
+
+  int res = KernelMain(framebuffer);
   unsigned short buffer[8];
 
   itoa(res, buffer, 10);
   SystemTable->ConOut->OutputString(SystemTable->ConOut, (unsigned short int*) L"The kernel return exit code ");
   SystemTable->ConOut->OutputString(SystemTable->ConOut, (unsigned short int*) buffer);
   
-  SystemTable->BootServices->Stall(5000000);
+  while(1);
   
   // Exit Boot Services
   SystemTable->BootServices->ExitBootServices(ImageHandle, MapKey);
