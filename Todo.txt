@@ -1,0 +1,14 @@
+- Page Frame Allocater
+- Page Table Manager
+- GDT
+- Interrupts
+- Keyboard PS2 Driver
+- Mouse PS2 Driver
+- PCI Driver
+- Memory Stuff
+- PIT
+- AHCI
+
+- FileSystem
+- Ring 3
+- BASH

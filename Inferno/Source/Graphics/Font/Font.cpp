@@ -77,7 +77,7 @@ void printf(long long int i) {
   }
 }
 
-void hprintf(unsigned long long int i) {
+void hprintf(unsigned int i) {
   char* chr = (char*)to_hstring(i);
   while(*chr != 0) {
     if (CursorX > framebuffer->Width) {

@@ -93,6 +93,11 @@ typedef struct {
   void* GlyphBuffer;
 } PSFFont;
 
+typedef struct {
+  MemoryDescriptor* Map;
+  unsigned long long DescriptorSize, MapSize;
+} Memory;
+
 extern "C" unsigned long long boot(void* ImageHandle, SystemTable* SystemTable) {
   SystemTable->BootServices->SetWatchdogTimer(0, 0, 0, 0);
   SystemTable->ConOut->Reset(SystemTable->ConOut, 1);
@@ -225,13 +230,17 @@ extern "C" unsigned long long boot(void* ImageHandle, SystemTable* SystemTable) 
   MemoryMapSize+=2*DescriptorSize;
   SystemTable->BootServices->AllocatePool(LoaderData, MemoryMapSize, (void**)&MemoryMap);
   SystemTable->BootServices->GetMemoryMap(&MemoryMapSize, MemoryMap, &MapKey, &DescriptorSize, &DescriptorVersion);
+  Memory* memory;
+  memory->Map = MemoryMap;
+  memory->MapSize = MemoryMapSize;
+  memory->DescriptorSize = DescriptorSize;
 
   // Exit Boot Services
   SystemTable->BootServices->ExitBootServices(ImageHandle, MapKey);
 
   // Load Kernel
-	void (*KernelMain)(Framebuffer*, PSFFont*)=((__attribute__((ms_abi)) void (*)(Framebuffer*, PSFFont*))KernelHeaders.e_entry);
-  KernelMain(&framebuffer, font);
+	void (*KernelMain)(Framebuffer*, PSFFont*, Memory*)=((__attribute__((ms_abi)) void (*)(Framebuffer*, PSFFont*, Memory*))KernelHeaders.e_entry);
+  KernelMain(&framebuffer, font, memory);
 
   SystemTable->RuntimeServices->ResetSystem(ResetShutdown, 0x8000000000000000, 0, 0);
   return 0;
