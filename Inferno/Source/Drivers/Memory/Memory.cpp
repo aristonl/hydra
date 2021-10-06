@@ -42,3 +42,37 @@ void Bitmap::Set(uint64_t index, bool value) {
   Buffer[byteIndex] &= ~bitIndexer;
   if (value) Buffer[byteIndex] |= bitIndexer;
 }
+
+uint64_t freeMemory;
+uint64_t reservedMemory;
+uint64_t usedMemory;
+
+bool Initialized = false;
+
+void PageFrameAllocator::ReadMemoryMap(MemoryDescriptor* Map, size_t MapSize, size_t DescriptorSize) {
+  if (Initialized) return;
+  Initialized = true;
+  uint64_t MapEntries = MapSize/DescriptorSize;
+  void* largestFreeMemorySegment = (void*)0;
+  size_t largestFreeMemorySegmentSize = 0;
+  for (int i=0;i<MapEntries;i++) {
+    MemoryDescriptor* desc = (MemoryDescriptor*)((uint64_t)Map+(i*DescriptorSize));
+    if (desc->type == 7) {
+      if (desc->numPages*4096 > largestFreeMemorySegmentSize) {
+        largestFreeMemorySegment = desc->physAddr;
+        largestFreeMemorySegmentSize = desc->numPages*4096;
+      }
+    }
+  }
+  uint64_t memorySize = GetMemorySize(Map, MapEntries, DescriptorSize);
+  freeMemory = memorySize;
+  uint64_t bitmapSize = memorySize/4096/8+1;
+  InitBitmap(bitmapSize, largestFreeMemorySegment);
+  
+}
+
+void PageFrameAllocator::InitBitmap(size_t bitmapSize, void* BufferAddress) {
+  PageBitmap.Size = bitmapSize;
+  PageBitmap.Buffer = (uint8_t*)BufferAddress;
+  for (int i=0;i<bitmapSize;i++) *(uint8_t*)(PageBitmap.Buffer+i)=0;
+}

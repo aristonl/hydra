@@ -22,4 +22,12 @@ class Bitmap {
     void Set(uint64_t index, bool value);
 };
 
+class PageFrameAllocator {
+  public:
+    void ReadMemoryMap(MemoryDescriptor* Map, size_t MapSize, size_t DescriptorSize);
+    Bitmap PageBitmap;
+  private:
+    void InitBitmap(size_t bitmapSize, void* BufferAddress);
+};
+
 extern const char* MemoryTypesStrings[];
