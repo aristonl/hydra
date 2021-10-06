@@ -6,11 +6,16 @@ void putpixel(unsigned int x, unsigned int y, unsigned int color) {
   *(unsigned int*)((unsigned int*)framebuffer->Address + x + (y * framebuffer->PPSL)) = 0;
 }
 
+uint8_t testBuffer[20];
+
 void main(Framebuffer* framebuffer, PSFFont* font, Memory* memory) {
   SetGlobalFramebuffer(framebuffer);
   SetGlobalFont(font);
   uint64_t MapEntries = memory->MapSize / memory->DescriptorSize;
-  printf(GetMemorySize(memory->Map, MapEntries, memory->DescriptorSize)/1024/1024);
+  
+
+
+  // printf(GetMemorySize(memory->Map, MapEntries, memory->DescriptorSize));
 
   // 
   // for (int i=0;i<MapEntries;i++) {

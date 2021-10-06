@@ -9,9 +9,17 @@ struct MemoryDescriptor {
 
 typedef struct {
   MemoryDescriptor* Map;
-  unsigned long long DescriptorSize, MapSize;
+  uint64_t DescriptorSize, MapSize;
 } Memory;
 
 uint64_t GetMemorySize(MemoryDescriptor* Map, uint64_t MapEntries, uint64_t DescriptorSize);
+
+class Bitmap {
+  public:
+    size_t Size;
+    uint8_t* Buffer;
+    bool operator[](uint64_t index);
+    void Set(uint64_t index, bool value);
+};
 
 extern const char* MemoryTypesStrings[];
