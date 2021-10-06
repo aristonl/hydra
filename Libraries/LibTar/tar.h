@@ -10,14 +10,14 @@
 #ifndef __TAR__
 #define __TAR__
 
-#include <LibC/errno.h>
-#include <LibC/stdarg.h>
-#include <LibC/stdio.h>
-#include <LibC/stdlib.h>
-#include <LibC/string.h>
-#include <LibC/time.h>
+#include "../LibC/errno.h"
+#include "../LibC/stdarg.h"
+#include "../LibC/stdio.h"
+#include "../LibC/stdlib.h"
+#include "../LibC/string.h"
+#include "../LibC/time.h"
 
-#include <LibC/unistd.h>
+#include "../LibC/unistd.h"
 
 #define BLOCKSECTOR 512
 
@@ -36,13 +36,13 @@ struct ustar {
 	char mode[8];
 	char uid[8];
 	char gid[8];
-	char size[12]		// octal base
+	char size[12];		// octal base
 	char mtime[12];		// octal base
 	char cksum[8];
 	char typeflag[1];
 	char linkname[100];
 	char magic[6];
-	char version[3]
+	char version[3];
 	char uname[32];
 	char gname[32];
 	char devmajor[8];
