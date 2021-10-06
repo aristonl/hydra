@@ -20,6 +20,16 @@
 
 #define BLOCKSECTOR 512
 
+#define REGULAR 	0
+#define NORMAL 		'0'
+#define HARDLINK 	'1'
+#define SYMLINK 	'2'
+#define CHAR 		'3'
+#define BLOCK		'4'
+#define DIRECTORY	'5'
+#define FIFO		'6'
+#define CONTIGUOUS	'7'
+
 struct ustar {
 	char name[100];
 	char mode[8];
