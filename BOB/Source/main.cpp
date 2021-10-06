@@ -84,6 +84,15 @@ struct TGAImage {
 	void* buffer;
 };
 
+typedef struct {
+  unsigned char magic[2], mode, charSize;
+} PSFHeader;
+
+typedef struct {
+  PSFHeader* Header;
+  void* GlyphBuffer;
+} PSFFont;
+
 extern "C" unsigned long long boot(void* ImageHandle, SystemTable* SystemTable) {
   SystemTable->BootServices->SetWatchdogTimer(0, 0, 0, 0);
   SystemTable->ConOut->Reset(SystemTable->ConOut, 1);
@@ -105,10 +114,11 @@ extern "C" unsigned long long boot(void* ImageHandle, SystemTable* SystemTable) 
   SystemTable->BootServices->LocateProtocol(&gopGUID, (void*)0, (void**)&gop);
   Framebuffer framebuffer = Framebuffer(gop->Mode->FrameBufferBase, gop->Mode->FrameBufferSize, gop->Mode->Info->HorizontalResolution, gop->Mode->Info->VerticalResolution, gop->Mode->Info->PixelsPerScanLine);
   
-  // Load Boot Logo
+  // Load Boot Logo File
   FileProtocol* image;
   FS->Open(FS, &image, (unsigned short*) L"Echo.tga", 0x0000000000000001, 0);
 
+  // Load Boot Logo Data
   struct TGAHeader* header;
   unsigned long long headerSize = sizeof(struct TGAHeader);
   SystemTable->BootServices->AllocatePool(LoaderData, headerSize, (void**)&header);
@@ -144,6 +154,27 @@ extern "C" unsigned long long boot(void* ImageHandle, SystemTable* SystemTable) 
     }
   }
 
+  // Load Font File
+  FileProtocol* fontFile;
+  FS->Open(FS, &fontFile, (unsigned short*) L"font.psf", 0x0000000000000001, 0);
+
+  PSFHeader* fontHeader;
+  PSFFont* font;
+  SystemTable->BootServices->AllocatePool(LoaderData, sizeof(PSFHeader), (void**)&fontHeader);
+  unsigned long long fontSize = sizeof(fontHeader);
+  fontFile->Read(fontFile, &fontSize, fontHeader);
+  if (fontHeader->magic[0] == 0x36 || fontHeader->magic[1] == 0x04) {
+    unsigned long long glyphBufferSize = fontHeader->charSize*256;
+    void* glyphBuffer; {
+      fontFile->SetPosition(fontFile, sizeof(PSFHeader));
+      SystemTable->BootServices->AllocatePool(LoaderData, glyphBufferSize, (void**)&glyphBuffer);
+      fontFile->Read(fontFile, &glyphBufferSize, glyphBuffer);
+      SystemTable->BootServices->AllocatePool(LoaderData, sizeof(PSFFont), (void**)&font);
+      font->Header = fontHeader;
+      font->GlyphBuffer = glyphBuffer;
+    }
+  }
+  
   // Load Kernel File
   FileProtocol* KernelFile;
   FS->Open(FS, &KernelFile, (unsigned short*) L"inferno", 0x0000000000000001, 0);
@@ -199,8 +230,8 @@ extern "C" unsigned long long boot(void* ImageHandle, SystemTable* SystemTable) 
   SystemTable->BootServices->ExitBootServices(ImageHandle, MapKey);
 
   // Load Kernel
-	void (*KernelMain)(Framebuffer*)=((__attribute__((ms_abi)) void (*)(Framebuffer*))KernelHeaders.e_entry);
-  KernelMain(&framebuffer);
+	void (*KernelMain)(Framebuffer*, PSFFont*)=((__attribute__((ms_abi)) void (*)(Framebuffer*, PSFFont*))KernelHeaders.e_entry);
+  KernelMain(&framebuffer, font);
 
   SystemTable->RuntimeServices->ResetSystem(ResetShutdown, 0x8000000000000000, 0, 0);
   return 0;

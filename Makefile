@@ -28,6 +28,7 @@ endif
 	@-mmd -i Build/ISO/Echo.img ::/EFI/BOOT
 	@-mcopy -i Build/ISO/Echo.img Build/ISO/EFI/BOOT/bootx64.efi ::/EFI/BOOT
 	@-mcopy -i Build/ISO/Echo.img Build/ISO/Echo.tga ::
+	@-mcopy -i Build/ISO/Echo.img Build/ISO/font.psf ::
 	@-mcopy -i Build/ISO/Echo.img Build/ISO/inferno ::
 	@-mcopy -i Build/ISO/Echo.img Build/ISO/startup.nsh ::
 
