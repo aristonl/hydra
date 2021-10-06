@@ -30,15 +30,16 @@ class PageFrameAllocator {
     void LockPage(void* address);
     void FreePages(void* address, uint64_t pageCount);
     void LockPages(void* address, uint64_t pageCount);
+    void* RequestPage();
     uint64_t GetFreeMem();
     uint64_t GetUsedMem();
     uint64_t GetReservedMem();
   private:
     void InitBitmap(size_t bitmapSize, void* BufferAddress);
-    void ReservedPage(void* address);
-    void UnreservedPage(void* address);
-    void ReservedPages(void* address, uint64_t pageCount);
-    void UnreservedPages(void* address, uint64_t pageCount);
+    void ReservePage(void* address);
+    void UnreservePage(void* address);
+    void ReservePages(void* address, uint64_t pageCount);
+    void UnreservePages(void* address, uint64_t pageCount);
 };
 
 extern const char* MemoryTypesStrings[];

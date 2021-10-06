@@ -71,7 +71,7 @@ void PageFrameAllocator::ReadMemoryMap(MemoryDescriptor* Map, size_t MapSize, si
   LockPages(&PageBitmap, PageBitmap.Size / 4096 + 1);
   for (int i = 0; i < MapEntries; i++) {
     MemoryDescriptor* desc = (MemoryDescriptor*)((uint64_t) Map + (i * DescriptorSize));
-    if (desc->type != 7) ReservedPages(desc->physAddr, desc->numPages);
+    if (desc->type != 7) ReservePages(desc->physAddr, desc->numPages);
   }
 }
 
@@ -105,7 +105,7 @@ void PageFrameAllocator::LockPages(void *address, uint64_t pageCount) {
   for (int t = 0; t < pageCount; t++) LockPage((void*)((uint64_t)address + (t * 4096)));
 }
 
-void PageFrameAllocator::UnreservedPage(void *address) {
+void PageFrameAllocator::UnreservePage(void *address) {
   uint64_t index = (uint64_t)address / 4096;
   if (PageBitmap[index] == false) return;
   PageBitmap.Set(index, false);
@@ -113,11 +113,11 @@ void PageFrameAllocator::UnreservedPage(void *address) {
   reservedMemory -= 4096;
 }
 
-void PageFrameAllocator::UnreservedPages(void *address, uint64_t pageCount) {
-  for (int t = 0; t < pageCount; t++) UnreservedPage((void*)((uint64_t)address + (t * 4096)));
+void PageFrameAllocator::UnreservePages(void *address, uint64_t pageCount) {
+  for (int t = 0; t < pageCount; t++) UnreservePage((void*)((uint64_t)address + (t * 4096)));
 }
 
-void PageFrameAllocator::ReservedPage(void *address) {
+void PageFrameAllocator::ReservePage(void *address) {
   uint64_t index = (uint64_t)address / 4096;
   if (PageBitmap[index] == true) return;
   PageBitmap.Set(index, true);
@@ -125,8 +125,17 @@ void PageFrameAllocator::ReservedPage(void *address) {
   reservedMemory += 4096;
 }
 
-void PageFrameAllocator::ReservedPages(void *address, uint64_t pageCount) {
-  for (int t = 0; t < pageCount; t++) ReservedPage((void*)((uint64_t)address + (t * 4096)));
+void PageFrameAllocator::ReservePages(void *address, uint64_t pageCount) {
+  for (int t = 0; t < pageCount; t++) ReservePage((void*)((uint64_t)address + (t * 4096)));
+}
+
+void* PageFrameAllocator::RequestPage() {
+  for (uint64_t index=0;index<PageBitmap.Size*8;index++) {
+    if (PageBitmap[index]==true) continue;
+    LockPage((void*)(index*4096));
+    return (void*)(index*4096);
+  }
+  return (void*)0; // Come back to here when ahci driver is done.
 }
 
 uint64_t PageFrameAllocator::GetFreeMem() {
