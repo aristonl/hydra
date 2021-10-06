@@ -1,4 +1,5 @@
 #pragma once
+#include "../../../../std/Types.h"
 
 struct MemoryDescriptor {
   uint32_t type;

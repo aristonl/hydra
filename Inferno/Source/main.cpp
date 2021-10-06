@@ -1,7 +1,6 @@
 #include "Drivers/Graphics/GOP/GOP.hpp"
 #include "Graphics/Font/Font.hpp"
 #include "Drivers/Memory/Memory.hpp"
-#include "../../../../std/Types.h"
 
 void putpixel(unsigned int x, unsigned int y, unsigned int color) {
   *(unsigned int*)((unsigned int*)framebuffer->Address + x + (y * framebuffer->PPSL)) = 0;
