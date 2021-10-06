@@ -24,7 +24,23 @@ struct FileSystemProtocol;
 struct FileProtocol;
 struct FileSystemProtocol;
 
-typedef enum {ReservedMemoryType, LoaderCode, LoaderData, BootServicesCode, BootServicesData, RuntimeServicesCode, RuntimeServicesData, ConventionalMemory, UnusableMemory, ACPIReclaimMemory, ACPIMemoryNVS, MemoryMappedIO, MemoryMappedIOPortSpace, PalCode, MaxMemoryType} EFI_MEMORY_TYPE;
+typedef enum {
+  EfiReservedMemoryType,
+  EfiLoaderCode,
+  EfiLoaderData,
+  EfiBootServicesCode,
+  EfiBootServicesData,
+  EfiRuntimeServicesCode,
+  EfiRuntimeServicesData,
+  EfiConventionalMemory,
+  EfiUnusableMemory,
+  EfiACPIReclaimMemory,
+  EfiACPIMemoryNVS,
+  EfiMemoryMappedIO,
+  EfiMemoryMappedIOPortSpace,
+  EfiPalCode,
+  EfiMaxMemoryType
+} EFI_MEMORY_TYPE;
 
 typedef struct Time {
 	unsigned short Year;

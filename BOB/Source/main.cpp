@@ -98,6 +98,9 @@ typedef struct {
   unsigned long long DescriptorSize, MapSize;
 } Memory;
 
+#define NULL ((void*)0)
+
+
 extern "C" unsigned long long boot(void* ImageHandle, SystemTable* SystemTable) {
   SystemTable->BootServices->SetWatchdogTimer(0, 0, 0, 0);
   SystemTable->ConOut->Reset(SystemTable->ConOut, 1);
@@ -126,16 +129,16 @@ extern "C" unsigned long long boot(void* ImageHandle, SystemTable* SystemTable) 
   // Load Boot Logo Data
   struct TGAHeader* header;
   unsigned long long headerSize = sizeof(struct TGAHeader);
-  SystemTable->BootServices->AllocatePool(LoaderData, headerSize, (void**)&header);
+  SystemTable->BootServices->AllocatePool(EfiLoaderData, headerSize, (void**)&header);
   image->Read(image, &headerSize, header);
   unsigned long long bufferSize = header->width*header->height*header->bbp/8;
   void* buffer; {
     image->SetPosition(image, headerSize);
-    SystemTable->BootServices->AllocatePool(LoaderData, bufferSize, (void**)&buffer);
+    SystemTable->BootServices->AllocatePool(EfiLoaderData, bufferSize, (void**)&buffer);
     image->Read(image, &bufferSize, buffer);
   }
   struct TGAImage* BootLogo;
-  SystemTable->BootServices->AllocatePool(LoaderData, sizeof(struct TGAImage), (void**)&BootLogo);
+  SystemTable->BootServices->AllocatePool(EfiLoaderData, sizeof(struct TGAImage), (void**)&BootLogo);
   BootLogo->header_ptr = header;
   BootLogo->buffer = buffer;
 
@@ -165,16 +168,16 @@ extern "C" unsigned long long boot(void* ImageHandle, SystemTable* SystemTable) 
 
   PSFHeader* fontHeader;
   PSFFont* font;
-  SystemTable->BootServices->AllocatePool(LoaderData, sizeof(PSFHeader), (void**)&fontHeader);
+  SystemTable->BootServices->AllocatePool(EfiLoaderData, sizeof(PSFHeader), (void**)&fontHeader);
   unsigned long long fontSize = sizeof(fontHeader);
   fontFile->Read(fontFile, &fontSize, fontHeader);
   if (fontHeader->magic[0] == 0x36 || fontHeader->magic[1] == 0x04) {
     unsigned long long glyphBufferSize = fontHeader->charSize*256;
     void* glyphBuffer; {
       fontFile->SetPosition(fontFile, sizeof(PSFHeader));
-      SystemTable->BootServices->AllocatePool(LoaderData, glyphBufferSize, (void**)&glyphBuffer);
+      SystemTable->BootServices->AllocatePool(EfiLoaderData, glyphBufferSize, (void**)&glyphBuffer);
       fontFile->Read(fontFile, &glyphBufferSize, glyphBuffer);
-      SystemTable->BootServices->AllocatePool(LoaderData, sizeof(PSFFont), (void**)&font);
+      SystemTable->BootServices->AllocatePool(EfiLoaderData, sizeof(PSFFont), (void**)&font);
       font->Header = fontHeader;
       font->GlyphBuffer = glyphBuffer;
     }
@@ -189,7 +192,7 @@ extern "C" unsigned long long boot(void* ImageHandle, SystemTable* SystemTable) 
     unsigned long long FileInfoSize;
     FileInfo* KernelInfo;
     KernelFile->GetInfo(KernelFile, &FileInfoGUID, FileInfoSize, (void*)0);
-    SystemTable->BootServices->AllocatePool(LoaderData, FileInfoSize, (void**)&KernelInfo);
+    SystemTable->BootServices->AllocatePool(EfiLoaderData, FileInfoSize, (void**)&KernelInfo);
     KernelFile->GetInfo(KernelFile, &FileInfoGUID, FileInfoSize, (void**)&KernelInfo);
     unsigned long long size = sizeof(KernelHeaders);
     KernelFile->Read(KernelFile, &size, &KernelHeaders);
@@ -204,7 +207,7 @@ extern "C" unsigned long long boot(void* ImageHandle, SystemTable* SystemTable) 
   Elf64_Phdr* ProgramHeaders; {
     KernelFile->SetPosition(KernelFile, KernelHeaders.e_phoff);
     unsigned long long size = KernelHeaders.e_phnum*KernelHeaders.e_phentsize;
-    SystemTable->BootServices->AllocatePool(LoaderData, size, (void**)&ProgramHeaders);
+    SystemTable->BootServices->AllocatePool(EfiLoaderData, size, (void**)&ProgramHeaders);
     KernelFile->Read(KernelFile, &size, ProgramHeaders);
   }
 
@@ -213,7 +216,7 @@ extern "C" unsigned long long boot(void* ImageHandle, SystemTable* SystemTable) 
       case 1: {
         int pages=(ProgramHeader->p_memsz+0x1000-1)/0x1000;
         unsigned long long segment=ProgramHeader->p_paddr;
-        SystemTable->BootServices->AllocatePages(AllocateAddress, LoaderData, pages, &segment);
+        SystemTable->BootServices->AllocatePages(AllocateAddress, EfiLoaderData, pages, &segment);
         KernelFile->SetPosition(KernelFile, ProgramHeader->p_offset);
         unsigned long long size = ProgramHeader->p_filesz;
         KernelFile->Read(KernelFile, &size, (void*)segment);
@@ -223,23 +226,26 @@ extern "C" unsigned long long boot(void* ImageHandle, SystemTable* SystemTable) 
   }
 
   // Initialize Memory Map
-  unsigned long long MemoryMapSize=0, MapKey, DescriptorSize;
-  MemoryDescriptor* MemoryMap=0;
-  unsigned int DescriptorVersion;
-  SystemTable->BootServices->GetMemoryMap(&MemoryMapSize, MemoryMap, &MapKey, &DescriptorSize, &DescriptorVersion);
-  SystemTable->BootServices->AllocatePool(LoaderData, MemoryMapSize, (void**)&MemoryMap);
-  SystemTable->BootServices->GetMemoryMap(&MemoryMapSize, MemoryMap, &MapKey, &DescriptorSize, &DescriptorVersion);
+  MemoryDescriptor* Map = 0;
+	unsigned long long int MapSize, MapKey;
+	unsigned long long int DescriptorSize;
+	unsigned int DescriptorVersion; {
+		SystemTable->BootServices->GetMemoryMap(&MapSize, Map, &MapKey, &DescriptorSize, &DescriptorVersion);
+		SystemTable->BootServices->AllocatePool(EfiLoaderData, MapSize, (void**)&Map);
+		SystemTable->BootServices->GetMemoryMap(&MapSize, Map, &MapKey, &DescriptorSize, &DescriptorVersion);
+	}
 
   Memory* memory;
-  memory->Map = MemoryMap;
-  memory->MapSize = MemoryMapSize;
+  memory->Map = Map;
+  memory->MapSize = MapSize;
   memory->DescriptorSize = DescriptorSize;
+
+  // Load Kernel
+	void (*KernelMain)(Framebuffer*, PSFFont*, Memory*)=((__attribute__((ms_abi)) void (*)(Framebuffer*, PSFFont*, Memory*))KernelHeaders.e_entry);
 
   // Exit Boot Services
   SystemTable->BootServices->ExitBootServices(ImageHandle, MapKey);
 
-  // Load Kernel
-	void (*KernelMain)(Framebuffer*, PSFFont*, Memory*)=((__attribute__((ms_abi)) void (*)(Framebuffer*, PSFFont*, Memory*))KernelHeaders.e_entry);
   KernelMain(&framebuffer, font, memory);
 
   SystemTable->RuntimeServices->ResetSystem(ResetShutdown, 0x8000000000000000, 0, 0);
