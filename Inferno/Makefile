@@ -21,4 +21,4 @@ Build/%.so: Source/%.s
 	@-nasm $^ -f elf64 -o $@
 
 all: $(Objects)
-	@ld -T linker.ld -static -Bsymbolic -nostdlib -o ../Build/ISO/inferno $(Objects)
+	@ld -T linker.ld -L../std/ -L../Libraries/ -static -Bsymbolic -nostdlib -o ../Build/ISO/inferno $(Objects)

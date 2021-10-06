@@ -1,6 +1,6 @@
 #pragma once
 
-#include <stdint.h>
+#include "../Libraries/LibC/stdint.h"
 
 typedef uint8_t byte;
 typedef uint16_t word;
@@ -11,6 +11,8 @@ typedef int8_t signed_byte;
 typedef int16_t signed_word;
 typedef int32_t signed_dword;
 typedef int64_t signed_qword;
+
+typedef unsigned long long size_t;
 
 constexpr unsigned KB = 1024;
 constexpr unsigned MB = KB * KB;

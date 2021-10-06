@@ -10,6 +10,7 @@ void main(Framebuffer* framebuffer, PSFFont* font) {
   // }
   SetGlobalFramebuffer(framebuffer);
   SetGlobalFont(font);
-  printf("Hello, world!");
+  printf("Hello, World!\nThis is a test: ");
+  printf(1000);
   while(1);
 }

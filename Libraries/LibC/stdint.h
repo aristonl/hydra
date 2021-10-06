@@ -1,38 +1,38 @@
 #pragma once
 
-#include <sys/cdefs.h>
+#include "sys/cdefs.h"
 
 __BEGIN_DECLS
 
-typedef __UINT64_TYPE__ uint64_t;
-typedef __UINT32_TYPE__ uint32_t;
-typedef __UINT16_TYPE__ uint16_t;
-typedef __UINT8_TYPE__ uint8_t;
+typedef unsigned long long int uint64_t;
+typedef unsigned int uint32_t;
+typedef unsigned short int uint16_t;
+typedef unsigned char uint8_t;
 
-typedef __INT64_TYPE__ int64_t;
-typedef __INT32_TYPE__ int32_t;
-typedef __INT16_TYPE__ int16_t;
-typedef __INT8_TYPE__ int8_t;
+typedef long long int int64_t;
+typedef int int32_t;
+typedef short int int16_t;
+typedef signed char int8_t;
 
-typedef __UINT_FAST8_TYPE__ uint_fast8_t;
-typedef __UINT_FAST16_TYPE__ uint_fast16_t;
-typedef __UINT_FAST32_TYPE__ uint_fast32_t;
-typedef __UINT_FAST64_TYPE__ uint_fast64_t;
+typedef unsigned char uint_fast8_t;
+typedef unsigned long int uint_fast16_t;
+typedef unsigned long int uint_fast32_t;
+typedef unsigned long int uint_fast64_t;
 
-typedef __INT_FAST8_TYPE__ int_fast8_t;
-typedef __INT_FAST16_TYPE__ int_fast16_t;
-typedef __INT_FAST32_TYPE__ int_fast32_t;
-typedef __INT_FAST64_TYPE__ int_fast64_t;
+typedef signed char int_fast8_t;
+typedef long int int_fast16_t;
+typedef long int int_fast32_t;
+typedef long int int_fast64_t;
 
-typedef __UINT_LEAST8_TYPE__ uint_least8_t;
-typedef __UINT_LEAST16_TYPE__ uint_least16_t;
-typedef __UINT_LEAST32_TYPE__ uint_least32_t;
-typedef __UINT_LEAST64_TYPE__ uint_least64_t;
+typedef unsigned char uint_least8_t;
+typedef unsigned short int uint_least16_t;
+typedef unsigned int uint_least32_t;
+typedef unsigned long int uint_least64_t;
 
-typedef __INT_LEAST8_TYPE__ int_least8_t;
-typedef __INT_LEAST16_TYPE__ int_least16_t;
-typedef __INT_LEAST32_TYPE__ int_least32_t;
-typedef __INT_LEAST64_TYPE__ int_least64_t;
+typedef signed char int_least8_t;
+typedef short int int_least16_t;
+typedef int int_least32_t;
+typedef long int int_least64_t;
 
 #define __int8_t_defined 1
 #define __uint8_t_defined 1
@@ -43,14 +43,14 @@ typedef __INT_LEAST64_TYPE__ int_least64_t;
 #define __int64_t_defined 1
 #define __uint64_t_defined 1
 
-typedef __UINTPTR_TYPE__ uintptr_t;
-typedef __INTPTR_TYPE__ intptr_t;
+typedef unsigned long int uintptr_t;
+typedef long int intptr_t;
 
-typedef __UINTMAX_TYPE__ uintmax_t;
+typedef unsigned long long int uintmax_t;
 #define UINTMAX_MAX __UINTMAX_MAX__
 #define UINTMAX_MIN __UINTMAX_MIN__
 
-typedef __INTMAX_TYPE__ intmax_t;
+typedef long long int intmax_t;
 #define INTMAX_MAX __INTMAX_MAX__
 #define INTMAX_MIN (-INTMAX_MAX - 1)
 

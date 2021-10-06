@@ -1,5 +1,6 @@
 #include "Font.hpp"
 #include "../../Drivers/Graphics/GOP/GOP.hpp"
+#include "string.hpp"
 
 PSFFont* font;
 
@@ -23,12 +24,41 @@ void putc(char c, unsigned int xOff, unsigned int yOff) {
 
 void printf(const char* str) {
   char* chr = (char*)str;
-  while(*chr != 0){
-    putc(*chr, CursorX, CursorY);
-    CursorX+=8;
-    if(CursorX + 8 > framebuffer->Width) {
-      CursorX = 0;
-      CursorY += 16;
+  while(*chr != 0) {
+    if (CursorX > framebuffer->Width) {
+      CursorX=0;
+      CursorY+=16;
+    } else if (*chr == '\n') {
+      CursorY+=16;
+      CursorX=0;
+    } else {
+      putc(*chr, CursorX, CursorY);
+      CursorX+=8;
+      if(CursorX + 8 > framebuffer->Width) {
+        CursorX = 0;
+        CursorY += 16;
+      }
+    }
+    chr++;
+  }
+}
+
+void printf(unsigned long long int i) {
+  char* chr = (char*)to_string(i);
+  while(*chr != 0) {
+    if (CursorX > framebuffer->Width) {
+      CursorX=0;
+      CursorY+=16;
+    } else if (*chr == '\n') {
+      CursorY+=16;
+      CursorX=0;
+    } else {
+      putc(*chr, CursorX, CursorY);
+      CursorX+=8;
+      if(CursorX + 8 > framebuffer->Width) {
+        CursorX = 0;
+        CursorY += 16;
+      }
     }
     chr++;
   }
