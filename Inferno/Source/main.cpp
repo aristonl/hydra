@@ -1,6 +1,7 @@
 #include "Drivers/Graphics/GOP/GOP.hpp"
 #include "Graphics/Font/Font.hpp"
 #include "Drivers/Memory/Memory.hpp"
+#include "../../../../std/Types.h"
 
 void putpixel(unsigned int x, unsigned int y, unsigned int color) {
   *(unsigned int*)((unsigned int*)framebuffer->Address + x + (y * framebuffer->PPSL)) = 0;
@@ -13,8 +14,12 @@ void main(Framebuffer* framebuffer, PSFFont* font, Memory* memory) {
   SetGlobalFont(font);
   uint64_t MapEntries = memory->MapSize / memory->DescriptorSize;
   
+  PageFrameAllocator newAllocator;
+  newAllocator.ReadMemoryMap(memory->Map, memory->MapSize, memory->DescriptorSize);
 
-
+  printf("Free: %d KB\n", newAllocator.GetFreeMem() / 1024);
+  printf("Free: %d KB\n", newAllocator.GetUsedMem() / 1024);
+  printf("Free: %d KB\n", newAllocator.GetReservedMem() / 1024);
   // printf(GetMemorySize(memory->Map, MapEntries, memory->DescriptorSize));
 
   // 
