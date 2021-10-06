@@ -9,8 +9,10 @@ void putpixel(unsigned int x, unsigned int y, unsigned int color) {
 void main(Framebuffer* framebuffer, PSFFont* font, Memory* memory) {
   SetGlobalFramebuffer(framebuffer);
   SetGlobalFont(font);
+  uint64_t MapEntries = memory->MapSize / memory->DescriptorSize;
+  printf(GetMemorySize(memory->Map, MapEntries, memory->DescriptorSize)/1024/1024);
 
-  // uint64_t MapEntries = memory->MapSize / memory->DescriptorSize;
+  // 
   // for (int i=0;i<MapEntries;i++) {
   //   MemoryDescriptor* desc = (MemoryDescriptor*)((uint64_t)memory->Map+(i*memory->DescriptorSize));
   //   printf(MemoryTypesStrings[desc->type]);

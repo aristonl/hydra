@@ -227,9 +227,9 @@ extern "C" unsigned long long boot(void* ImageHandle, SystemTable* SystemTable) 
   MemoryDescriptor* MemoryMap;
   unsigned int DescriptorVersion;
   SystemTable->BootServices->GetMemoryMap(&MemoryMapSize, MemoryMap, &MapKey, &DescriptorSize, &DescriptorVersion);
-  MemoryMapSize+=2*DescriptorSize;
   SystemTable->BootServices->AllocatePool(LoaderData, MemoryMapSize, (void**)&MemoryMap);
   SystemTable->BootServices->GetMemoryMap(&MemoryMapSize, MemoryMap, &MapKey, &DescriptorSize, &DescriptorVersion);
+
   Memory* memory;
   memory->Map = MemoryMap;
   memory->MapSize = MemoryMapSize;
