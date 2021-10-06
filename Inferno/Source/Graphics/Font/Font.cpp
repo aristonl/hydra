@@ -1,6 +1,7 @@
 #include "Font.hpp"
 #include "../../Drivers/Graphics/GOP/GOP.hpp"
 #include "string.hpp"
+#include "../../../../Libraries/LibC/stdarg.h"
 
 PSFFont* font;
 
@@ -22,8 +23,41 @@ void putc(char c, unsigned int xOff, unsigned int yOff) {
   }
 }
 
-void printf(const char* str) {
-  char* chr = (char*)str;
+void printf(const char* format, ...) {
+  va_list args;
+  va_start(args, format);
+
+  char* chr = (char*)format;
+  while(*chr != 0) {
+    if (CursorX > framebuffer->Width) {
+      CursorX=0;
+      CursorY+=16;
+    } else if (*chr == '\n') {
+      CursorY+=16;
+      CursorX=0;
+    } else if (*chr == '%') {
+      chr++;
+      if (*chr == 'd') {
+        unsigned int i = va_arg(args, int);
+        printf(i);
+      } else if (*chr == 'c') {
+        unsigned int i = va_arg(args, int);
+        putc(i, CursorX, CursorY);
+        CursorX+=8;
+      } else if (*chr == 'x') {
+        unsigned int i = va_arg(args, int);
+        hprintf(i);
+      }
+    } else {
+      putc(*chr, CursorX, CursorY);
+      CursorX+=8;
+    }
+    chr++;
+  }
+}
+
+void printf(long long int i) {
+  char* chr = (char*)to_string(i);
   while(*chr != 0) {
     if (CursorX > framebuffer->Width) {
       CursorX=0;
@@ -43,8 +77,8 @@ void printf(const char* str) {
   }
 }
 
-void printf(unsigned long long int i) {
-  char* chr = (char*)to_string(i);
+void hprintf(unsigned long long int i) {
+  char* chr = (char*)to_hstring(i);
   while(*chr != 0) {
     if (CursorX > framebuffer->Width) {
       CursorX=0;
