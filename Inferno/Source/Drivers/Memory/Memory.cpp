@@ -14,7 +14,8 @@ const char* MemoryTypesStrings[] {
   "EfiACPIMemoryNVS",
   "EfiMemoryMappedIO",
   "EfiMemoryMappedIOPortSpace",
-  "EfiPalCode"
+  "EfiPalCode",
+  "EfiMaxMemoryType"
 };
 
 uint64_t GetMemorySize(MemoryDescriptor* Map, uint64_t MapEntries, uint64_t DescriptorSize) {
@@ -56,7 +57,7 @@ void PageFrameAllocator::ReadMemoryMap(MemoryDescriptor* Map, size_t MapSize, si
   void *largestFreeMemorySegment = (void *) 0;
   size_t largestFreeMemorySegmentSize = 0;
   for (int i = 0; i < MapEntries; i++) {
-    MemoryDescriptor *desc = (MemoryDescriptor *) ((uint64_t) Map + (i * DescriptorSize));
+    MemoryDescriptor *desc = (MemoryDescriptor*)((uint64_t)Map + (i * DescriptorSize));
     if (desc->type == 7) {
       if (desc->numPages * 4096 > largestFreeMemorySegmentSize) {
         largestFreeMemorySegment = desc->physAddr;
