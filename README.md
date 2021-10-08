@@ -38,7 +38,7 @@ This repository has 3 main sections, BOB (our bootloader), Inferno (the kernel),
 
 **Genesis Banzon** - [@myst330](https://github.com/myst330)
 
-**Nolan Gerold** - [@Redpendrew](https://github.com/Redpendrew)
+**Red** - [@Redpendrew](https://github.com/Redpendrew)
 
 ## License
 Echo and Inferno are licensed under the MIT License.
