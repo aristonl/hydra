@@ -112,7 +112,7 @@ else
 		else \
 			touch build.config; \
 			echo "QEMU=normal" >> build.config; \
-			echo "QEMU_MEMORY=512M" >> build.config; \
+			echo "QEMU_MEMORY=2G" >> build.config; \
 			echo "DOCKER=false" >> build.config; \
 			echo "DOCKER_CONTAINER=" >> build.config; \
 			echo "DOCKER_ECHO_ROOT=" >> build.config; \
