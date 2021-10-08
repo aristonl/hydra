@@ -10,6 +10,8 @@ This document has set guidelines on contributing to Hydra (Echo/Inferno/BOB). If
 
 ## Styleguide
 To keep things in an organized fashion, we have some rules on how we would like certain things to be formatted.
+### Coding Style
+The number one thing important to us when formatting your code is try to minimize the amount of lines as much as possible. We want to make sure that we don't use unneccesary data space in the file. When doing this, make sure you minimize the lines but try to make sure that everything still can seperated into parts for clarity in the code. We would also appreciate adding comments to parts of the code that maybe you have written so it can help us MAINTAINERS understand what a certain part of your code does.
 ### Git Commit Messages
 When commiting to Echo, your commits must have good clarity in what they implement/fix/enhance. All commits should start with what section of Hydra you have changed.
 <br>
