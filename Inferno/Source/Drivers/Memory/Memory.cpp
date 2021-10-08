@@ -28,7 +28,12 @@ uint64_t GetMemorySize(MemoryDescriptor* Map, uint64_t MapEntries, uint64_t Desc
   return memorySizeBytes;
 }
 
+void memset(void* start, uint8_t value, uint64_t num) {
+  for (uint64_t i=0;i<num;i++) *(uint8_t*)((uint64_t)start+i)=value;
+}
+
 bool Bitmap::operator[](uint64_t index) {
+  if (index >= Size*8) return false;
   uint64_t byteIndex = index/8;
   uint8_t bitIndex = index%8;
   uint8_t bitIndexer = 0b10000000 >> bitIndex;
@@ -36,17 +41,20 @@ bool Bitmap::operator[](uint64_t index) {
   return false;
 }
 
-void Bitmap::Set(uint64_t index, bool value) {
+bool Bitmap::Set(uint64_t index, bool value) {
+  if (index >= Size*8) return false;
   uint64_t byteIndex = index/8;
   uint8_t bitIndex = index%8;
   uint8_t bitIndexer = 0b10000000 >> bitIndex;
   Buffer[byteIndex] &= ~bitIndexer;
   if (value) Buffer[byteIndex] |= bitIndexer;
+  return true;
 }
 
 uint64_t freeMemory;
 uint64_t reservedMemory;
 uint64_t usedMemory;
+PageFrameAllocator Allocator;
 
 bool Initialized = false;
 
@@ -82,12 +90,24 @@ void PageFrameAllocator::InitBitmap(size_t bitmapSize, void* BufferAddress) {
   for (int i=0;i<bitmapSize;i++) *(uint8_t*)(PageBitmap.Buffer+i)=0;
 }
 
+uint64_t pageBitMapIndex=0;
+void* PageFrameAllocator::RequestPage() {
+  for (pageBitMapIndex;pageBitMapIndex<PageBitmap.Size*8;pageBitMapIndex++) {
+    if (PageBitmap[pageBitMapIndex]==true) continue;
+    LockPage((void*)(pageBitMapIndex*4096));
+    return (void*)(pageBitMapIndex*4096);
+  }
+  return (void*)0; // Come back to here when ahci driver is done.
+}
+
 void PageFrameAllocator::FreePage(void *address) {
   uint64_t index = (uint64_t)address / 4096;
   if (PageBitmap[index] == false) return;
-  PageBitmap.Set(index, false);
-  freeMemory += 4096;
-  usedMemory -= 4096;
+  if (PageBitmap.Set(index, false)) {
+    freeMemory += 4096;
+    usedMemory -= 4096;
+    if (pageBitMapIndex>index)pageBitMapIndex=index;
+  }
 }
 
 void PageFrameAllocator::FreePages(void *address, uint64_t pageCount) {
@@ -97,9 +117,10 @@ void PageFrameAllocator::FreePages(void *address, uint64_t pageCount) {
 void PageFrameAllocator::LockPage(void *address) {
   uint64_t index = (uint64_t)address / 4096;
   if (PageBitmap[index] == true) return;
-  PageBitmap.Set(index, true);
-  freeMemory -= 4096;
-  usedMemory += 4096;
+  if (PageBitmap.Set(index, true)) {
+    freeMemory -= 4096;
+    usedMemory += 4096;
+  }
 }
 
 void PageFrameAllocator::LockPages(void *address, uint64_t pageCount) {
@@ -109,9 +130,11 @@ void PageFrameAllocator::LockPages(void *address, uint64_t pageCount) {
 void PageFrameAllocator::UnreservePage(void *address) {
   uint64_t index = (uint64_t)address / 4096;
   if (PageBitmap[index] == false) return;
-  PageBitmap.Set(index, false);
-  freeMemory += 4096;
-  reservedMemory -= 4096;
+  if (PageBitmap.Set(index, false)) {
+    freeMemory += 4096;
+    reservedMemory -= 4096;
+    if (pageBitMapIndex>index)pageBitMapIndex=index;
+  }
 }
 
 void PageFrameAllocator::UnreservePages(void *address, uint64_t pageCount) {
@@ -121,30 +144,98 @@ void PageFrameAllocator::UnreservePages(void *address, uint64_t pageCount) {
 void PageFrameAllocator::ReservePage(void *address) {
   uint64_t index = (uint64_t)address / 4096;
   if (PageBitmap[index] == true) return;
-  PageBitmap.Set(index, true);
-  freeMemory -= 4096;
-  reservedMemory += 4096;
+  if (PageBitmap.Set(index, true)) {
+    freeMemory -= 4096;
+    reservedMemory += 4096;
+  }
 }
 
 void PageFrameAllocator::ReservePages(void *address, uint64_t pageCount) {
   for (int t = 0; t < pageCount; t++) ReservePage((void*)((uint64_t)address + (t * 4096)));
 }
 
-void* PageFrameAllocator::RequestPage() {
-  for (uint64_t index=0;index<PageBitmap.Size*8;index++) {
-    if (PageBitmap[index]==true) continue;
-    LockPage((void*)(index*4096));
-    return (void*)(index*4096);
+uint64_t PageFrameAllocator::GetFreeMem() { return freeMemory; }
+uint64_t PageFrameAllocator::GetUsedMem() { return usedMemory; }
+uint64_t PageFrameAllocator::GetReservedMem() { return reservedMemory; }
+
+void PageDirectoryEntry::SetFlag(PT_Flag flag, bool enabled){
+  uint64_t bitSelector = (uint64_t)1 << flag;
+  Value &= ~bitSelector;
+  if (enabled){
+    Value |= bitSelector;
   }
-  return (void*)0; // Come back to here when ahci driver is done.
 }
 
-uint64_t PageFrameAllocator::GetFreeMem() {
-  return freeMemory;
+bool PageDirectoryEntry::GetFlag(PT_Flag flag){
+  uint64_t bitSelector = (uint64_t)1 << flag;
+  return Value & bitSelector;
 }
-uint64_t PageFrameAllocator::GetUsedMem() {
-  return usedMemory;
+
+uint64_t PageDirectoryEntry::GetAddress(){
+  return (Value & 0x000ffffffffff000) >> 12;
 }
-uint64_t PageFrameAllocator::GetReservedMem() {
-  return reservedMemory;
+
+void PageDirectoryEntry::SetAddress(uint64_t address){
+  address &= 0x000000ffffffffff;
+  Value &= 0xfff0000000000fff;
+  Value |= (address << 12);
+}
+
+PageMapIndexer::PageMapIndexer(uint64_t virtualAddress) {
+  virtualAddress >>= 12;
+  this->P_i = virtualAddress&0x1ff;
+  virtualAddress >>=9;
+  this->PT_i = virtualAddress&0x1ff;
+  virtualAddress >>=9;
+  this->PD_i = virtualAddress&0x1ff;
+  virtualAddress >>=9;
+  this->PDP_i = virtualAddress&0x1ff;
+}
+
+PageTableManager::PageTableManager(PageTable* Level4Address) { this->Level4Address = Level4Address; }
+
+void PageTableManager::MapMemory(void* virtualMemory, void* physicalMemory) {
+  PageMapIndexer indexer = PageMapIndexer((uint64_t)virtualMemory);
+  PageDirectoryEntry PDE;
+  PDE=Level4Address->entries[indexer.PDP_i];
+  PageTable* PDP;
+  if (!PDE.GetFlag(PT_Flag::Present)) {
+    PDP=(PageTable*)Allocator.RequestPage();
+    memset(PDP, 0, 0x1000);
+    PDE.SetAddress((uint64_t)PDP>>12);
+    PDE.SetFlag(PT_Flag::Present, true);
+    PDE.SetFlag(PT_Flag::ReadWrite, true);
+    this->Level4Address->entries[indexer.PDP_i]=PDE;
+  } else {
+    PDP=(PageTable*)((uint64_t)PDE.GetAddress()<<12);
+  }
+  PDE=PDP->entries[indexer.PD_i];
+  PageTable* PD;
+  if (!PDE.GetFlag(PT_Flag::Present)) {
+    PD=(PageTable*)Allocator.RequestPage();
+    memset(PD, 0, 0x1000);
+    PDE.SetAddress((uint64_t)PD>>12);
+    PDE.SetFlag(PT_Flag::Present, true);
+    PDE.SetFlag(PT_Flag::ReadWrite, true);
+    PDP->entries[indexer.PD_i]=PDE;
+  } else {
+    PD=(PageTable*)((uint64_t)PDE.GetAddress()<<12);
+  }
+  PDE=PD->entries[indexer.PT_i];
+  PageTable* PT;
+  if (!PDE.GetFlag(PT_Flag::Present)) {
+    PT=(PageTable*)Allocator.RequestPage();
+    memset(PT, 0, 0x1000);
+    PDE.SetAddress((uint64_t)PT>>12);
+    PDE.SetFlag(PT_Flag::Present, true);
+    PDE.SetFlag(PT_Flag::ReadWrite, true);
+    PD->entries[indexer.PT_i]=PDE;
+  } else {
+    PT=(PageTable*)((uint64_t)PDE.GetAddress()<<12);
+  }
+  PDE=PT->entries[indexer.P_i];
+  PDE.SetAddress((uint64_t)physicalMemory>>12);
+  PDE.SetFlag(PT_Flag::Present, true);
+  PDE.SetFlag(PT_Flag::ReadWrite, true);
+  PT->entries[indexer.P_i] = PDE;
 }

@@ -142,26 +142,6 @@ extern "C" unsigned long long boot(void* ImageHandle, SystemTable* SystemTable) 
   BootLogo->header_ptr = header;
   BootLogo->buffer = buffer;
 
-  // Draw Boot Logo
-  unsigned int* pixel = (unsigned int*)framebuffer.Address;
-  for (unsigned int y=0;y<=framebuffer.Height;y++) {
-    for (unsigned int x=0;x<=framebuffer.Width;x++) {
-      *(unsigned int*)(pixel + x + (y * framebuffer.PPSL)) = 0;
-    }
-  }
-  unsigned int* img = (unsigned int*)BootLogo->buffer;
-  unsigned int height = BootLogo->header_ptr->height;
-  unsigned int width = BootLogo->header_ptr->width;
-  for (size_t dy=0;dy<height;dy++) {
-    for (size_t dx=0;dx<width;dx++) {
-      size_t offset = dx+(height*dy);
-      unsigned int color = *(img+offset);
-      size_t x = dx+(framebuffer.Width/2)-(width/2);
-      size_t y = dy+(framebuffer.Height/2)-(height/2);
-      *(unsigned int*)(pixel+x+(y*framebuffer.PPSL)) = color;
-    }
-  }
-
   // Load Font File
   FileProtocol* fontFile;
   FS->Open(FS, &fontFile, (unsigned short*) L"font.psf", 0x0000000000000001, 0);
@@ -241,12 +221,12 @@ extern "C" unsigned long long boot(void* ImageHandle, SystemTable* SystemTable) 
   memory->DescriptorSize = DescriptorSize;
 
   // Load Kernel
-	void (*KernelMain)(Framebuffer*, PSFFont*, Memory*)=((__attribute__((ms_abi)) void (*)(Framebuffer*, PSFFont*, Memory*))KernelHeaders.e_entry);
+	void (*KernelMain)(Framebuffer*, PSFFont*, Memory*, TGAImage*)=((__attribute__((ms_abi)) void (*)(Framebuffer*, PSFFont*, Memory*, TGAImage*))KernelHeaders.e_entry);
 
   // Exit Boot Services
   SystemTable->BootServices->ExitBootServices(ImageHandle, MapKey);
 
-  KernelMain(&framebuffer, font, memory);
+  KernelMain(&framebuffer, font, memory, BootLogo);
 
   SystemTable->RuntimeServices->ResetSystem(ResetShutdown, 0x8000000000000000, 0, 0);
   return 0;
