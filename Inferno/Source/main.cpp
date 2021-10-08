@@ -25,10 +25,9 @@ void main(Framebuffer* framebuffer, PSFFont* font, Memory* memory) {
   printf("Free: %d MB\n", newAllocator.GetFreeMem() / 1024 / 1024);
   printf("Used: %d MB\n", newAllocator.GetUsedMem() / 1024 / 1024);
   printf("Reserved: %d MB\n", newAllocator.GetReservedMem() / 1024 / 1024);
-
-  for (int i=0;i<20;i++) {
+  for (int t=0;t<20;t++) {
     void* address = newAllocator.RequestPage();
-    printf("%x\n", (long long) address);
+    printf("%x\n", (int64_t)address);
   }
   while(1);
 }
