@@ -13,7 +13,7 @@ BOB:
 	@-make -C "BOB" > /dev/null >&1
 
 Inferno:
-	@-make -C "Inferno" > /dev/null >&1
+	@-cd Inferno > /dev/null >&1;make Inferno > /dev/null >&1
 
 image:
 ifeq ($(shell [ -e Build/ISO/Echo.img ] && echo 1 || echo 0), 0)

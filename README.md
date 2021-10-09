@@ -18,6 +18,7 @@ This repository has 3 main sections, BOB (our bootloader), Inferno (the kernel),
 - Custom Boot Logo
 - Custom LibC Library
 - USTAR File System support
+- Interrupts
 
 ## Coming Soon
 - Panic Screen (blue screen)

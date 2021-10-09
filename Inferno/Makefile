@@ -8,9 +8,9 @@ Objects += $(patsubst Source/%.cpp, Build/%.o, $(CPPSourceCode))
 Objects += $(patsubst Source/%.s, Build/%.so, $(ASMSourceCode))
 Directories = $(wildcard Source/*)
 
-Build/%.o: Source/%.c
+Build/Drivers/Interrupts/Interrupts.o: Source/Drivers/Interrupts/Interrupts.cpp
 	@-mkdir -p $(@D)
-	@-gcc -ffreestanding -fshort-wchar -mabi=ms -no-pie -c $^ -o $@
+	@-gcc -ffreestanding -fshort-wchar -mabi=ms -no-pie -mno-red-zone -mgeneral-regs-only -c $^ -o $@
 
 Build/%.o: Source/%.cpp
 	@-mkdir -p $(@D)
@@ -20,5 +20,5 @@ Build/%.so: Source/%.s
 	@-mkdir -p $(@D)
 	@-nasm $^ -f elf64 -o $@
 
-all: $(Objects)
+Inferno: $(Objects)
 	@ld -T linker.ld -static -Bsymbolic -nostdlib -o ../Build/ISO/inferno $(Objects)

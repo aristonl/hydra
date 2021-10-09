@@ -2,6 +2,9 @@
 #include "Graphics/Font/Font.hpp"
 #include "Drivers/Memory/Memory.hpp"
 #include "Graphics/Images/TGA/TGA.hpp"
+#include "Drivers/Interrupts/GDT/GDT.hpp"
+#include "Drivers/Interrupts/IDT/IDT.hpp"
+#include "Drivers/Interrupts/Interrupts.hpp"
 
 extern uint64_t InfernoStart;
 extern uint64_t InfernoEnd;
@@ -10,9 +13,15 @@ void putpixel(unsigned int x, unsigned int y, unsigned int color) {
   *(unsigned int*)((unsigned int*)framebuffer->Address + x + (y * framebuffer->PPSL)) = 0;
 }
 
+IDTR idtr;
+
 void main(Framebuffer* framebuffer, PSFFont* font, Memory* memory, TGAImage* BootLogo) {
   SetGlobalFramebuffer(framebuffer);
   SetGlobalFont(font);
+  GDTDescriptor descriptor;
+  descriptor.Size = sizeof(GDT)-1;
+  descriptor.Offset = (uint64_t)&DefaultGDT;
+
   uint64_t MapEntries = memory->MapSize / memory->DescriptorSize;
   Allocator=PageFrameAllocator();
   Allocator.ReadMemoryMap(memory->Map, memory->MapSize, memory->DescriptorSize);
@@ -44,6 +53,17 @@ void main(Framebuffer* framebuffer, PSFFont* font, Memory* memory, TGAImage* Boo
   Allocator.LockPages((void*)framebufferAddress, framebufferSize/0x1000+1);
   for (uint64_t t=framebufferAddress;t<framebufferAddress+framebufferSize;t+=0x1000) pageTableManager.MapMemory((void*)t, (void*)t);
   asm("mov %0, %%cr3" :: "r" (pageTable));
+
+  LoadGDT(&descriptor);
+  idtr.Limit = 0x0FFF;
+  idtr.Offset = (uint64_t)Allocator.RequestPage();
+  IDTDescriptorEntry* PageFault = (IDTDescriptorEntry*)(idtr.Offset+0xE*sizeof(IDTDescriptorEntry));
+  PageFault->SetOffset((uint64_t)PageFaultHandler);
+  PageFault->type_attr = IDT_TA_InterruptGate;
+  PageFault->selector = 0x08;
+  asm("lidt %0" :: "m" (idtr));
+
+  printf("Echo v0.151\n");
   
   asm("hlt");
 }
