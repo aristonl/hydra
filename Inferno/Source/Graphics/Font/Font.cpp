@@ -9,7 +9,8 @@ void SetGlobalFont(PSFFont* temp) {
   font = temp;
 }
 
-unsigned int CursorX = 0, CursorY = 0;
+unsigned int CursorX=0;
+unsigned int CursorY=0;
 
 void putc(char c, unsigned int xOff, unsigned int yOff) {
   char* fontPointer = (char*)font->GlyphBuffer + (c*font->Header->charSize);

@@ -17,3 +17,4 @@ void printf(long long int i);
 void hprintf(unsigned int i);
 
 extern PSFFont* font;
+extern unsigned int CursorX, CursorY;
