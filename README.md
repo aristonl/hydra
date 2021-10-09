@@ -19,6 +19,7 @@ This repository has 3 main sections, BOB (our bootloader), Inferno (the kernel),
 - Custom LibC Library
 - USTAR File System support
 - Interrupts
+- Memory Drivers (Allocation, Paging, etc...)
 
 ## Coming Soon
 - Panic Screen (blue screen)
@@ -39,7 +40,7 @@ This repository has 3 main sections, BOB (our bootloader), Inferno (the kernel),
 
 **Genesis Banzon** - [@myst330](https://github.com/myst330)
 
-**Nolan Gerold** - [@Redpendrew](https://github.com/Redpendrew)
+**Red** - [@Redpendrew](https://github.com/Redpendrew)
 
 ## License
 Echo and Inferno are licensed under the MIT License.
