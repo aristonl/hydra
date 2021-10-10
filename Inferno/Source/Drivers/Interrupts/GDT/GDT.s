@@ -7,9 +7,9 @@ LoadGDT:
   mov fs, ax
   mov gs, ax
   mov ss, ax
-  pop rdi
+  pop rcx
   mov rax, 0x08
   push rax
-  push rdi
+  push rcx
   retfq
 GLOBAL LoadGDT
