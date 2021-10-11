@@ -26,7 +26,7 @@ This repository has 3 main sections, BOB (our bootloader), Inferno (the kernel),
 - PS2 Keyboard and Mouse drivers
 - PCI Driver
 - AHCI Driver
-- ext4 File System Support
+- ext2 File System Support
 
 ## Links
 [Discord](https://discord.gg/MGHjJ2VjjC)

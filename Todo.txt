@@ -9,6 +9,7 @@
 - PIT
 - AHCI
 
-- FileSystem
+- FileSystem (ext2)
 - Ring 3
+- Toolchain
 - BASH
