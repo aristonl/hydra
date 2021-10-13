@@ -101,7 +101,7 @@ typedef struct {
 #define NULL ((void*)0)
 
 
-extern "C" unsigned long long boot(void* ImageHandle, SystemTable* SystemTable) {
+extern "C" __attribute__((ms_abi)) unsigned long long boot(void* ImageHandle, SystemTable* SystemTable) {
   SystemTable->BootServices->SetWatchdogTimer(0, 0, 0, 0);
   SystemTable->ConOut->Reset(SystemTable->ConOut, 1);
   SystemTable->ConOut->OutputString(SystemTable->ConOut, (unsigned short int*) L"Better Opensource Bootloader (BOB)\r\n");
@@ -221,7 +221,7 @@ extern "C" unsigned long long boot(void* ImageHandle, SystemTable* SystemTable) 
   memory->DescriptorSize = DescriptorSize;
 
   // Load Kernel
-	void (*KernelMain)(Framebuffer*, PSFFont*, Memory*, TGAImage*)=((__attribute__((ms_abi)) void (*)(Framebuffer*, PSFFont*, Memory*, TGAImage*))KernelHeaders.e_entry);
+	__attribute__((sysv_abi)) void (*KernelMain)(Framebuffer*, PSFFont*, Memory*, TGAImage*)=((__attribute__((sysv_abi)) void (*)(Framebuffer*, PSFFont*, Memory*, TGAImage*))KernelHeaders.e_entry);
 
   // Exit Boot Services
   SystemTable->BootServices->ExitBootServices(ImageHandle, MapKey);
