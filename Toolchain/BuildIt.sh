@@ -212,6 +212,14 @@ pushd "$DIR/Build/$ARCH"
 
     pushd binutils
         echo "XXX configure binutils"
+        buildstep "binutils/configure" cp "$DIR"/Config/binutil-config.sub "$DIR"/Tarballs/$BINUTILS_NAME/config.sub
+        buildstep "binutils/configure" cp "$DIR"/Config/config.bfd "$DIR"/Tarballs/$BINUTILS_NAME/bfd/config.bfd
+        buildstep "binutils/configure" cp "$DIR"/Config/gas-configure.tgt "$DIR"/Tarballs/$BINUTILS_NAME/gas/configure.tgt
+        buildstep "binutils/configure" cp "$DIR"/Config/ld-configure.tgt "$DIR"/Tarballs/$BINUTILS_NAME/ld/configure.tgt
+        buildstep "binutils/configure" cp "$DIR"/Config/elf_x86_64_echo.sh "$DIR"/Tarballs/$BINUTILS_NAME/ld/emulparams/elf_x86_64_echo.sh
+        buildstep "binutils/configure" cp "$DIR"/Config/elf_i386_echo.sh "$DIR"/Tarballs/$BINUTILS_NAME/ld/emulparams/elf_i386_echo.sh
+        buildstep "binutils/configure" cp "$DIR"/Config/ld-Makefile.am "$DIR"/Tarballs/$BINUTILS_NAME/ld/Makefile.am
+        buildstep "binutils/configure" cp "$DIR"/Config/ld-Makefile.in "$DIR"/Tarballs/$BINUTILS_NAME/ld/Makefile.in
         buildstep "binutils/configure" "$DIR"/Tarballs/$BINUTILS_NAME/configure --prefix="$PREFIX" \
                                                  --target="$TARGET" \
                                                  --with-sysroot="$SYSROOT" \
