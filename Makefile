@@ -51,9 +51,15 @@ endif
 	@qemu-system-x86_64 -drive format=raw,file=Build/Echo.iso -drive if=pflash,format=raw,unit=0,file=/tmp/OVMF_CODE.fd,readonly=on -drive if=pflash,format=raw,unit=1,file=/tmp/OVMF_VARS.fd -m $(QEMU_MEMORY) -net none -cpu qemu64 > /dev/null 2>&1
 else
 ifeq ($(shell [ -e /tmp/OVMF_VARS.fd ] && echo 1 || echo 0), 0)
+ifeq ($(shell [ -e /usr/share/OVMF/OVMF_VARS.fd ] && echo 1 || echo 0), 1)
 	@cp /usr/share/OVMF/OVMF_VARS.fd /tmp/OVMF_VARS.fd
+	@cp /usr/share/OVMF/OVMF_CODE.fd /tmp/OVMF_CODE.fd
+else
+	@cp /usr/share/OVMF/x64/OVMF_VARS.fd /tmp/OVMF_VARS.fd
+	@cp /usr/share/OVMF/x64/OVMF_CODE.fd /tmp/OVMF_CODE.fd
 endif
-	@qemu-system-x86_64 -drive format=raw,file=Build/Echo.iso -drive if=pflash,format=raw,unit=0,file=/usr/share/OVMF/OVMF_CODE.fd,readonly=on -drive if=pflash,format=raw,unit=1,file=/tmp/OVMF_VARS.fd -m $(QEMU_MEMORY) -net none -cpu qemu64 > /dev/null 2>&1
+endif
+	@qemu-system-x86_64 -drive format=raw,file=Build/Echo.iso -drive if=pflash,format=raw,unit=0,file=/tmp/OVMF_CODE.fd,readonly=on -drive if=pflash,format=raw,unit=1,file=/tmp/OVMF_VARS.fd -m $(QEMU_MEMORY) -net none -cpu qemu64 > /dev/null 2>&1
 endif
 endif
 

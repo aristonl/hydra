@@ -16,7 +16,7 @@ void putpixel(unsigned int x, unsigned int y, unsigned int color) {
 
 IDTR idtr;
 
-void main(Framebuffer* framebuffer, PSFFont* font, Memory* memory, TGAImage* BootLogo) {
+__attribute__((sysv_abi)) void main(Framebuffer* framebuffer, PSFFont* font, Memory* memory, TGAImage* BootLogo) {
   SetGlobalFramebuffer(framebuffer);
   SetGlobalFont(font);
   GDTDescriptor descriptor;

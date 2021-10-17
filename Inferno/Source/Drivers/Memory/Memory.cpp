@@ -1,5 +1,7 @@
 #include "Memory.hpp"
 
+extern "C" void __stack_chk_fail(void) {}
+
 const char* MemoryTypesStrings[] {
   "EfiReservedMemoryType",
   "EfiLoaderCode",

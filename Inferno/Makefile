@@ -10,15 +10,15 @@ Directories = $(wildcard Source/*)
 
 Build/Drivers/Interrupts/Interrupts.o: Source/Drivers/Interrupts/Interrupts.cpp
 	@-mkdir -p $(@D)
-	@-gcc -ffreestanding -fshort-wchar -mabi=ms -no-pie -mno-red-zone -mgeneral-regs-only -c $^ -o $@
+	@-gcc -ffreestanding -fshort-wchar -mabi=sysv -no-pie -mno-red-zone -mgeneral-regs-only -c $^ -o $@
 
 Build/%.o: Source/%.cpp
 	@-mkdir -p $(@D)
-	@-g++ -ffreestanding -fshort-wchar -mabi=ms -no-pie -c $^ -o $@
+	@-g++ -ffreestanding -fshort-wchar -mabi=sysv -no-pie -c $^ -o $@
 
 Build/%.so: Source/%.s
 	@-mkdir -p $(@D)
 	@-nasm $^ -f elf64 -o $@
 
 Inferno: $(Objects)
-	@ld -T linker.ld -static -Bsymbolic -nostdlib -o ../Build/ISO/inferno $(Objects)
+	@gcc -T linker.ld -static -Bsymbolic -nostdlib -o ../Build/ISO/inferno $(Objects)
