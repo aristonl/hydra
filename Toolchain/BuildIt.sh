@@ -2,6 +2,8 @@
 set -eo pipefail
 # This file will need to be run in bash, for now.
 
+echo "Echo Cross-Compiler/Toolchain Build Script"
+
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 echo "$DIR"
@@ -14,8 +16,10 @@ SYSROOT="$BUILD/Root"
 
 MAKE="make"
 MD5SUM="md5sum"
-NPROC="nproc"
+NPROC="sysctl -n hw.logicalcpu"
 REALPATH="realpath"
+
+PATCHPATH="$DIR/Patch"
 
 if command -v ginstall &>/dev/null; then
     INSTALL=ginstall
@@ -28,7 +32,7 @@ SYSTEM_NAME="$(uname -s)"
 export CFLAGS="-g0 -O2 -mtune=native"
 export CXXFLAGS="-g0 -O2 -mtune=native"
 
-BINUTILS_VERSION="2.37"
+BINUTILS_VERSION="2.33.1"
 BINUTILS_MD5SUM="1e55743d73c100b7a0d67ffb32398cdb"
 BINUTILS_NAME="binutils-$BINUTILS_VERSION"
 BINUTILS_PKG="${BINUTILS_NAME}.tar.gz"
@@ -152,7 +156,8 @@ pushd "$DIR/Tarballs"
     tar -xzf ${BINUTILS_PKG}
 
     pushd ${BINUTILS_NAME}
-
+    echo "Patching binutils..."
+    patch -p1 < "$PATCHPATH/binutils.patch"
     popd
 
     if [ -d ${GCC_NAME} ]; then
@@ -212,14 +217,6 @@ pushd "$DIR/Build/$ARCH"
 
     pushd binutils
         echo "XXX configure binutils"
-        buildstep "binutils/configure" cp "$DIR"/Config/binutil-config.sub "$DIR"/Tarballs/$BINUTILS_NAME/config.sub
-        buildstep "binutils/configure" cp "$DIR"/Config/config.bfd "$DIR"/Tarballs/$BINUTILS_NAME/bfd/config.bfd
-        buildstep "binutils/configure" cp "$DIR"/Config/gas-configure.tgt "$DIR"/Tarballs/$BINUTILS_NAME/gas/configure.tgt
-        buildstep "binutils/configure" cp "$DIR"/Config/ld-configure.tgt "$DIR"/Tarballs/$BINUTILS_NAME/ld/configure.tgt
-        buildstep "binutils/configure" cp "$DIR"/Config/elf_x86_64_echo.sh "$DIR"/Tarballs/$BINUTILS_NAME/ld/emulparams/elf_x86_64_echo.sh
-        buildstep "binutils/configure" cp "$DIR"/Config/elf_i386_echo.sh "$DIR"/Tarballs/$BINUTILS_NAME/ld/emulparams/elf_i386_echo.sh
-        buildstep "binutils/configure" cp "$DIR"/Config/ld-Makefile.am "$DIR"/Tarballs/$BINUTILS_NAME/ld/Makefile.am
-        buildstep "binutils/configure" cp "$DIR"/Config/ld-Makefile.in "$DIR"/Tarballs/$BINUTILS_NAME/ld/Makefile.in
         buildstep "binutils/configure" "$DIR"/Tarballs/$BINUTILS_NAME/configure --prefix="$PREFIX" \
                                                  --target="$TARGET" \
                                                  --with-sysroot="$SYSROOT" \
