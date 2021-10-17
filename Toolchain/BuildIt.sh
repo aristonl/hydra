@@ -244,7 +244,7 @@ pushd "$DIR/Build/$ARCH"
         SRC_ROOT=$($REALPATH "$DIR"/..)
         FILES=$(find "$SRC_ROOT"/Libraries/LibC "$SRC_ROOT"/Libraries/LibM "$SRC_ROOT"/Libraries/LibPthread -name '*.h' -print)
         for header in $FILES; do
-            target=$(echo "$header" | sed -e "s@$SRC_ROOT/Libraries/LibC@@" -e "s@$SRC_ROOT/Libraries/LibM@@" -e "s@$SRC_ROOT/Libraries/LibPthread)
+            target=$(echo "$header" | sed -e "s@$SRC_ROOT/Libraries/LibC@@" -e "s@$SRC_ROOT/Libraries/LibM@@" -e "s@$SRC_ROOT/Libraries/LibPthread"	)
             buildstep "system_headers" $INSTALL -D "$header" "Root/usr/include/$target"
         done
         unset SRC_ROOT
