@@ -16,7 +16,6 @@ SYSROOT="$BUILD/Root"
 
 MAKE="make"
 MD5SUM="md5sum"
-NPROC="nproc" # Darwin does not have nproc so check logicalcpu instead
 REALPATH="realpath"
 
 PATCHPATH="$DIR/Patch"
@@ -28,6 +27,12 @@ else
 fi
 
 SYSTEM_NAME="$(uname -s)"
+
+if [ "$SYSTEM_NAME" != "Darwin" ]; then
+	NPROC="nproc"
+else
+	NPROC="sysctl -n hw.logicalcpu"
+fi
 
 export CFLAGS="-g0 -O2 -mtune=native"
 export CXXFLAGS="-g0 -O2 -mtune=native"
