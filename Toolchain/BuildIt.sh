@@ -32,6 +32,7 @@ if [ "$SYSTEM_NAME" != "Darwin" ]; then
 	NPROC="nproc"
 else
 	NPROC="sysctl -n hw.logicalcpu"
+	brew install coreutils && echo "Downloading GNU Coreutils..."
 fi
 
 export CFLAGS="-g0 -O2 -mtune=native"
