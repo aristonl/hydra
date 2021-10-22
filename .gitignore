@@ -7,4 +7,5 @@
 *.DS_Store
 Build/ISO/inferno
 .vscode/
+.idea/
 build.config
