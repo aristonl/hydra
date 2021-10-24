@@ -86,10 +86,10 @@ __attribute__((sysv_abi)) void main(Framebuffer* framebuffer, PSFFont* font, Mem
   for (uint64_t t=framebufferAddress;t<framebufferAddress+framebufferSize;t+=0x1000) pageTableManager.MapMemory((void*)t, (void*)t);
   asm("mov %0, %%cr3" :: "r" (pageTable));
 
-  printf("Echo v0.151\n");
+  printf("Echo v0.174\n");
 
   // int* test = (int*)0x800000000;
   // *test = 2;
   
-  asm("hlt");
+  while(true);
 }
