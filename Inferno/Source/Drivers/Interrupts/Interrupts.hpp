@@ -14,8 +14,8 @@ struct InterruptFrame;
 __attribute__((interrupt)) void PageFaultHandler(struct InterruptFrame* frame);
 __attribute__((interrupt)) void DoubleFaultHandler(struct InterruptFrame* frame);
 __attribute__((interrupt)) void GeneralProtectionFaultHandler(struct InterruptFrame* frame);
-__attribute__((interrupt)) void PS2KBHandler(struct InterruptFrame* frame);
+__attribute__((interrupt)) void PS2KeyboardHandler(struct InterruptFrame* frame);
 
 void MapPIC();
-void PIC_EndMaster();
-void PIC_EndSlave();
+void PICEndMaster();
+void PICEndSlave();

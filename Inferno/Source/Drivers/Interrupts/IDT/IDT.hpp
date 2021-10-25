@@ -5,7 +5,7 @@
 #define IDT_TA_CallGate 0b10001100
 #define IDT_TA_TrapGate 0b10001111
 
-struct IDTDescriptorEntry {
+struct InterruptDescriptorTableEntry {
   uint16_t offset0, selector;
   uint8_t ist, type_attr;
   uint16_t offset1;

@@ -34,25 +34,25 @@ __attribute__((sysv_abi)) void main(Framebuffer* framebuffer, PSFFont* font, Mem
   idtr.Limit = 0x0FFF;
   idtr.Offset = (uint64_t)Allocator.RequestPage();
 
-  IDTDescriptorEntry* int_PageFault = (IDTDescriptorEntry*)(idtr.Offset + 0xE * sizeof(IDTDescriptorEntry));
-  int_PageFault->SetOffset((uint64_t)PageFaultHandler);
-  int_PageFault->type_attr = IDT_TA_InterruptGate;
-  int_PageFault->selector = 0x08;
+  InterruptDescriptorTableEntry* PageFault = (InterruptDescriptorTableEntry*)(idtr.Offset + 0xE * sizeof(InterruptDescriptorTableEntry));
+  PageFault->SetOffset((uint64_t)PageFaultHandler);
+  PageFault->type_attr = IDT_TA_InterruptGate;
+  PageFault->selector = 0x08;
 
-  IDTDescriptorEntry* int_DoubleFault = (IDTDescriptorEntry*)(idtr.Offset + 0x8 * sizeof(IDTDescriptorEntry));
-  int_DoubleFault->SetOffset((uint64_t)DoubleFaultHandler);
-  int_DoubleFault->type_attr = IDT_TA_InterruptGate;
-  int_DoubleFault->selector = 0x08;
+  InterruptDescriptorTableEntry* DoubleFault = (InterruptDescriptorTableEntry*)(idtr.Offset + 0x8 * sizeof(InterruptDescriptorTableEntry));
+  DoubleFault->SetOffset((uint64_t)DoubleFaultHandler);
+  DoubleFault->type_attr = IDT_TA_InterruptGate;
+  DoubleFault->selector = 0x08;
 
-  IDTDescriptorEntry* int_GPFault = (IDTDescriptorEntry*)(idtr.Offset + 0xD * sizeof(IDTDescriptorEntry));
-  int_GPFault->SetOffset((uint64_t)GeneralProtectionFaultHandler);
-  int_GPFault->type_attr = IDT_TA_InterruptGate;
-  int_GPFault->selector = 0x08;
+  InterruptDescriptorTableEntry* GeneralProtectionFault = (InterruptDescriptorTableEntry*)(idtr.Offset + 0xD * sizeof(InterruptDescriptorTableEntry));
+  GeneralProtectionFault->SetOffset((uint64_t)GeneralProtectionFaultHandler);
+  GeneralProtectionFault->type_attr = IDT_TA_InterruptGate;
+  GeneralProtectionFault->selector = 0x08;
 
-  IDTDescriptorEntry* int_Keyboard = (IDTDescriptorEntry*)(idtr.Offset + 0x21 * sizeof(IDTDescriptorEntry));
-  int_Keyboard->SetOffset((uint64_t)PS2KBHandler);
-  int_Keyboard->type_attr = IDT_TA_InterruptGate;
-  int_Keyboard->selector = 0x08;
+  InterruptDescriptorTableEntry* PS2Keyboard = (InterruptDescriptorTableEntry*)(idtr.Offset + 0x21 * sizeof(InterruptDescriptorTableEntry));
+  PS2Keyboard->SetOffset((uint64_t)PS2KeyboardHandler);
+  PS2Keyboard->type_attr = IDT_TA_InterruptGate;
+  PS2Keyboard->selector = 0x08;
 
   asm("lidt %0" :: "m" (idtr));
 

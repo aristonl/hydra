@@ -34,17 +34,18 @@ __attribute__((interrupt)) void GeneralProtectionFaultHandler(struct InterruptFr
   asm("hlt");
 }
 
-__attribute__((interrupt)) void PS2KBHandler(struct InterruptFrame* frame) {
-  printf("Pressed!");
+__attribute__((interrupt)) void PS2KeyboardHandler(struct InterruptFrame* frame) {
   uint8_t code = inb(0x60);
-  PIC_EndMaster();
+  print8h(code);
+  printf(" ");
+  PICEndMaster();
 }
 
-void PIC_EndMaster() {
+void PICEndMaster() {
   outb(PIC1_COMMAND, PIC_EOI);
 }
 
-void PIC_EndSlave() {
+void PICEndSlave() {
   outb(PIC2_COMMAND, PIC_EOI);
   outb(PIC1_COMMAND, PIC_EOI);
 }

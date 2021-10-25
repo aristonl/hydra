@@ -57,6 +57,10 @@ void printf(const char* format, ...) {
   }
 }
 
+void print8h(unsigned char value) {
+  printf(to_hstring(value));
+}
+
 void printf(long long int i) {
   char* chr = (char*)to_string(i);
   while(*chr != 0) {
