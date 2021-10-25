@@ -1,13 +1,19 @@
 QEMU = $(shell grep -n "^QEMU=" build.config | cut -d'=' -f 2)
 QEMU_MEMORY = $(shell grep -n "^QEMU_MEMORY=" build.config | cut -d'=' -f 2)
 
-DOCKER = $(shell grep -n "^DOCKER=" build.config | cut -d'=' -f 2)
-DOCKER_CONTAINER = $(shell grep -n "^DOCKER_CONTAINER=" build.config | cut -d'=' -f 2)
-DOCKER_ECHO_ROOT = $(shell grep -n "^DOCKER_ECHO_ROOT=" build.config | cut -d'=' -f 2)
-
 .PHONY: BOB Inferno
 
-all: BOB Inferno image iso emulate
+BUILD_INSTRUCTIONS =
+ifeq ($(shell echo `uname`), Darwin)
+	BUILD_INSTRUCTIONS = vagrant emulate
+else
+	BUILD_INSTRUCTIONS = BOB Inferno image iso emulate
+endif
+
+all: $(BUILD_INSTRUCTIONS)
+
+vagrant:
+	@vagrant ssh -c "cd /vagrant/;make BOB Inferno image iso"
 
 BOB:
 	@-make -C "BOB" > /dev/null >&1
@@ -19,11 +25,7 @@ image:
 ifeq ($(shell [ -e Build/ISO/Echo.img ] && echo 1 || echo 0), 0)
 	@dd if=/dev/zero of=Build/ISO/Echo.img bs=512 count=93750 > /dev/null 2>&1
 endif
-ifeq ($(DOCKER), true)
-	@docker exec -it $(DOCKER_CONTAINER) sh -c "cd $(DOCKER_ECHO_ROOT)/;mformat -i Build/ISO/Echo.img -f 1440 ::"
-else
 	@-mformat -i Build/ISO/Echo.img -F ::
-endif
 	@-mmd -i Build/ISO/Echo.img ::/EFI
 	@-mmd -i Build/ISO/Echo.img ::/EFI/BOOT
 	@-mcopy -i Build/ISO/Echo.img Build/ISO/EFI/BOOT/bootx64.efi ::/EFI/BOOT
@@ -72,30 +74,11 @@ ifeq ($(shell echo `uname`), Linux)
 	@-touch build.config
 	@-echo "QEMU=normal" >> build.config
 	@-echo "QEMU_MEMORY=2G" >> build.config
-	@-echo "DOCKER=false" >> build.config
-	@-echo "DOCKER_CONTAINER=" >> build.config
-	@-echo "DOCKER_ECHO_ROOT=" >> build.config
 endif
 ifeq ($(shell echo `uname`), Darwin)
-	@-echo "We've detected that this is running on macOS"; \
-	echo "Docker is required on macOS\n"; \
-	printf "What is the name of the container you'll use? "; \
-	read -r docker_name;if [ "$$docker_name" = "" ]; then \
-		echo "Please enter a docker container!"; \
-	else \
-		if [ -f build.config ]; then rm build.config; fi; \
-		touch build.config; \
-		echo "QEMU=normal" >> build.config; \
-		echo "QEMU_MEMORY=512M" >> build.config; \
-		echo "DOCKER=true" >> build.config; \
-		echo "DOCKER_CONTAINER=$$docker_name" >> build.config; \
-		printf "Where is the root of Echo in the container? "; \
-		read -r docker_root;if [ "$$docker_root" = "" ]; then \
-			echo "Please enter the Docker container root!"; \
-		else \
-			echo "DOCKER_ECHO_ROOT=$$docker_root" >> build.config; \
-		fi \
-	fi
+	@-touch build.config
+	@echo "QEMU=normal" >> build.config
+	@echo "QEMU_MEMORY=2G" >> build.config
 endif
 else
 	@echo "We've detected that this is running on WSL\n"
@@ -108,9 +91,6 @@ else
 			touch build.config; \
 			echo "QEMU=windows" >> build.config; \
 			echo "QEMU_MEMORY=512M" >> build.config; \
-			echo "DOCKER=false" >> build.config; \
-			echo "DOCKER_CONTAINER=" >> build.config; \
-			echo "DOCKER_ECHO_ROOT=" >> build.config; \
 		fi \
 	else \
 		if [ -f build.config ]; then \
@@ -119,9 +99,6 @@ else
 			touch build.config; \
 			echo "QEMU=normal" >> build.config; \
 			echo "QEMU_MEMORY=2G" >> build.config; \
-			echo "DOCKER=false" >> build.config; \
-			echo "DOCKER_CONTAINER=" >> build.config; \
-			echo "DOCKER_ECHO_ROOT=" >> build.config; \
 		fi \
 	fi
 endif

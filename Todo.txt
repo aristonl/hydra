@@ -1,7 +1,3 @@
-- Page Frame Allocater
-- Page Table Manager
-- GDT
-- Interrupts
 - Keyboard PS2 Driver
 - Mouse PS2 Driver
 - PCI Driver
