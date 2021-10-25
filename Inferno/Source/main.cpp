@@ -91,5 +91,5 @@ __attribute__((sysv_abi)) void main(Framebuffer* framebuffer, PSFFont* font, Mem
   // int* test = (int*)0x800000000;
   // *test = 2;
   
-  while(true);
+  while(true) asm("hlt");
 }
