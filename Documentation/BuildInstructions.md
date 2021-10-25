@@ -15,9 +15,10 @@ sudo pacman -S --needed base-devel mtools libisoburn qemu qemu-arch-extra mingw-
 You need to install QEMU and MingW-W64. Make sure you add QEMU to your PATH.
 ### macOS
 ```bash
-brew install *TODO: packages names here*
+brew install vagrant
+vagrant up
 ```
-Make sure you also install Docker Desktop.
+If you get an error while building that says Connection to 127.0.0.1 closed. You can ignore it.
 ## Building
 In order to build Echo, you will need to first configure your build by running the following command:
 ```bash
