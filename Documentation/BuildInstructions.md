@@ -16,6 +16,7 @@ You need to install QEMU and MingW-W64. Make sure you add QEMU to your PATH.
 ### macOS
 ```bash
 brew install vagrant
+brew install --cask virtualbox
 vagrant up
 ```
 If you get an error while building that says Connection to 127.0.0.1 closed. You can ignore it.
