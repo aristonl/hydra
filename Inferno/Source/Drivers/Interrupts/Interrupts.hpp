@@ -10,11 +10,13 @@
 #define ICW1_ICW4 0x01
 #define ICW4_8086 0x01
 
+#define Interrupt __attribute__((interrupt))
+
 struct InterruptFrame;
-__attribute__((interrupt)) void PageFaultHandler(struct InterruptFrame* frame);
-__attribute__((interrupt)) void DoubleFaultHandler(struct InterruptFrame* frame);
-__attribute__((interrupt)) void GeneralProtectionFaultHandler(struct InterruptFrame* frame);
-__attribute__((interrupt)) void PS2KeyboardHandler(struct InterruptFrame* frame);
+Interrupt void PageFaultHandler(struct InterruptFrame* frame);
+Interrupt void DoubleFaultHandler(struct InterruptFrame* frame);
+Interrupt void GeneralProtectionFaultHandler(struct InterruptFrame* frame);
+Interrupt void PS2KeyboardHandler(struct InterruptFrame* frame);
 
 void MapPIC();
 void PICEndMaster();

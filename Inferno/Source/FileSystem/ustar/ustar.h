@@ -9,14 +9,13 @@
 #ifndef __USTAR__
 #define __USTAR__
 
-#include <LibC/errno.h>
-#include <LibC/stdarg.h>
-#include <LibC/stdio.h>
-#include <LibC/stdlib.h>
-#include <LibC/string.h>
-#include <LibC/time.h>
-
-#include <LibC/unistd.h>
+#include "../../../../Libraries/LibC/errno.h"
+#include "../../../../Libraries/LibC/stdarg.h"
+#include "../../../../Libraries/LibC/stdio.h"
+#include "../../../../Libraries/LibC/stdlib.h"
+#include "../../../../Libraries/LibC/string.h"
+#include "../../../../Libraries/LibC/time.h"
+#include "../../../../Libraries/LibC/unistd.h"
 
 #define BLOCKSECTOR 512
 
@@ -35,7 +34,7 @@ struct ustar {
 	char mode[8];
 	char owner_uid[8];
 	char group_uid[8];
-	char size[12]		// octal base
+	char size[12];		// octal base
 	char mtime[12];		// octal base
 	char checksum[8];
 	char link;		// link indicator

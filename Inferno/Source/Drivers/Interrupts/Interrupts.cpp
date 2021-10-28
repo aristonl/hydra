@@ -1,8 +1,8 @@
 #include "Interrupts.hpp"
+#include "../IO/IO.hpp"
 #include "../../Graphics/Font/Font.hpp"
 #include "../Graphics/GOP/GOP.hpp"
 #include "../Memory/Memory.hpp"
-#include "../IO/IO.hpp"
 
 size_t strlen(const char *str) {
   const char* s;
@@ -10,7 +10,7 @@ size_t strlen(const char *str) {
   return (s-str);
 }
 
-__attribute__((interrupt)) void PageFaultHandler(struct InterruptFrame* frame) {
+Interrupt void PageFaultHandler(struct InterruptFrame* frame) {
   memset(framebuffer->Address, 0, framebuffer->Size);
   CursorX=framebuffer->Width/2-(strlen("Page Fault!")*8/2);
   CursorY=framebuffer->Height/2-4;
@@ -18,7 +18,7 @@ __attribute__((interrupt)) void PageFaultHandler(struct InterruptFrame* frame) {
   asm("hlt");
 }
 
-__attribute__((interrupt)) void DoubleFaultHandler(struct InterruptFrame* frame) {
+Interrupt void DoubleFaultHandler(struct InterruptFrame* frame) {
   memset(framebuffer->Address, 0, framebuffer->Size);
   CursorX=framebuffer->Width/2-(strlen("Double Fault!")*8/2);
   CursorY=framebuffer->Height/2-4;
@@ -26,7 +26,7 @@ __attribute__((interrupt)) void DoubleFaultHandler(struct InterruptFrame* frame)
   asm("hlt");
 }
 
-__attribute__((interrupt)) void GeneralProtectionFaultHandler(struct InterruptFrame* frame) {
+Interrupt void GeneralProtectionFaultHandler(struct InterruptFrame* frame) {
   memset(framebuffer->Address, 0, framebuffer->Size);
   CursorX=framebuffer->Width/2-(strlen("General Protection Fault!")*8/2);
   CursorY=framebuffer->Height/2-4;
@@ -34,10 +34,8 @@ __attribute__((interrupt)) void GeneralProtectionFaultHandler(struct InterruptFr
   asm("hlt");
 }
 
-__attribute__((interrupt)) void PS2KeyboardHandler(struct InterruptFrame* frame) {
+Interrupt void PS2KeyboardHandler(struct InterruptFrame* frame) {
   uint8_t code = inb(0x60);
-  print8h(code);
-  printf(" ");
   PICEndMaster();
 }
 

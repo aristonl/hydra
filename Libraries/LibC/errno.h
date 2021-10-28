@@ -1,6 +1,4 @@
-#pragma once
-
-#include <sys/cdefs.h>
+#include "sys/cdefs.h"
 #include "../../std/errno.h"
 
 #define __RETURN_WITH_ERRNO(rc, good_ret, bad_ret) \

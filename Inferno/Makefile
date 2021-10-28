@@ -14,7 +14,7 @@ Build/Drivers/Interrupts/Interrupts.o: Source/Drivers/Interrupts/Interrupts.cpp
 
 Build/%.o: Source/%.cpp
 	@-mkdir -p $(@D)
-	@-g++ -ffreestanding -fshort-wchar -mabi=sysv -no-pie -c $^ -o $@
+	@-g++ -ffreestanding -fshort-wchar -fstack-protector -mabi=sysv -no-pie -c $^ -o $@
 
 Build/%.so: Source/%.s
 	@-mkdir -p $(@D)

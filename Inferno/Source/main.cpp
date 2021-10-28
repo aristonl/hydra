@@ -10,6 +10,8 @@
 extern uint64_t InfernoStart;
 extern uint64_t InfernoEnd;
 
+#define Inferno
+
 void putpixel(unsigned int x, unsigned int y, unsigned int color) {
   *(unsigned int*)((unsigned int*)framebuffer->Address + x + (y * framebuffer->PPSL)) = 0;
 }
@@ -86,7 +88,7 @@ __attribute__((sysv_abi)) void main(Framebuffer* framebuffer, PSFFont* font, Mem
   for (uint64_t t=framebufferAddress;t<framebufferAddress+framebufferSize;t+=0x1000) pageTableManager.MapMemory((void*)t, (void*)t);
   asm("mov %0, %%cr3" :: "r" (pageTable));
 
-  printf("Echo v0.182\n");
+  printf("Echo v0.185\n");
 
   // int* test = (int*)0x800000000;
   // *test = 2;
