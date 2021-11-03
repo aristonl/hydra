@@ -2,6 +2,7 @@
 #include "../../Drivers/Graphics/GOP/GOP.hpp"
 #include "string.hpp"
 #include "../../../../Libraries/LibC/stdarg.h"
+#include "../../Drivers/Memory/Memory.hpp"
 
 PSFFont* font;
 
@@ -33,6 +34,10 @@ void printf(const char* format, ...) {
     if (CursorX > framebuffer->Width) {
       CursorX=0;
       CursorY+=16;
+    } else if (CursorY > framebuffer->Height-16) {
+      CursorY=0;
+      CursorX=0;
+      memset(framebuffer->Address, 0, framebuffer->Size);
     } else if (*chr == '\n') {
       CursorY+=16;
       CursorX=0;
@@ -67,6 +72,10 @@ void printf(long long int i) {
     if (CursorX > framebuffer->Width) {
       CursorX=0;
       CursorY+=16;
+    } else if (CursorY > framebuffer->Height-16) {
+      CursorY=0;
+      CursorX=0;
+      memset(framebuffer->Address, 0, framebuffer->Size);
     } else if (*chr == '\n') {
       CursorY+=16;
       CursorX=0;
@@ -88,6 +97,10 @@ void hprintf(unsigned int i) {
     if (CursorX > framebuffer->Width) {
       CursorX=0;
       CursorY+=16;
+    } else if (CursorY > framebuffer->Height-16) {
+      CursorY=0;
+      CursorX=0;
+      memset(framebuffer->Address, 0, framebuffer->Size);
     } else if (*chr == '\n') {
       CursorY+=16;
       CursorX=0;

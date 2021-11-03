@@ -3,6 +3,7 @@
 #include "../../Graphics/Font/Font.hpp"
 #include "../Graphics/GOP/GOP.hpp"
 #include "../Memory/Memory.hpp"
+#include "../PS2/Keyboard/Keyboard.hpp"
 
 size_t strlen(const char *str) {
   const char* s;
@@ -36,6 +37,7 @@ Interrupt void GeneralProtectionFaultHandler(struct InterruptFrame* frame) {
 
 Interrupt void PS2KeyboardHandler(struct InterruptFrame* frame) {
   uint8_t code = inb(0x60);
+  printf(getKeyFormatted(code));
   PICEndMaster();
 }
 
