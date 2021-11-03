@@ -3,7 +3,7 @@ This document will explain how to build Hydra and prerequisites needed.
 
 ## Prerequisites
 Make sure you have all the prerequisites needed to build.
-### Ubuntu
+### Ubuntu / Debian
 ```bash
 sudo apt install mtools xorriso qemu qemu-system mingw-w64 ovmf build-essential nasm bison flex libgmp3-dev libmpc-dev libmpfr-dev texinfo
 ```
@@ -11,8 +11,6 @@ sudo apt install mtools xorriso qemu qemu-system mingw-w64 ovmf build-essential 
 ```bash
 sudo pacman -S --needed base-devel mtools libisoburn qemu qemu-arch-extra mingw-w64-gcc mingw-w64-binutils edk2-ovmf nasm gmp libmpc mpfr
 ```
-### Windows
-You need to install QEMU and MingW-W64. Make sure you add QEMU to your PATH.
 ### macOS
 ```bash
 brew install vagrant
