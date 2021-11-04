@@ -210,15 +210,13 @@ extern "C" __attribute__((ms_abi)) unsigned long long boot(void* ImageHandle, Sy
 		SystemTable->BootServices->GetMemoryMap(&MapSize, Map, &MapKey, &DescriptorSize, &DescriptorVersion);
 	}
 
+  SystemTable->ConOut->OutputString(SystemTable->ConOut, (unsigned short int*) L"Exiting BootServices...\r\n");
+  SystemTable->BootServices->ExitBootServices(ImageHandle, MapKey);
+
   SystemTable->ConOut->OutputString(SystemTable->ConOut, (unsigned short int*) L"Loading Inferno...\r\n");
   SystemTable->ConOut->ClearScreen(SystemTable->ConOut);
 	__attribute__((sysv_abi)) void (*KernelMain)(Framebuffer*, PSFFont*, MemoryDescriptor*, unsigned long long int, unsigned long long int, TGAImage*)=((__attribute__((sysv_abi)) void (*)(Framebuffer*, PSFFont*, MemoryDescriptor*, unsigned long long int, unsigned long long int, TGAImage*))KernelHeaders.e_entry);
-
-  SystemTable->ConOut->OutputString(SystemTable->ConOut, (unsigned short int*) L"Exiting...\r\n");
-  SystemTable->BootServices->ExitBootServices(ImageHandle, MapKey);
-
   KernelMain(&framebuffer, font, Map, MapSize, DescriptorSize, BootLogo);
 
-  SystemTable->RuntimeServices->ResetSystem(ResetShutdown, 0x8000000000000000, 0, 0);
   return 0;
 }

@@ -61,11 +61,19 @@ __attribute__((sysv_abi)) void main(Framebuffer* framebuffer, PSFFont* font, Mem
   PS2Keyboard->type_attr = IDT_TA_InterruptGate;
   PS2Keyboard->selector = 0x08;
 
+  printf("Loading PS2 Mouse interrupt...\n");
+  InterruptDescriptorTableEntry* PS2Mouse = (InterruptDescriptorTableEntry*)(idtr.Offset + 0x2C * sizeof(InterruptDescriptorTableEntry));
+  PS2Mouse->SetOffset((uint64_t)PS2MouseHandler);
+  PS2Mouse->type_attr = IDT_TA_InterruptGate;
+  PS2Mouse->selector = 0x08;
+
+  CallPS2MouseDriver();
+
   asm("lidt %0" :: "m" (idtr));
 
   MapPIC();
-  outb(PIC1_DATA, 0b11111101);
-  outb(PIC2_DATA, 0b11111111);
+  outb(PIC1_DATA, 0b11111001);
+  outb(PIC2_DATA, 0b11101111);
   asm("sti");
 
   printf("Loading Page Table...\n");
@@ -104,5 +112,8 @@ __attribute__((sysv_abi)) void main(Framebuffer* framebuffer, PSFFont* font, Mem
   // int* test = (int*)0x800000000;
   // *test = 2;
   
-  while(true) asm("hlt");
+  while(true) {
+    CallPS2MousePacketHandler();
+    asm("hlt");
+  }
 }

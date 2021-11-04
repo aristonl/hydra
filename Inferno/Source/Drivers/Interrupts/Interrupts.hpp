@@ -13,10 +13,14 @@
 #define Interrupt __attribute__((interrupt))
 
 struct InterruptFrame;
-Interrupt void PageFaultHandler(struct InterruptFrame* frame);
-Interrupt void DoubleFaultHandler(struct InterruptFrame* frame);
-Interrupt void GeneralProtectionFaultHandler(struct InterruptFrame* frame);
-Interrupt void PS2KeyboardHandler(struct InterruptFrame* frame);
+Interrupt void PageFaultHandler(InterruptFrame* frame);
+Interrupt void DoubleFaultHandler(InterruptFrame* frame);
+Interrupt void GeneralProtectionFaultHandler(InterruptFrame* frame);
+Interrupt void PS2KeyboardHandler(InterruptFrame* frame);
+Interrupt void PS2MouseHandler(InterruptFrame* frame);
+
+void CallPS2MousePacketHandler();
+void CallPS2MouseDriver();
 
 void MapPIC();
 void PICEndMaster();

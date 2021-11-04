@@ -31,7 +31,26 @@ void printf(const char* format, ...) {
 
   char* chr = (char*)format;
   while(*chr != 0) {
-    if (CursorX > framebuffer->Width) {
+    if (*chr == '\b') {
+      if (CursorX == 0 && CursorY >= 16) {
+        CursorX=framebuffer->Width-8;
+        CursorY-=16;
+        for (unsigned int x=CursorX;x<CursorX+8;x++) {
+          for (unsigned int y=CursorY;y<CursorY+16;y++) {
+            *(unsigned int*)((unsigned int*)framebuffer->Address + x + (y * framebuffer->PPSL)) = 0;
+          }
+        }
+      } else {
+        CursorX-=8;
+        for (unsigned int x=CursorX;x<CursorX+8;x++) {
+          for (unsigned int y=CursorY;y<CursorY+16;y++) {
+            *(unsigned int*)((unsigned int*)framebuffer->Address + x + (y * framebuffer->PPSL)) = 0;
+          }
+        }
+      }
+    } else if (*chr == '\t') {
+      printf("    ");
+    } else if (CursorX >= framebuffer->Width-8) {
       CursorX=0;
       CursorY+=16;
     } else if (CursorY > framebuffer->Height-16) {
