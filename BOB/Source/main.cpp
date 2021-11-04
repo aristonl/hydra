@@ -93,11 +93,6 @@ typedef struct {
   void* GlyphBuffer;
 } PSFFont;
 
-typedef struct {
-  MemoryDescriptor* Map;
-  unsigned long long DescriptorSize, MapSize;
-} Memory;
-
 #define NULL ((void*)0)
 
 
@@ -106,7 +101,7 @@ extern "C" __attribute__((ms_abi)) unsigned long long boot(void* ImageHandle, Sy
   SystemTable->ConOut->Reset(SystemTable->ConOut, 1);
   SystemTable->ConOut->OutputString(SystemTable->ConOut, (unsigned short int*) L"Better Opensource Bootloader (BOB)\r\n");
 
-  // Init Filesystem
+  SystemTable->ConOut->OutputString(SystemTable->ConOut, (unsigned short int*) L"Initializing FileSystem...\r\n");
   LoadedImageProtocol* LoadedImage;
   SystemTable->BootServices->HandleProtocol(ImageHandle, &LoadedImageProtocolGUID, (void**)&LoadedImage);
   DevicePathProtocol* DevicePath;
@@ -116,17 +111,17 @@ extern "C" __attribute__((ms_abi)) unsigned long long boot(void* ImageHandle, Sy
   FileProtocol* FS;
   Volume->OpenVolume(Volume, &FS);
 
-  // Init Graphics Output Protocol
+  SystemTable->ConOut->OutputString(SystemTable->ConOut, (unsigned short int*) L"Initializing GOP...\r\n");
   GUID gopGUID = GOPGUID;
   GOP* gop;
   SystemTable->BootServices->LocateProtocol(&gopGUID, (void*)0, (void**)&gop);
   Framebuffer framebuffer = Framebuffer(gop->Mode->FrameBufferBase, gop->Mode->FrameBufferSize, gop->Mode->Info->HorizontalResolution, gop->Mode->Info->VerticalResolution, gop->Mode->Info->PixelsPerScanLine);
   
-  // Load Boot Logo File
+  SystemTable->ConOut->OutputString(SystemTable->ConOut, (unsigned short int*) L"Loading Bootloader logo...\r\n");
   FileProtocol* image;
   FS->Open(FS, &image, (unsigned short*) L"Echo.tga", 0x0000000000000001, 0);
 
-  // Load Boot Logo Data
+  SystemTable->ConOut->OutputString(SystemTable->ConOut, (unsigned short int*) L"Getting Bootloader data...\r\n");
   struct TGAHeader* header;
   unsigned long long headerSize = sizeof(struct TGAHeader);
   SystemTable->BootServices->AllocatePool(EfiLoaderData, headerSize, (void**)&header);
@@ -142,7 +137,7 @@ extern "C" __attribute__((ms_abi)) unsigned long long boot(void* ImageHandle, Sy
   BootLogo->header_ptr = header;
   BootLogo->buffer = buffer;
 
-  // Load Font File
+  SystemTable->ConOut->OutputString(SystemTable->ConOut, (unsigned short int*) L"Loading Font file...\r\n");
   FileProtocol* fontFile;
   FS->Open(FS, &fontFile, (unsigned short*) L"font.psf", 0x0000000000000001, 0);
 
@@ -163,11 +158,11 @@ extern "C" __attribute__((ms_abi)) unsigned long long boot(void* ImageHandle, Sy
     }
   }
   
-  // Load Kernel File
+  SystemTable->ConOut->OutputString(SystemTable->ConOut, (unsigned short int*) L"Loading Inferno...\r\n");
   FileProtocol* KernelFile;
   FS->Open(FS, &KernelFile, (unsigned short*) L"inferno", 0x0000000000000001, 0);
 
-  // Verify Kernel
+  SystemTable->ConOut->OutputString(SystemTable->ConOut, (unsigned short int*) L"Verifying Inferno...\r\n");
   Elf64_Ehdr KernelHeaders; {
     unsigned long long FileInfoSize;
     FileInfo* KernelInfo;
@@ -205,28 +200,24 @@ extern "C" __attribute__((ms_abi)) unsigned long long boot(void* ImageHandle, Sy
     }
   }
 
-  // Initialize Memory Map
+  SystemTable->ConOut->OutputString(SystemTable->ConOut, (unsigned short int*) L"Initializing Memory Map...\r\n");
   MemoryDescriptor* Map = 0;
-	unsigned long long int MapSize, MapKey;
-	unsigned long long int DescriptorSize;
+	unsigned long long int MapSize, MapKey, DescriptorSize;
 	unsigned int DescriptorVersion; {
 		SystemTable->BootServices->GetMemoryMap(&MapSize, Map, &MapKey, &DescriptorSize, &DescriptorVersion);
+    MapSize += 2*DescriptorSize;
 		SystemTable->BootServices->AllocatePool(EfiLoaderData, MapSize, (void**)&Map);
 		SystemTable->BootServices->GetMemoryMap(&MapSize, Map, &MapKey, &DescriptorSize, &DescriptorVersion);
 	}
 
-  Memory* memory;
-  memory->Map = Map;
-  memory->MapSize = MapSize;
-  memory->DescriptorSize = DescriptorSize;
+  SystemTable->ConOut->OutputString(SystemTable->ConOut, (unsigned short int*) L"Loading Inferno...\r\n");
+  SystemTable->ConOut->ClearScreen(SystemTable->ConOut);
+	__attribute__((sysv_abi)) void (*KernelMain)(Framebuffer*, PSFFont*, MemoryDescriptor*, unsigned long long int, unsigned long long int, TGAImage*)=((__attribute__((sysv_abi)) void (*)(Framebuffer*, PSFFont*, MemoryDescriptor*, unsigned long long int, unsigned long long int, TGAImage*))KernelHeaders.e_entry);
 
-  // Load Kernel
-	__attribute__((sysv_abi)) void (*KernelMain)(Framebuffer*, PSFFont*, Memory*, TGAImage*)=((__attribute__((sysv_abi)) void (*)(Framebuffer*, PSFFont*, Memory*, TGAImage*))KernelHeaders.e_entry);
-
-  // Exit Boot Services
+  SystemTable->ConOut->OutputString(SystemTable->ConOut, (unsigned short int*) L"Exiting...\r\n");
   SystemTable->BootServices->ExitBootServices(ImageHandle, MapKey);
 
-  KernelMain(&framebuffer, font, memory, BootLogo);
+  KernelMain(&framebuffer, font, Map, MapSize, DescriptorSize, BootLogo);
 
   SystemTable->RuntimeServices->ResetSystem(ResetShutdown, 0x8000000000000000, 0, 0);
   return 0;

@@ -7,11 +7,6 @@ struct MemoryDescriptor {
   uint64_t numPages, attribs;
 };
 
-typedef struct {
-  MemoryDescriptor* Map;
-  uint64_t DescriptorSize, MapSize;
-} Memory;
-
 uint64_t GetMemorySize(MemoryDescriptor* Map, uint64_t MapEntries, uint64_t DescriptorSize);
 void memset(void* start, uint8_t value, uint64_t num);
 

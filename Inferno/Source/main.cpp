@@ -18,16 +18,17 @@ void putpixel(unsigned int x, unsigned int y, unsigned int color) {
 
 IDTR idtr;
 
-__attribute__((sysv_abi)) void main(Framebuffer* framebuffer, PSFFont* font, Memory* memory, TGAImage* BootLogo) {
+__attribute__((sysv_abi)) void main(Framebuffer* framebuffer, PSFFont* font, MemoryDescriptor* Map, unsigned long long int MapSize, unsigned long long int DescriptorSize, TGAImage* BootLogo) {
   SetGlobalFramebuffer(framebuffer);
   SetGlobalFont(font);
+  printf("Loading Global Descriptor Table...\n");
   GDTDescriptor descriptor;
   descriptor.Size = sizeof(GDT)-1;
   descriptor.Offset = (uint64_t)&DefaultGDT;
 
-  uint64_t MapEntries = memory->MapSize / memory->DescriptorSize;
+  uint64_t MapEntries = MapSize / DescriptorSize;
   Allocator=PageFrameAllocator();
-  Allocator.ReadMemoryMap(memory->Map, memory->MapSize, memory->DescriptorSize);
+  Allocator.ReadMemoryMap(Map, MapSize, DescriptorSize);
   uint64_t kernelSize = (uint64_t)&InfernoEnd-(uint64_t)&InfernoStart;
   uint64_t kernelPages = (uint64_t)kernelSize/4096+1;
   Allocator.LockPages(&InfernoStart, kernelPages);
@@ -36,21 +37,25 @@ __attribute__((sysv_abi)) void main(Framebuffer* framebuffer, PSFFont* font, Mem
   idtr.Limit = 0x0FFF;
   idtr.Offset = (uint64_t)Allocator.RequestPage();
 
+  printf("Loading Page Fault interrupt...\n");
   InterruptDescriptorTableEntry* PageFault = (InterruptDescriptorTableEntry*)(idtr.Offset + 0xE * sizeof(InterruptDescriptorTableEntry));
   PageFault->SetOffset((uint64_t)PageFaultHandler);
   PageFault->type_attr = IDT_TA_InterruptGate;
   PageFault->selector = 0x08;
 
+  printf("Loading Double Fault interrupt...\n");
   InterruptDescriptorTableEntry* DoubleFault = (InterruptDescriptorTableEntry*)(idtr.Offset + 0x8 * sizeof(InterruptDescriptorTableEntry));
   DoubleFault->SetOffset((uint64_t)DoubleFaultHandler);
   DoubleFault->type_attr = IDT_TA_InterruptGate;
   DoubleFault->selector = 0x08;
 
+  printf("Loading General Protection Fault interrupt...\n");
   InterruptDescriptorTableEntry* GeneralProtectionFault = (InterruptDescriptorTableEntry*)(idtr.Offset + 0xD * sizeof(InterruptDescriptorTableEntry));
   GeneralProtectionFault->SetOffset((uint64_t)GeneralProtectionFaultHandler);
   GeneralProtectionFault->type_attr = IDT_TA_InterruptGate;
   GeneralProtectionFault->selector = 0x08;
 
+  printf("Loading PS2 Keyboard interrupt...\n");
   InterruptDescriptorTableEntry* PS2Keyboard = (InterruptDescriptorTableEntry*)(idtr.Offset + 0x21 * sizeof(InterruptDescriptorTableEntry));
   PS2Keyboard->SetOffset((uint64_t)PS2KeyboardHandler);
   PS2Keyboard->type_attr = IDT_TA_InterruptGate;
@@ -63,12 +68,14 @@ __attribute__((sysv_abi)) void main(Framebuffer* framebuffer, PSFFont* font, Mem
   outb(PIC2_DATA, 0b11111111);
   asm("sti");
 
+  printf("Loading Page Table...\n");
   PageTable* pageTable = (PageTable*)Allocator.RequestPage();
   memset(pageTable, 0, 0x1000);
   PageTableManager pageTableManager = PageTableManager(pageTable);
-  for (uint64_t t=0;t<GetMemorySize(memory->Map, MapEntries, memory->DescriptorSize);t+=0x1000) pageTableManager.MapMemory((void*)t, (void*)t);
+  for (uint64_t t=0;t<GetMemorySize(Map, MapEntries, DescriptorSize);t+=0x1000) pageTableManager.MapMemory((void*)t, (void*)t);
   memset(framebuffer->Address, 0, framebuffer->Size);
-
+  CursorX = 0; CursorY = 0;
+  printf("Printing Bootlogo...\n");
   unsigned int* img = (unsigned int*)BootLogo->buffer;
   unsigned int height = BootLogo->header_ptr->height;
   unsigned int width = BootLogo->header_ptr->width;
@@ -82,13 +89,17 @@ __attribute__((sysv_abi)) void main(Framebuffer* framebuffer, PSFFont* font, Mem
     }
   }
   
+  printf("Locking Framebuffer...\n");
   uint64_t framebufferAddress = (uint64_t)framebuffer->Address;
   uint64_t framebufferSize = (uint64_t)framebuffer->Size+0x1000;
   Allocator.LockPages((void*)framebufferAddress, framebufferSize/0x1000+1);
   for (uint64_t t=framebufferAddress;t<framebufferAddress+framebufferSize;t+=0x1000) pageTableManager.MapMemory((void*)t, (void*)t);
   asm("mov %0, %%cr3" :: "r" (pageTable));
 
-  printf("Echo v0.185\n");
+  printf("Echo v0.189\n");
+
+  printf((Allocator.GetFreeMem()+Allocator.GetReservedMem()+Allocator.GetUsedMem())/1024/1024);
+  printf(" MB of RAM");
 
   // int* test = (int*)0x800000000;
   // *test = 2;
