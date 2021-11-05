@@ -3,8 +3,6 @@
 #include "../../Graphics/Font/Font.hpp"
 #include "../Graphics/GOP/GOP.hpp"
 #include "../Memory/Memory.hpp"
-// #include "../PS2/Keyboard/Keyboard.hpp"
-#include "../PS2/Mouse/Mouse.hpp"
 
 size_t strlen(const char *str) {
   const char* s;
@@ -38,14 +36,11 @@ Interrupt void GeneralProtectionFaultHandler(struct InterruptFrame* frame) {
 
 Interrupt void PS2KeyboardHandler(struct InterruptFrame* frame) {
   uint8_t code = inb(0x60);
-  // SetKey(code);
-  // printf(GetActiveKeys());
   PICEndMaster();
 }
 
 Interrupt void PS2MouseHandler(struct InterruptFrame* frame) {
   uint8_t data = inb(0x60);
-  PS2MouseUpdate(data);
   PICEndSlave();
 }
 
@@ -84,6 +79,3 @@ void MapPIC() {
   io_wait();
   outb(PIC2_DATA, a2);
 }
-
-void CallPS2MousePacketHandler() { PS2MousePacketHandler(); }
-void CallPS2MouseDriver() { PS2MouseDriver(); }

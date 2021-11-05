@@ -67,8 +67,6 @@ __attribute__((sysv_abi)) void main(Framebuffer* framebuffer, PSFFont* font, Mem
   PS2Mouse->type_attr = IDT_TA_InterruptGate;
   PS2Mouse->selector = 0x08;
 
-  CallPS2MouseDriver();
-
   asm("lidt %0" :: "m" (idtr));
 
   MapPIC();
@@ -112,8 +110,5 @@ __attribute__((sysv_abi)) void main(Framebuffer* framebuffer, PSFFont* font, Mem
   // int* test = (int*)0x800000000;
   // *test = 2;
   
-  while(true) {
-    CallPS2MousePacketHandler();
-    asm("hlt");
-  }
+  while(true) asm("hlt");
 }

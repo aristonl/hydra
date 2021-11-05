@@ -19,9 +19,6 @@ Interrupt void GeneralProtectionFaultHandler(InterruptFrame* frame);
 Interrupt void PS2KeyboardHandler(InterruptFrame* frame);
 Interrupt void PS2MouseHandler(InterruptFrame* frame);
 
-void CallPS2MousePacketHandler();
-void CallPS2MouseDriver();
-
 void MapPIC();
 void PICEndMaster();
 void PICEndSlave();
