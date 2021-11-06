@@ -7,16 +7,13 @@ BUILD_INSTRUCTIONS =
 ifeq ($(shell echo `uname`), Darwin)
 	BUILD_INSTRUCTIONS = vagrant emulate
 else
-	BUILD_INSTRUCTIONS = BOB Inferno image iso emulate
+	BUILD_INSTRUCTIONS = Inferno image iso emulate
 endif
 
 all: $(BUILD_INSTRUCTIONS)
 
 vagrant:
-	@vagrant ssh -c "cd /vagrant/;make BOB Inferno image iso"
-
-BOB:
-	@-make -C "BOB" > /dev/null >&1
+	@vagrant ssh -c "cd /vagrant/;make Inferno image iso"
 
 Inferno:
 	@-cd Inferno > /dev/null >&1;make Inferno > /dev/null >&1
