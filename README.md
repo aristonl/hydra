@@ -14,7 +14,6 @@ This repository has 3 main sections, BOB (our bootloader), Inferno (the kernel),
 <!-- Update 08/31/2021 2354: I still think it doesn't look like enough...-->
 
 ## Features
-- Custom EFI Bootloader
 - Custom Boot Logo
 - Custom LibC Library
 - USTAR File System support
@@ -27,6 +26,7 @@ This repository has 3 main sections, BOB (our bootloader), Inferno (the kernel),
 - PCI Driver
 - AHCI Driver
 - ext2 File System Support
+- Custom EFI Bootloader
 
 ## Links
 [Discord](https://discord.gg/MGHjJ2VjjC)
