@@ -5,11 +5,11 @@ This document will explain how to build Hydra and prerequisites needed.
 Make sure you have all the prerequisites needed to build.
 ### Ubuntu / Debian
 ```bash
-sudo apt install mtools xorriso qemu qemu-system ovmf build-essential nasm bison flex libgmp3-dev libmpc-dev libmpfr-dev texinfo
+sudo apt install mtools xorriso qemu qemu-system mingw-w64 ovmf build-essential nasm bison flex libgmp3-dev libmpc-dev libmpfr-dev texinfo
 ```
 ### Arch Linux / Manjaro
 ```bash
-sudo pacman -S --needed base-devel mtools libisoburn qemu qemu-arch-extra edk2-ovmf nasm gmp libmpc mpfr
+sudo pacman -S --needed base-devel mtools libisoburn qemu qemu-arch-extra mingw-w64-gcc mingw-w64-binutils edk2-ovmf nasm gmp libmpc mpfr
 ```
 ### macOS
 ```bash
