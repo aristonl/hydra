@@ -1,0 +1,3 @@
+[submodule "gnuefi"]
+	path = gnuefi
+	url = https://github.com/Null-LLC/GNU-EFI
