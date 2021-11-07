@@ -100,7 +100,7 @@ __attribute__((sysv_abi)) void Inferno(Framebuffer* framebuffer, PSFFont* font, 
   for (uint64_t t=framebufferAddress;t<framebufferAddress+framebufferSize;t+=0x1000) pageTableManager.MapMemory((void*)t, (void*)t);
   asm("mov %0, %%cr3" :: "r" (pageTable));
 
-  printf("Echo v0.189\n");
+  printf("Inferno v0.200\n");
 
   printf((Allocator.GetFreeMem()+Allocator.GetReservedMem()+Allocator.GetUsedMem())/1024/1024);
   printf(" MB of RAM");
