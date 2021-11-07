@@ -1,6 +1,7 @@
 #pragma once
 #include "../ACPI/ACPI.hpp"
 #include "../Memory/Memory.hpp"
+#include "../../Graphics/Font/Font.hpp"
 
 namespace PCI {
   struct PCIDeviceHeader {

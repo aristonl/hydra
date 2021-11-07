@@ -33,6 +33,20 @@ __attribute__((sysv_abi)) void Inferno(Framebuffer* framebuffer, PSFFont* font, 
   uint64_t kernelPages = (uint64_t)kernelSize/4096+1;
   Allocator.LockPages(&InfernoStart, kernelPages);
 
+  printf("Loading Page Table...\n");
+  PageTable* pageTable = (PageTable*)Allocator.RequestPage();
+  memset(pageTable, 0, 0x1000);
+  pageTableManager = PageTableManager(pageTable);
+  for (uint64_t t=0;t<GetMemorySize(Map, MapEntries, DescriptorSize);t+=0x1000) pageTableManager.MapMemory((void*)t, (void*)t);
+  asm ("mov %0, %%cr3" : : "r" (pageTable));
+  uint64_t fbBase = (uint64_t)framebuffer->Address;
+  uint64_t fbSize = (uint64_t)framebuffer->Size + 0x1000;
+  Allocator.LockPages((void*)fbBase, fbSize/0x1000 + 1);
+  for (uint64_t t = fbBase; t < fbBase + fbSize; t += 4096) pageTableManager.MapMemory((void*)t, (void*)t);
+  InitializeHeap((void*)0x0000100000000000, 0x10);
+  memset(framebuffer->Address, 0, framebuffer->Size);
+  CursorX = 0; CursorY = 0;
+
   LoadGDT(&descriptor);
   idtr.Limit = 0x0FFF;
   idtr.Offset = (uint64_t)Allocator.RequestPage();
@@ -75,13 +89,6 @@ __attribute__((sysv_abi)) void Inferno(Framebuffer* framebuffer, PSFFont* font, 
   outb(PIC2_DATA, 0b11101111);
   asm("sti");
 
-  printf("Loading Page Table...\n");
-  PageTable* pageTable = (PageTable*)Allocator.RequestPage();
-  memset(pageTable, 0, 0x1000);
-  pageTableManager = PageTableManager(pageTable);
-  for (uint64_t t=0;t<GetMemorySize(Map, MapEntries, DescriptorSize);t+=0x1000) pageTableManager.MapMemory((void*)t, (void*)t);
-  memset(framebuffer->Address, 0, framebuffer->Size);
-  CursorX = 0; CursorY = 0;
   printf("Printing Bootlogo...\n");
   unsigned int* img = (unsigned int*)BootLogo->buffer;
   unsigned int height = BootLogo->header_ptr->height;
@@ -95,12 +102,6 @@ __attribute__((sysv_abi)) void Inferno(Framebuffer* framebuffer, PSFFont* font, 
       *(unsigned int*)((unsigned int*)framebuffer->Address+x+(y*framebuffer->PPSL)) = color;
     }
   }
-  
-  printf("Locking Framebuffer...\n");
-  uint64_t framebufferAddress = (uint64_t)framebuffer->Address;
-  uint64_t framebufferSize = (uint64_t)framebuffer->Size+0x1000;
-  Allocator.LockPages((void*)framebufferAddress, framebufferSize/0x1000+1);
-  for (uint64_t t=framebufferAddress;t<framebufferAddress+framebufferSize;t+=0x1000) pageTableManager.MapMemory((void*)t, (void*)t);
 
   printf((Allocator.GetFreeMem()+Allocator.GetUsedMem())/1024/1024);
   printf(" MB of RAM\n");
