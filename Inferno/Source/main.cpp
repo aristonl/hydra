@@ -98,7 +98,6 @@ __attribute__((sysv_abi)) void Inferno(Framebuffer* framebuffer, PSFFont* font, 
   uint64_t framebufferSize = (uint64_t)framebuffer->Size+0x1000;
   Allocator.LockPages((void*)framebufferAddress, framebufferSize/0x1000+1);
   for (uint64_t t=framebufferAddress;t<framebufferAddress+framebufferSize;t+=0x1000) pageTableManager.MapMemory((void*)t, (void*)t);
-  asm("mov %0, %%cr3" :: "r" (pageTable));
 
   printf("Inferno v0.200\n");
 
