@@ -81,11 +81,12 @@ void PageFrameAllocator::ReadMemoryMap(MemoryDescriptor* Map, size_t MapSize, si
   freeMemory = memorySize;
   uint64_t bitmapSize = memorySize / 4096 / 8 + 1;
   InitBitmap(bitmapSize, largestFreeMemorySegment);
-  LockPages(PageBitmap.Buffer, PageBitmap.Size / 4096 + 1);
+  ReservePages(0, memorySize / 4096+1);
   for (int i = 0; i < MapEntries; i++) {
     MemoryDescriptor* desc = (MemoryDescriptor*)((uint64_t) Map + (i * DescriptorSize));
-    if (desc->type != 7) ReservePages(desc->physAddr, desc->numPages);
+    if (desc->type == 7) UnreservePages(desc->physAddr, desc->numPages);
   }
+  LockPages(PageBitmap.Buffer, PageBitmap.Size / 4096 + 1);
 }
 
 void PageFrameAllocator::InitBitmap(size_t bitmapSize, void* BufferAddress) {
