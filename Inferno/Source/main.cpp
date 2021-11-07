@@ -7,6 +7,7 @@
 #include "Drivers/Interrupts/Interrupts.hpp"
 #include "Drivers/IO/IO.hpp"
 #include "Drivers/ACPI/ACPI.hpp"
+#include "Drivers/PCI/PCI.hpp"
 
 extern uint64_t InfernoStart;
 extern uint64_t InfernoEnd;
@@ -77,7 +78,7 @@ __attribute__((sysv_abi)) void Inferno(Framebuffer* framebuffer, PSFFont* font, 
   printf("Loading Page Table...\n");
   PageTable* pageTable = (PageTable*)Allocator.RequestPage();
   memset(pageTable, 0, 0x1000);
-  PageTableManager pageTableManager = PageTableManager(pageTable);
+  pageTableManager = PageTableManager(pageTable);
   for (uint64_t t=0;t<GetMemorySize(Map, MapEntries, DescriptorSize);t+=0x1000) pageTableManager.MapMemory((void*)t, (void*)t);
   memset(framebuffer->Address, 0, framebuffer->Size);
   CursorX = 0; CursorY = 0;
@@ -101,8 +102,6 @@ __attribute__((sysv_abi)) void Inferno(Framebuffer* framebuffer, PSFFont* font, 
   Allocator.LockPages((void*)framebufferAddress, framebufferSize/0x1000+1);
   for (uint64_t t=framebufferAddress;t<framebufferAddress+framebufferSize;t+=0x1000) pageTableManager.MapMemory((void*)t, (void*)t);
 
-  printf("Inferno v0.200\n");
-
   printf((Allocator.GetFreeMem()+Allocator.GetReservedMem()+Allocator.GetUsedMem())/1024/1024);
   printf(" MB of RAM\n");
 
@@ -115,11 +114,12 @@ __attribute__((sysv_abi)) void Inferno(Framebuffer* framebuffer, PSFFont* font, 
     for (int t=0;t<4;t++) {
       putc(mcfg->Header.Signature[t], CursorX+=8, CursorY);
     }
-  } else printf("Could not locate MCFG!");
+    printf("\n");
+    PCI::EnumeratePCI(mcfg);
+  } else printf("Could not locate MCFG!\n");
 
-  // int* test = (int*)0x800000000;
-  // *test = 2;
-  
+  printf("Inferno v0.204\n");
+
   while(true) asm("hlt");
 }
 

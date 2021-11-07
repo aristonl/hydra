@@ -2,6 +2,8 @@
 
 extern "C" void __stack_chk_fail(void) {}
 
+PageTableManager pageTableManager = 0;
+
 const char* MemoryTypesStrings[] {
   "EfiReservedMemoryType",
   "EfiLoaderCode",

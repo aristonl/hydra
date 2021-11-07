@@ -80,3 +80,4 @@ class PageTableManager {
 
 extern const char* MemoryTypesStrings[];
 extern PageFrameAllocator Allocator;
+extern PageTableManager pageTableManager;

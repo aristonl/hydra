@@ -17,5 +17,11 @@ namespace ACPI {
     SDTHeader Header;
     unsigned long long Reserved;
   } __attribute__((packed));
+  struct DeviceConfig {
+    unsigned long long Address;
+    unsigned short PCISegmentGroup;
+    unsigned char StartBus, EndBus;
+    unsigned int Reserved;
+  } __attribute__((packed));
   void* FindTable(SDTHeader* header, char* signature);
 }
