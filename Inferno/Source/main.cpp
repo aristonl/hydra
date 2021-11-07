@@ -108,7 +108,14 @@ __attribute__((sysv_abi)) void Inferno(Framebuffer* framebuffer, PSFFont* font, 
 
   
   ACPI::SDTHeader* xsdt = (ACPI::SDTHeader*)(rsdp->XSDTAddress);
-  ACPI::MCFGHeader* mcfg = (ACPI::MCFGHeader*)(ACPI::FindTable(xsdt, (char*)"MCFG"));
+  ACPI::MCFGHeader* mcfg;
+  if (ACPI::FindTable(xsdt, (char*)"MCFG")) {
+    mcfg = (ACPI::MCFGHeader*)(ACPI::FindTable(xsdt, (char*)"MCFG"));
+
+    for (int t=0;t<4;t++) {
+      putc(mcfg->Header.Signature[t], CursorX+=8, CursorY);
+    }
+  } else printf("Could not locate MCFG!");
 
   // int* test = (int*)0x800000000;
   // *test = 2;
