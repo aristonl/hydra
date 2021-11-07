@@ -121,13 +121,22 @@ extern "C" __attribute__((ms_abi)) unsigned long long boot(void* ImageHandle, st
 		SystemTable->BootServices->GetMemoryMap(&MapSize, Map, &MapKey, &DescriptorSize, &DescriptorVersion);
 	}
 
+  SystemTable->ConsoleOutput->OutputString(SystemTable->ConsoleOutput, (unsigned short int*) L"Getting RSDP...\r\n");
+  ConfigurationTable* configTable = SystemTable->ConfigurationTable;
+	void* rsdp = (void*)0; 
+	GUID ACPI2TableGUID = ACPI20TableGUID;
+
+	for (unsigned long long index = 0; index < SystemTable->NumberOfEntries; index++) {
+		if (CompareGUID(&configTable[index].VendorGUID, &ACPI2TableGUID) && strcmp((unsigned char*)"RSD PTR ", (unsigned char*)configTable->VendorTable, 8)) rsdp = (void*)configTable->VendorTable;
+		configTable++;
+	}
+
   SystemTable->ConsoleOutput->OutputString(SystemTable->ConsoleOutput, (unsigned short int*) L"Exiting BootServices...\r\n");
   SystemTable->BootServices->ExitBootServices(ImageHandle, MapKey);
 
   SystemTable->ConsoleOutput->OutputString(SystemTable->ConsoleOutput, (unsigned short int*) L"Loading Inferno...\r\n");
   SystemTable->ConsoleOutput->ClearScreen(SystemTable->ConsoleOutput);
-	void (*KernelMain)(Framebuffer*, PSFFont*, MemoryDescriptor*, unsigned long long int, unsigned long long int, TGAImage*)=((void (*)(Framebuffer*, PSFFont*, MemoryDescriptor*, unsigned long long int, unsigned long long int, TGAImage*))KernelHeaders.e_entry);
-  KernelMain(&framebuffer, font, Map, MapSize, DescriptorSize, BootLogo);
-
+	void (*KernelMain)(Framebuffer*, PSFFont*, MemoryDescriptor*, unsigned long long int, unsigned long long int, TGAImage*, void*)=((void (*)(Framebuffer*, PSFFont*, MemoryDescriptor*, unsigned long long int, unsigned long long int, TGAImage*, void*))KernelHeaders.e_entry);
+  KernelMain(&framebuffer, font, Map, MapSize, DescriptorSize, BootLogo, rsdp);
   return 0;
 }

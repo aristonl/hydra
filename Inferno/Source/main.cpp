@@ -6,6 +6,7 @@
 #include "Drivers/Interrupts/IDT/IDT.hpp"
 #include "Drivers/Interrupts/Interrupts.hpp"
 #include "Drivers/IO/IO.hpp"
+#include "Drivers/ACPI/ACPI.hpp"
 
 extern uint64_t InfernoStart;
 extern uint64_t InfernoEnd;
@@ -16,7 +17,7 @@ void putpixel(unsigned int x, unsigned int y, unsigned int color) {
 
 IDTR idtr;
 
-__attribute__((sysv_abi)) void Inferno(Framebuffer* framebuffer, PSFFont* font, MemoryDescriptor* Map, unsigned long long int MapSize, unsigned long long int DescriptorSize, TGAImage* BootLogo) {
+__attribute__((sysv_abi)) void Inferno(Framebuffer* framebuffer, PSFFont* font, MemoryDescriptor* Map, unsigned long long int MapSize, unsigned long long int DescriptorSize, TGAImage* BootLogo, ACPI::RSDP2* rsdp) {
   SetGlobalFramebuffer(framebuffer);
   SetGlobalFont(font);
   printf("Loading Global Descriptor Table...\n");
@@ -68,6 +69,7 @@ __attribute__((sysv_abi)) void Inferno(Framebuffer* framebuffer, PSFFont* font, 
   asm("lidt %0" :: "m" (idtr));
 
   MapPIC();
+  
   outb(PIC1_DATA, 0b11111001);
   outb(PIC2_DATA, 0b11101111);
   asm("sti");
@@ -102,7 +104,11 @@ __attribute__((sysv_abi)) void Inferno(Framebuffer* framebuffer, PSFFont* font, 
   printf("Inferno v0.200\n");
 
   printf((Allocator.GetFreeMem()+Allocator.GetReservedMem()+Allocator.GetUsedMem())/1024/1024);
-  printf(" MB of RAM");
+  printf(" MB of RAM\n");
+
+  
+  ACPI::SDTHeader* xsdt = (ACPI::SDTHeader*)(rsdp->XSDTAddress);
+  ACPI::MCFGHeader* mcfg = (ACPI::MCFGHeader*)(ACPI::FindTable(xsdt, (char*)"MCFG"));
 
   // int* test = (int*)0x800000000;
   // *test = 2;
@@ -110,6 +116,6 @@ __attribute__((sysv_abi)) void Inferno(Framebuffer* framebuffer, PSFFont* font, 
   while(true) asm("hlt");
 }
 
-__attribute__((ms_abi)) void main(Framebuffer* framebuffer, PSFFont* font, MemoryDescriptor* Map, unsigned long long int MapSize, unsigned long long int DescriptorSize, TGAImage* BootLogo) {
-  Inferno(framebuffer, font, Map, MapSize, DescriptorSize, BootLogo);
+__attribute__((ms_abi)) void main(Framebuffer* framebuffer, PSFFont* font, MemoryDescriptor* Map, unsigned long long int MapSize, unsigned long long int DescriptorSize, TGAImage* BootLogo, ACPI::RSDP2* rsdp) {
+  Inferno(framebuffer, font, Map, MapSize, DescriptorSize, BootLogo, rsdp);
 }

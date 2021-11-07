@@ -2,6 +2,7 @@
 #include "TableHeaders.hpp"
 #include "TextProtocol.hpp"
 #include "BootServices.hpp"
+#include "ConfigurationTable.hpp"
 
 struct SystemTable {
   struct TableHeaders Headers;
@@ -15,7 +16,7 @@ struct SystemTable {
   void* RuntimeServices;
   struct BootServices* BootServices;
   unsigned long long NumberOfEntries;
-  void* ConfigurationTable;
+  struct ConfigurationTable* ConfigurationTable;
 };
 
 #endif

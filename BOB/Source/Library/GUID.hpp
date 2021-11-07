@@ -24,3 +24,21 @@ struct GUID DevicePathProtocolGUID = {0x09576e91, 0x6d3f, 0x11d2, {0x8e, 0x39, 0
 #ifndef FileInfoGUID
 struct GUID FileInfoGUID = {0x9576e92, 0x6d3f, 0x11d2, {0x8e, 0x39, 0x0, 0xa0, 0xc9, 0x69, 0x72, 0x3b}};
 #endif
+#ifndef ACPI20TableGUID
+struct GUID ACPI20TableGUID = {0x8868e871, 0xe4f1, 0x11d3, {0xbc, 0x22, 0x00, 0x80, 0xc7, 0x3c, 0x88, 0x81}};
+#endif
+
+#ifndef CompareGUID
+
+unsigned long long CompareGUID(GUID* GUID1, GUID* GUID2) {
+  int *g1, *g2, r;
+  g1 = (int *) GUID1;
+  g2 = (int *) GUID2;
+  r = g1[0] - g2[0];
+  r |= g1[1] - g2[1];
+  r |= g1[2] - g2[2];
+  r |= g1[3] - g2[3];
+  return r;
+}
+
+#endif
