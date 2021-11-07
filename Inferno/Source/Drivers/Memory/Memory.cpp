@@ -86,6 +86,7 @@ void PageFrameAllocator::ReadMemoryMap(MemoryDescriptor* Map, size_t MapSize, si
     MemoryDescriptor* desc = (MemoryDescriptor*)((uint64_t) Map + (i * DescriptorSize));
     if (desc->type == 7) UnreservePages(desc->physAddr, desc->numPages);
   }
+  ReservePages(0, 0x1000);
   LockPages(PageBitmap.Buffer, PageBitmap.Size / 4096 + 1);
 }
 

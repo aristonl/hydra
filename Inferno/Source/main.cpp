@@ -102,7 +102,7 @@ __attribute__((sysv_abi)) void Inferno(Framebuffer* framebuffer, PSFFont* font, 
   Allocator.LockPages((void*)framebufferAddress, framebufferSize/0x1000+1);
   for (uint64_t t=framebufferAddress;t<framebufferAddress+framebufferSize;t+=0x1000) pageTableManager.MapMemory((void*)t, (void*)t);
 
-  printf((Allocator.GetFreeMem()+Allocator.GetReservedMem()+Allocator.GetUsedMem())/1024/1024);
+  printf((Allocator.GetFreeMem()+Allocator.GetUsedMem())/1024/1024);
   printf(" MB of RAM\n");
 
   
