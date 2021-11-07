@@ -10,15 +10,13 @@
 extern uint64_t InfernoStart;
 extern uint64_t InfernoEnd;
 
-#define Inferno
-
 void putpixel(unsigned int x, unsigned int y, unsigned int color) {
   *(unsigned int*)((unsigned int*)framebuffer->Address + x + (y * framebuffer->PPSL)) = 0;
 }
 
 IDTR idtr;
 
-__attribute__((sysv_abi)) void main(Framebuffer* framebuffer, PSFFont* font, MemoryDescriptor* Map, unsigned long long int MapSize, unsigned long long int DescriptorSize, TGAImage* BootLogo) {
+__attribute__((sysv_abi)) void Inferno(Framebuffer* framebuffer, PSFFont* font, MemoryDescriptor* Map, unsigned long long int MapSize, unsigned long long int DescriptorSize, TGAImage* BootLogo) {
   SetGlobalFramebuffer(framebuffer);
   SetGlobalFont(font);
   printf("Loading Global Descriptor Table...\n");
@@ -111,4 +109,8 @@ __attribute__((sysv_abi)) void main(Framebuffer* framebuffer, PSFFont* font, Mem
   // *test = 2;
   
   while(true) asm("hlt");
+}
+
+__attribute__((ms_abi)) void main(Framebuffer* framebuffer, PSFFont* font, MemoryDescriptor* Map, unsigned long long int MapSize, unsigned long long int DescriptorSize, TGAImage* BootLogo) {
+  Inferno(framebuffer, font, Map, MapSize, DescriptorSize, BootLogo);
 }

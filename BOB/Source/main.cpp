@@ -215,7 +215,7 @@ extern "C" __attribute__((ms_abi)) unsigned long long boot(void* ImageHandle, Sy
 
   SystemTable->ConOut->OutputString(SystemTable->ConOut, (unsigned short int*) L"Loading Inferno...\r\n");
   SystemTable->ConOut->ClearScreen(SystemTable->ConOut);
-	__attribute__((sysv_abi)) void (*KernelMain)(Framebuffer*, PSFFont*, MemoryDescriptor*, unsigned long long int, unsigned long long int, TGAImage*)=((__attribute__((sysv_abi)) void (*)(Framebuffer*, PSFFont*, MemoryDescriptor*, unsigned long long int, unsigned long long int, TGAImage*))KernelHeaders.e_entry);
+	void (*KernelMain)(Framebuffer*, PSFFont*, MemoryDescriptor*, unsigned long long int, unsigned long long int, TGAImage*)=((void (*)(Framebuffer*, PSFFont*, MemoryDescriptor*, unsigned long long int, unsigned long long int, TGAImage*))KernelHeaders.e_entry);
   KernelMain(&framebuffer, font, Map, MapSize, DescriptorSize, BootLogo);
 
   return 0;
