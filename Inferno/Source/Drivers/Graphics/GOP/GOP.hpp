@@ -1,4 +1,6 @@
 #pragma once
+#include "../../Memory/Memory.hpp"
+#include "../../../Graphics/Font/Font.hpp"
 
 class Framebuffer {
   public:
@@ -16,4 +18,9 @@ class Framebuffer {
 
 void SetGlobalFramebuffer(Framebuffer* temp);
 
+void putpixel(unsigned int x, unsigned int y, unsigned int color);
+void SwapBuffers();
+void ClearBuffer();
+
 extern Framebuffer* framebuffer;
+extern uint8_t* backbuffer;

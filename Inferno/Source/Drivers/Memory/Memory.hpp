@@ -100,3 +100,5 @@ void ExpandHeap(size_t length);
 extern const char* MemoryTypesStrings[];
 extern PageFrameAllocator Allocator;
 extern PageTableManager pageTableManager;
+
+void memcpy(void *dest, void *src, size_t n);

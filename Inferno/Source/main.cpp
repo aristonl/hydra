@@ -12,10 +12,6 @@
 extern uint64_t InfernoStart;
 extern uint64_t InfernoEnd;
 
-void putpixel(unsigned int x, unsigned int y, unsigned int color) {
-  *(unsigned int*)((unsigned int*)framebuffer->Address + x + (y * framebuffer->PPSL)) = 0;
-}
-
 IDTR idtr;
 
 __attribute__((sysv_abi)) void Inferno(Framebuffer* framebuffer, PSFFont* font, MemoryDescriptor* Map, unsigned long long int MapSize, unsigned long long int DescriptorSize, TGAImage* BootLogo, ACPI::RSDP2* rsdp) {
@@ -44,7 +40,9 @@ __attribute__((sysv_abi)) void Inferno(Framebuffer* framebuffer, PSFFont* font, 
   Allocator.LockPages((void*)fbBase, fbSize/0x1000 + 1);
   for (uint64_t t = fbBase; t < fbBase + fbSize; t += 4096) pageTableManager.MapMemory((void*)t, (void*)t);
   InitializeHeap((void*)0x0000100000000000, 0x10);
-  memset(framebuffer->Address, 0, framebuffer->Size);
+  backbuffer = ((uint8_t*) (malloc(framebuffer->Width * framebuffer->Height *4)));
+  ClearBuffer();
+  SwapBuffers();
   CursorX = 0; CursorY = 0;
 
   LoadGDT(&descriptor);
@@ -90,6 +88,7 @@ __attribute__((sysv_abi)) void Inferno(Framebuffer* framebuffer, PSFFont* font, 
   asm("sti");
 
   printf("Printing Bootlogo...\n");
+  ClearBuffer();
   unsigned int* img = (unsigned int*)BootLogo->buffer;
   unsigned int height = BootLogo->header_ptr->height;
   unsigned int width = BootLogo->header_ptr->width;
@@ -99,9 +98,11 @@ __attribute__((sysv_abi)) void Inferno(Framebuffer* framebuffer, PSFFont* font, 
       unsigned int color = *(img+offset);
       size_t x = dx+(framebuffer->Width/2)-(width/2);
       size_t y = dy+(framebuffer->Height/2)-(height/2);
-      *(unsigned int*)((unsigned int*)framebuffer->Address+x+(y*framebuffer->PPSL)) = color;
+      putpixel(x, y, color);
     }
   }
+
+  SwapBuffers();
 
   printf((Allocator.GetFreeMem()+Allocator.GetUsedMem())/1024/1024);
   printf(" MB of RAM\n");

@@ -348,3 +348,10 @@ void HeapSegHdr::CombineForward() {
 void HeapSegHdr::CombineBackward() {
   if (last != NULL && last->free) last->CombineForward();
 }
+
+void memcpy(void *dest, void *src, size_t n) {
+  int i;
+  char* src_char = (char*)src;
+  char* dest_char = (char*)dest;
+  for (i=0; i<n; i++) dest_char[i] = src_char[i];
+}
