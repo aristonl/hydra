@@ -40,7 +40,7 @@ __attribute__((sysv_abi)) void Inferno(Framebuffer* framebuffer, PSFFont* font, 
   Allocator.LockPages((void*)fbBase, fbSize/0x1000 + 1);
   for (uint64_t t = fbBase; t < fbBase + fbSize; t += 4096) pageTableManager.MapMemory((void*)t, (void*)t);
   InitializeHeap((void*)0x0000100000000000, 0x10);
-  backbuffer = ((uint8_t*) (malloc(framebuffer->Width * framebuffer->Height *4)));
+  backbuffer = ((uint8_t*) (malloc(framebuffer->Width * framebuffer->Height * 4)));
   ClearBuffer();
   SwapBuffers();
   CursorX = 0; CursorY = 0;
@@ -104,8 +104,8 @@ __attribute__((sysv_abi)) void Inferno(Framebuffer* framebuffer, PSFFont* font, 
 
   SwapBuffers();
 
-  printf((Allocator.GetFreeMem()+Allocator.GetUsedMem())/1024/1024);
-  printf(" MB of RAM\n");
+  printf((Allocator.GetFreeMem())/1024/1024);
+  printf(" MB of RAM Free\n");
 
   
   ACPI::SDTHeader* xsdt = (ACPI::SDTHeader*)(rsdp->XSDTAddress);
@@ -120,7 +120,17 @@ __attribute__((sysv_abi)) void Inferno(Framebuffer* framebuffer, PSFFont* font, 
     PCI::EnumeratePCI(mcfg);
   } else printf("Could not locate MCFG!\n");
 
+  printf("Resolution: ");
+  printf(framebuffer->Width);
+  printf("x");
+  printf(framebuffer->Height);
+  printf("\n");
+  printf("PPSL: ");
+  printf(framebuffer->PPSL);
+  printf("\n");
+
   printf("Inferno v0.204\n");
+  
 
   while(true) asm("hlt");
 }

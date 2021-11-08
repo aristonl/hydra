@@ -8,10 +8,10 @@ void SetGlobalFramebuffer(Framebuffer* temp) {
 }
 
 void putpixel(unsigned int x, unsigned int y, unsigned int color) {
-  backbuffer[(4*framebuffer->Width*y+4*x)] = (color & 0xFF);
-  backbuffer[(4*framebuffer->Width*y+4*x)+1] = (color & 0xFF00) >> 8;
-  backbuffer[(4*framebuffer->Width*y+4*x)+2] = (color & 0xFF0000) >> 16;
-  backbuffer[(4*framebuffer->Width*y+4*x)+3] = (color & 0xFF000000) >> 24;
+  backbuffer[(4*framebuffer->PPSL*y+4*x)] = (color & 0xFF);
+  backbuffer[(4*framebuffer->PPSL*y+4*x)+1] = (color & 0xFF00) >> 8;
+  backbuffer[(4*framebuffer->PPSL*y+4*x)+2] = (color & 0xFF0000) >> 16;
+  backbuffer[(4*framebuffer->PPSL*y+4*x)+3] = (color & 0xFF000000) >> 24;
 }
 
 void SwapBuffers() {
