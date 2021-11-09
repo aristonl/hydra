@@ -1,5 +1,5 @@
 #pragma once
-#include "../../../../../Libraries/LibC/stdint.h"
+#include "../../../../Libraries/LibC/stdint.h"
 
 struct GDTDescriptor {
   uint16_t Size;

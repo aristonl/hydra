@@ -2,7 +2,7 @@
 #include "Graphics/Font/Font.hpp"
 #include "Drivers/Memory/Memory.hpp"
 #include "Graphics/Images/TGA/TGA.hpp"
-#include "Drivers/Interrupts/GDT/GDT.hpp"
+#include "Drivers/GDT/GDT.hpp"
 #include "Drivers/Interrupts/IDT/IDT.hpp"
 #include "Drivers/Interrupts/Interrupts.hpp"
 #include "Drivers/IO/IO.hpp"
