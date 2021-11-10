@@ -7,12 +7,37 @@
 #include "Library/String.hpp"
 #include "Library/ELF.hpp"
 
+Framebuffer framebuffer;
+
+void putpixel(unsigned int x, unsigned int y, unsigned int color) {
+  *(unsigned int*)((unsigned int*)framebuffer.Address + x + (y * framebuffer.PPSL)) = color;
+}
+
+void addBar() {
+  for (unsigned int y=framebuffer.Height-100;y<=framebuffer.Height-100+20;y++) putpixel(100,y,0x0000ff);
+  for (unsigned int x=100;x<=framebuffer.Width-100;x++) putpixel(x,framebuffer.Height-100,0x0000ff);
+  for (unsigned int x=100;x<=framebuffer.Width-100;x++) putpixel(x,framebuffer.Height-100+20,0x0000ff);
+  for (unsigned int y=framebuffer.Height-100;y<=framebuffer.Height-100+20;y++) putpixel(framebuffer.Width-100,y,0x0000ff);
+}
+
+void fill(unsigned int x, unsigned int y, unsigned int width, unsigned int height, unsigned int color) {
+  for (int j = y; j < y+height; j++) {
+    for (int i = x; i < x+width; i++) {
+      putpixel(i,j,color);
+    }
+  }
+}
+
 extern "C" __attribute__((ms_abi)) unsigned long long boot(void* ImageHandle, struct SystemTable* SystemTable) {
   SystemTable->BootServices->SetWatchdogTimer(0, 0, 0, 0);
   SystemTable->ConsoleOutput->ClearScreen(SystemTable->ConsoleOutput);
-  SystemTable->ConsoleOutput->OutputString(SystemTable->ConsoleOutput, (unsigned short*) L"Better Opensource Bootloader (BOB)\n\r");
-  
-  SystemTable->ConsoleOutput->OutputString(SystemTable->ConsoleOutput, (unsigned short*) L"Initializing FileSystem...\n\r");
+
+  GUID gopGUID = GOPGUID;
+  GOP* gop;
+  SystemTable->BootServices->LocateProtocol(&gopGUID, (void*)0, (void**)&gop);
+  framebuffer = Framebuffer(gop->Mode->Address, gop->Mode->Size, gop->Mode->ModeInfo->Width, gop->Mode->ModeInfo->Height, gop->Mode->ModeInfo->PPSL);
+
+  addBar();
   LoadedImageProtocol* LoadedImage;
   SystemTable->BootServices->HandleProtocol(ImageHandle, &LoadedImageProtocolGUID, (void**)&LoadedImage);
   DevicePathProtocol* DevicePath;
@@ -21,18 +46,12 @@ extern "C" __attribute__((ms_abi)) unsigned long long boot(void* ImageHandle, st
   SystemTable->BootServices->HandleProtocol(LoadedImage->DeviceHandle, &FileSystemProtocolGUID, (void**)&Volume);
   FileProtocol* FS;
   Volume->OpenVolume(Volume, &FS);
-
-  SystemTable->ConsoleOutput->OutputString(SystemTable->ConsoleOutput, (unsigned short*) L"Initializing GOP...\n\r");
-  GUID gopGUID = GOPGUID;
-  GOP* gop;
-  SystemTable->BootServices->LocateProtocol(&gopGUID, (void*)0, (void**)&gop);
-  Framebuffer framebuffer = Framebuffer(gop->Mode->Address, gop->Mode->Size, gop->Mode->ModeInfo->Width, gop->Mode->ModeInfo->Height, gop->Mode->ModeInfo->PPSL);
+  fill(101, framebuffer.Height-99, (framebuffer.Width-200)/10, 19, 0xffffff);
   
-  SystemTable->ConsoleOutput->OutputString(SystemTable->ConsoleOutput, (unsigned short*) L"Loading Bootlogo...\n\r");
   FileProtocol* image;
   FS->Open(FS, &image, (unsigned short*)L"Echo.tga", 0x0000000000000001, 0);
+  fill(101, framebuffer.Height-99, (framebuffer.Width-200)/9, 19, 0xffffff);
 
-  SystemTable->ConsoleOutput->OutputString(SystemTable->ConsoleOutput, (unsigned short*) L"Getting Bootlogo data...\n\r");
   struct TGAHeader* header;
   unsigned long long headerSize = sizeof(struct TGAHeader);
   SystemTable->BootServices->AllocatePool(2, headerSize, (void**)&header);
@@ -48,10 +67,24 @@ extern "C" __attribute__((ms_abi)) unsigned long long boot(void* ImageHandle, st
   BootLogo->header_ptr = header;
   BootLogo->buffer = buffer;
   image->Close(image);
+  fill(101, framebuffer.Height-99, (framebuffer.Width-200)/8, 19, 0xffffff);
 
-  SystemTable->ConsoleOutput->OutputString(SystemTable->ConsoleOutput, (unsigned short*) L"Loading Font file...\n\r");
+  unsigned int* img = (unsigned int*)BootLogo->buffer;
+  unsigned int height = BootLogo->header_ptr->height;
+  unsigned int width = BootLogo->header_ptr->width;
+  for (unsigned long long dy=0;dy<height;dy++) {
+    for (unsigned long long dx=0;dx<width;dx++) {
+      unsigned long long offset = dx+(height*dy);
+      unsigned int color = *(img+offset);
+      unsigned long long x = dx+(framebuffer.Width/2)-(width/2);
+      unsigned long long y = dy+(framebuffer.Height/2)-(height/2);
+      putpixel(x, y, color);
+    }
+  }
+
   FileProtocol* fontFile;
   FS->Open(FS, &fontFile, (unsigned short*) L"font.psf", 0x0000000000000001, 0);
+  fill(101, framebuffer.Height-99, (framebuffer.Width-200)/7, 19, 0xffffff);
 
   PSFHeader* fontHeader;
   PSFFont* font;
@@ -69,12 +102,12 @@ extern "C" __attribute__((ms_abi)) unsigned long long boot(void* ImageHandle, st
       font->GlyphBuffer = glyphBuffer;
     }
   }
+  fill(101, framebuffer.Height-99, (framebuffer.Width-200)/6, 19, 0xffffff);
 
-  SystemTable->ConsoleOutput->OutputString(SystemTable->ConsoleOutput, (unsigned short int*) L"Loading Inferno...\r\n");
   FileProtocol* KernelFile;
   FS->Open(FS, &KernelFile, (unsigned short*) L"inferno", 0x0000000000000001, 0);
+  fill(101, framebuffer.Height-99, (framebuffer.Width-200)/5, 19, 0xffffff);
 
-  SystemTable->ConsoleOutput->OutputString(SystemTable->ConsoleOutput, (unsigned short int*) L"Verifying Inferno...\r\n");
   ELFHeaders KernelHeaders; {
     unsigned long long FileInfoSize;
     FileInfo* KernelInfo;
@@ -110,8 +143,8 @@ extern "C" __attribute__((ms_abi)) unsigned long long boot(void* ImageHandle, st
       }
     }
   }
+  fill(101, framebuffer.Height-99, (framebuffer.Width-200)/4, 19, 0xffffff);
 
-  SystemTable->ConsoleOutput->OutputString(SystemTable->ConsoleOutput, (unsigned short int*) L"Initializing Memory Map...\r\n");
   MemoryDescriptor* Map = 0;
 	unsigned long long int MapSize, MapKey, DescriptorSize;
 	unsigned int DescriptorVersion; {
@@ -120,8 +153,8 @@ extern "C" __attribute__((ms_abi)) unsigned long long boot(void* ImageHandle, st
 		SystemTable->BootServices->AllocatePool(2, MapSize, (void**)&Map);
 		SystemTable->BootServices->GetMemoryMap(&MapSize, Map, &MapKey, &DescriptorSize, &DescriptorVersion);
 	}
+  fill(101, framebuffer.Height-99, (framebuffer.Width-200)/3, 19, 0xffffff);
 
-  SystemTable->ConsoleOutput->OutputString(SystemTable->ConsoleOutput, (unsigned short int*) L"Getting RSDP...\r\n");
   ConfigurationTable* configTable = SystemTable->ConfigurationTable;
 	void* rsdp = (void*)0; 
 	GUID ACPI2TableGUID = ACPI20TableGUID;
@@ -130,12 +163,11 @@ extern "C" __attribute__((ms_abi)) unsigned long long boot(void* ImageHandle, st
 		if (CompareGUID(&configTable[index].VendorGUID, &ACPI2TableGUID) && strcmp((unsigned char*)"RSD PTR ", (unsigned char*)configTable->VendorTable, 8)) rsdp = (void*)configTable->VendorTable;
 		configTable++;
 	}
+  fill(101, framebuffer.Height-99, (framebuffer.Width-200)/2, 19, 0xffffff);
 
-  SystemTable->ConsoleOutput->OutputString(SystemTable->ConsoleOutput, (unsigned short int*) L"Exiting BootServices...\r\n");
   SystemTable->BootServices->ExitBootServices(ImageHandle, MapKey);
+  fill(101, framebuffer.Height-99, (framebuffer.Width-200), 19, 0xffffff);
 
-  SystemTable->ConsoleOutput->OutputString(SystemTable->ConsoleOutput, (unsigned short int*) L"Loading Inferno...\r\n");
-  SystemTable->ConsoleOutput->ClearScreen(SystemTable->ConsoleOutput);
 	void (*KernelMain)(Framebuffer*, PSFFont*, MemoryDescriptor*, unsigned long long int, unsigned long long int, TGAImage*, void*)=((void (*)(Framebuffer*, PSFFont*, MemoryDescriptor*, unsigned long long int, unsigned long long int, TGAImage*, void*))KernelHeaders.e_entry);
   KernelMain(&framebuffer, font, Map, MapSize, DescriptorSize, BootLogo, rsdp);
   return 0;

@@ -87,23 +87,6 @@ __attribute__((sysv_abi)) void Inferno(Framebuffer* framebuffer, PSFFont* font, 
   outb(PIC2_DATA, 0b11101111);
   asm("sti");
 
-  printf("Printing Bootlogo...\n");
-  ClearBuffer();
-  unsigned int* img = (unsigned int*)BootLogo->buffer;
-  unsigned int height = BootLogo->header_ptr->height;
-  unsigned int width = BootLogo->header_ptr->width;
-  for (size_t dy=0;dy<height;dy++) {
-    for (size_t dx=0;dx<width;dx++) {
-      size_t offset = dx+(height*dy);
-      unsigned int color = *(img+offset);
-      size_t x = dx+(framebuffer->Width/2)-(width/2);
-      size_t y = dy+(framebuffer->Height/2)-(height/2);
-      putpixel(x, y, color);
-    }
-  }
-
-  SwapBuffers();
-
   printf((Allocator.GetFreeMem())/1024/1024);
   printf(" MB of RAM Free\n");
 
