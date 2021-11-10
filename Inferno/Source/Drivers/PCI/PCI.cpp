@@ -8,11 +8,11 @@ namespace PCI {
     PCIDeviceHeader* DeviceHeader = (PCIDeviceHeader*)functionAddress;
     if (DeviceHeader->DeviceID == 0) return;
     if (DeviceHeader->DeviceID == 0xFFFF) return;
-    printf("0x");
-    printf(to_hstring(DeviceHeader->VendorID));
-    printf(" - 0x");
-    printf(to_hstring(DeviceHeader->DeviceID));
-    printf("\n");
+    kprintf("0x");
+    kprintf(to_hstring(DeviceHeader->VendorID));
+    kprintf(" - 0x");
+    kprintf(to_hstring(DeviceHeader->DeviceID));
+    kprintf("\n\r");
   }
   void EnumerateDevice(unsigned long long Address, unsigned long long device) {
     unsigned long long offset = device << 15;

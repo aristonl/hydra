@@ -8,6 +8,7 @@
 #include "Drivers/IO/IO.hpp"
 #include "Drivers/ACPI/ACPI.hpp"
 #include "Drivers/PCI/PCI.hpp"
+#include "Drivers/COM/COM.hpp"
 
 extern uint64_t InfernoStart;
 extern uint64_t InfernoEnd;
@@ -15,9 +16,10 @@ extern uint64_t InfernoEnd;
 IDTR idtr;
 
 __attribute__((sysv_abi)) void Inferno(Framebuffer* framebuffer, PSFFont* font, MemoryDescriptor* Map, unsigned long long int MapSize, unsigned long long int DescriptorSize, TGAImage* BootLogo, ACPI::RSDP2* rsdp) {
+  InitializeSerialDevice();
   SetGlobalFramebuffer(framebuffer);
   SetGlobalFont(font);
-  printf("Loading Global Descriptor Table...\n");
+  kprintf("Loading Global Descriptor Table...\n\r");
   GDTDescriptor descriptor;
   descriptor.Size = sizeof(GDT)-1;
   descriptor.Offset = (uint64_t)&DefaultGDT;
@@ -29,7 +31,7 @@ __attribute__((sysv_abi)) void Inferno(Framebuffer* framebuffer, PSFFont* font, 
   uint64_t kernelPages = (uint64_t)kernelSize/4096+1;
   Allocator.LockPages(&InfernoStart, kernelPages);
 
-  printf("Loading Page Table...\n");
+  kprintf("Loading Page Table...\n\r");
   PageTable* pageTable = (PageTable*)Allocator.RequestPage();
   memset(pageTable, 0, 0x1000);
   pageTableManager = PageTableManager(pageTable);
@@ -49,31 +51,31 @@ __attribute__((sysv_abi)) void Inferno(Framebuffer* framebuffer, PSFFont* font, 
   idtr.Limit = 0x0FFF;
   idtr.Offset = (uint64_t)Allocator.RequestPage();
 
-  printf("Loading Page Fault interrupt...\n");
+  kprintf("Loading Page Fault interrupt...\n\r");
   InterruptDescriptorTableEntry* PageFault = (InterruptDescriptorTableEntry*)(idtr.Offset + 0xE * sizeof(InterruptDescriptorTableEntry));
   PageFault->SetOffset((uint64_t)PageFaultHandler);
   PageFault->type_attr = IDT_TA_InterruptGate;
   PageFault->selector = 0x08;
 
-  printf("Loading Double Fault interrupt...\n");
+  kprintf("Loading Double Fault interrupt...\n\r");
   InterruptDescriptorTableEntry* DoubleFault = (InterruptDescriptorTableEntry*)(idtr.Offset + 0x8 * sizeof(InterruptDescriptorTableEntry));
   DoubleFault->SetOffset((uint64_t)DoubleFaultHandler);
   DoubleFault->type_attr = IDT_TA_InterruptGate;
   DoubleFault->selector = 0x08;
 
-  printf("Loading General Protection Fault interrupt...\n");
+  kprintf("Loading General Protection Fault interrupt...\n\r");
   InterruptDescriptorTableEntry* GeneralProtectionFault = (InterruptDescriptorTableEntry*)(idtr.Offset + 0xD * sizeof(InterruptDescriptorTableEntry));
   GeneralProtectionFault->SetOffset((uint64_t)GeneralProtectionFaultHandler);
   GeneralProtectionFault->type_attr = IDT_TA_InterruptGate;
   GeneralProtectionFault->selector = 0x08;
 
-  printf("Loading PS2 Keyboard interrupt...\n");
+  kprintf("Loading PS2 Keyboard interrupt...\n\r");
   InterruptDescriptorTableEntry* PS2Keyboard = (InterruptDescriptorTableEntry*)(idtr.Offset + 0x21 * sizeof(InterruptDescriptorTableEntry));
   PS2Keyboard->SetOffset((uint64_t)PS2KeyboardHandler);
   PS2Keyboard->type_attr = IDT_TA_InterruptGate;
   PS2Keyboard->selector = 0x08;
 
-  printf("Loading PS2 Mouse interrupt...\n");
+  kprintf("Loading PS2 Mouse interrupt...\n\r");
   InterruptDescriptorTableEntry* PS2Mouse = (InterruptDescriptorTableEntry*)(idtr.Offset + 0x2C * sizeof(InterruptDescriptorTableEntry));
   PS2Mouse->SetOffset((uint64_t)PS2MouseHandler);
   PS2Mouse->type_attr = IDT_TA_InterruptGate;
@@ -87,8 +89,8 @@ __attribute__((sysv_abi)) void Inferno(Framebuffer* framebuffer, PSFFont* font, 
   outb(PIC2_DATA, 0b11101111);
   asm("sti");
 
-  printf((Allocator.GetFreeMem())/1024/1024);
-  printf(" MB of RAM Free\n");
+  kprintf(to_string((Allocator.GetFreeMem()/1024/1024)));
+  kprintf(" MB of RAM Free\n\r");
 
   
   ACPI::SDTHeader* xsdt = (ACPI::SDTHeader*)(rsdp->XSDTAddress);
@@ -97,24 +99,14 @@ __attribute__((sysv_abi)) void Inferno(Framebuffer* framebuffer, PSFFont* font, 
     mcfg = (ACPI::MCFGHeader*)(ACPI::FindTable(xsdt, (char*)"MCFG"));
 
     for (int t=0;t<4;t++) {
-      putc(mcfg->Header.Signature[t], CursorX+=8, CursorY);
+      kputchar(mcfg->Header.Signature[t]);
     }
-    printf("\n");
+    kprintf("\n\r");
     PCI::EnumeratePCI(mcfg);
-  } else printf("Could not locate MCFG!\n");
+  } else kprintf("Could not locate MCFG!\n\r");
 
-  printf("Resolution: ");
-  printf(framebuffer->Width);
-  printf("x");
-  printf(framebuffer->Height);
-  printf("\n");
-  printf("PPSL: ");
-  printf(framebuffer->PPSL);
-  printf("\n");
-
-  printf("Inferno v0.204\n");
+  kprintf("Inferno v0.212\n\r");
   
-
   while(true) asm("hlt");
 }
 

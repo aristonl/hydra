@@ -2,6 +2,7 @@
 #include "../ACPI/ACPI.hpp"
 #include "../Memory/Memory.hpp"
 #include "../../Graphics/Font/Font.hpp"
+#include "../COM/COM.hpp"
 
 namespace PCI {
   struct PCIDeviceHeader {
