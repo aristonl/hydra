@@ -32,8 +32,14 @@ uint64_t GetMemorySize(MemoryDescriptor* Map, uint64_t MapEntries, uint64_t Desc
   return memorySizeBytes;
 }
 
-void memset(void* start, uint8_t value, uint64_t num) {
-  for (uint64_t i=0;i<num;i++) *(uint8_t*)((uint64_t)start+i)=value;
+void* memset(void* s, uint8_t c, uint64_t len) {
+  unsigned char *dst = (unsigned char*) s;
+  while (len > 0) {
+    *dst = (unsigned char) c;
+    dst++;
+    len--;
+  }
+  return s;
 }
 
 bool Bitmap::operator[](uint64_t index) {
@@ -349,9 +355,16 @@ void HeapSegHdr::CombineBackward() {
   if (last != NULL && last->free) last->CombineForward();
 }
 
-void memcpy(void *dest, void *src, size_t n) {
-  int i;
-  char* src_char = (char*)src;
-  char* dest_char = (char*)dest;
-  for (i=0; i<n; i++) dest_char[i] = src_char[i];
+void* memcpy(void *dst, const void *src, size_t len) {
+  size_t i;
+  if ((uintptr_t)dst % sizeof(long) == 0 && (uintptr_t)src % sizeof(long) == 0 && len % sizeof(long) == 0) {
+    long *d = (long*) dst;
+    const long *s = (long*) src;
+    for (i=0; i<len/sizeof(long); i++) d[i] = s[i];
+  } else {
+    char *d = (char*) dst;
+    const char *s = (char*) src;
+    for (i=0; i<len; i++) d[i] = s[i];
+  }
+  return dst;
 }

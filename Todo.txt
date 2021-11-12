@@ -1,8 +1,3 @@
-- Keyboard PS2 Driver
-- Mouse PS2 Driver
-- PCI Driver
-- Memory Stuff
-- PIT
 - AHCI
 
 - FileSystem (ext2)

@@ -14,10 +14,10 @@ void putpixel(unsigned int x, unsigned int y, unsigned int color) {
 }
 
 void addBar() {
-  for (unsigned int y=framebuffer.Height-100;y<=framebuffer.Height-100+20;y++) putpixel(100,y,0x0000ff);
-  for (unsigned int x=100;x<=framebuffer.Width-100;x++) putpixel(x,framebuffer.Height-100,0x0000ff);
-  for (unsigned int x=100;x<=framebuffer.Width-100;x++) putpixel(x,framebuffer.Height-100+20,0x0000ff);
-  for (unsigned int y=framebuffer.Height-100;y<=framebuffer.Height-100+20;y++) putpixel(framebuffer.Width-100,y,0x0000ff);
+  for (unsigned int y=framebuffer.Height-100;y<=framebuffer.Height-100+20;y++) putpixel(100,y,0xcccccc);
+  for (unsigned int x=100;x<=framebuffer.Width-100;x++) putpixel(x,framebuffer.Height-100,0xcccccc);
+  for (unsigned int x=100;x<=framebuffer.Width-100;x++) putpixel(x,framebuffer.Height-100+20,0xcccccc);
+  for (unsigned int y=framebuffer.Height-100;y<=framebuffer.Height-100+20;y++) putpixel(framebuffer.Width-100,y,0xcccccc);
 }
 
 void fill(unsigned int x, unsigned int y, unsigned int width, unsigned int height, unsigned int color) {

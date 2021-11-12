@@ -19,6 +19,7 @@ __attribute__((sysv_abi)) void Inferno(Framebuffer* framebuffer, PSFFont* font, 
   InitializeSerialDevice();
   SetGlobalFramebuffer(framebuffer);
   SetGlobalFont(font);
+  printf("Inferno");
   kprintf("Loading Global Descriptor Table...\n\r");
   GDTDescriptor descriptor;
   descriptor.Size = sizeof(GDT)-1;
@@ -44,8 +45,7 @@ __attribute__((sysv_abi)) void Inferno(Framebuffer* framebuffer, PSFFont* font, 
   InitializeHeap((void*)0x0000100000000000, 0x10);
   backbuffer = ((uint8_t*) (malloc(framebuffer->Width * framebuffer->Height * 4)));
   ClearBuffer();
-  SwapBuffers();
-  CursorX = 0; CursorY = 0;
+  memset(backbuffer, 0xFF, framebuffer->Width * framebuffer->Height * 4);
 
   LoadGDT(&descriptor);
   idtr.Limit = 0x0FFF;
@@ -105,7 +105,7 @@ __attribute__((sysv_abi)) void Inferno(Framebuffer* framebuffer, PSFFont* font, 
     PCI::EnumeratePCI(mcfg);
   } else kprintf("Could not locate MCFG!\n\r");
 
-  kprintf("Inferno v0.212\n\r");
+  SwapBuffers();
   
   while(true) asm("hlt");
 }

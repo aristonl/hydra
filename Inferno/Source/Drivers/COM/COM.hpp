@@ -1,7 +1,7 @@
 #pragma once
 #include "../IO/IO.hpp"
 
-int InitializeSerialDevice();
+void InitializeSerialDevice();
 char AwaitSerialResponse();
 void kputchar(char a);
 void kprintf(const char* str);

@@ -8,7 +8,7 @@ struct MemoryDescriptor {
 };
 
 uint64_t GetMemorySize(MemoryDescriptor* Map, uint64_t MapEntries, uint64_t DescriptorSize);
-void memset(void* start, uint8_t value, uint64_t num);
+void* memset(void* s, uint8_t c, uint64_t len);
 
 class Bitmap {
   public:
@@ -101,4 +101,4 @@ extern const char* MemoryTypesStrings[];
 extern PageFrameAllocator Allocator;
 extern PageTableManager pageTableManager;
 
-void memcpy(void *dest, void *src, size_t n);
+void* memcpy(void *dst, const void *src, size_t len);
