@@ -3,6 +3,7 @@
 #include "../../Graphics/Font/Font.hpp"
 #include "../Graphics/GOP/GOP.hpp"
 #include "../Memory/Memory.hpp"
+#include "../PIT/PIT.hpp"
 
 size_t strlen(const char *str) {
   const char* s;
@@ -42,6 +43,11 @@ Interrupt void PS2KeyboardHandler(struct InterruptFrame* frame) {
 Interrupt void PS2MouseHandler(struct InterruptFrame* frame) {
   uint8_t data = inb(0x60);
   PICEndSlave();
+}
+
+Interrupt void PITHandler(struct InterruptFrame* frame) {
+  PIT::Tick();
+  PICEndMaster();
 }
 
 void PICEndMaster() {

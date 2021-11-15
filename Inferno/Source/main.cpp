@@ -9,13 +9,14 @@
 #include "Drivers/ACPI/ACPI.hpp"
 #include "Drivers/PCI/PCI.hpp"
 #include "Drivers/COM/COM.hpp"
+#include "Drivers/PIT/PIT.hpp"
 
 extern uint64_t InfernoStart;
 extern uint64_t InfernoEnd;
 
 IDTR idtr;
 
-__attribute__((sysv_abi)) void Inferno(Framebuffer* framebuffer, PSFFont* font, MemoryDescriptor* Map, unsigned long long int MapSize, unsigned long long int DescriptorSize, TGAImage* BootLogo, ACPI::RSDP2* rsdp) {
+__attribute__((sysv_abi)) void Inferno(Framebuffer* framebuffer, PSFFont* font, MemoryDescriptor* Map, unsigned long long int MapSize, unsigned long long int DescriptorSize, ACPI::RSDP2* rsdp) {
   InitializeSerialDevice();
   SetGlobalFramebuffer(framebuffer);
   SetGlobalFont(font);
@@ -45,7 +46,8 @@ __attribute__((sysv_abi)) void Inferno(Framebuffer* framebuffer, PSFFont* font, 
   InitializeHeap((void*)0x0000100000000000, 0x10);
   backbuffer = ((uint8_t*) (malloc(framebuffer->Width * framebuffer->Height * 4)));
   ClearBuffer();
-  memset(backbuffer, 0xFF, framebuffer->Width * framebuffer->Height * 4);
+  memset(backbuffer, 0, framebuffer->Width * framebuffer->Height * 4);
+  SwapBuffers();
 
   LoadGDT(&descriptor);
   idtr.Limit = 0x0FFF;
@@ -81,13 +83,21 @@ __attribute__((sysv_abi)) void Inferno(Framebuffer* framebuffer, PSFFont* font, 
   PS2Mouse->type_attr = IDT_TA_InterruptGate;
   PS2Mouse->selector = 0x08;
 
+  kprintf("Loading PIT...\n\r");
+  InterruptDescriptorTableEntry* PITInterrupt = (InterruptDescriptorTableEntry*)(idtr.Offset + 0x20 * sizeof(InterruptDescriptorTableEntry));
+  PITInterrupt->SetOffset((uint64_t)PITHandler);
+  PITInterrupt->type_attr = IDT_TA_InterruptGate;
+  PITInterrupt->selector = 0x08;
+
   asm("lidt %0" :: "m" (idtr));
 
   MapPIC();
   
-  outb(PIC1_DATA, 0b11111001);
+  outb(PIC1_DATA, 0b11111000);
   outb(PIC2_DATA, 0b11101111);
   asm("sti");
+
+  PIT::SetDivisor(2000);
 
   kprintf(to_string((Allocator.GetFreeMem()/1024/1024)));
   kprintf(" MB of RAM Free\n\r");
@@ -104,12 +114,10 @@ __attribute__((sysv_abi)) void Inferno(Framebuffer* framebuffer, PSFFont* font, 
     kprintf("\n\r");
     PCI::EnumeratePCI(mcfg);
   } else kprintf("Could not locate MCFG!\n\r");
-
-  SwapBuffers();
   
   while(true) asm("hlt");
 }
 
-__attribute__((ms_abi)) void main(Framebuffer* framebuffer, PSFFont* font, MemoryDescriptor* Map, unsigned long long int MapSize, unsigned long long int DescriptorSize, TGAImage* BootLogo, ACPI::RSDP2* rsdp) {
-  Inferno(framebuffer, font, Map, MapSize, DescriptorSize, BootLogo, rsdp);
+__attribute__((ms_abi)) void main(Framebuffer* framebuffer, PSFFont* font, MemoryDescriptor* Map, unsigned long long int MapSize, unsigned long long int DescriptorSize, ACPI::RSDP2* rsdp) {
+  Inferno(framebuffer, font, Map, MapSize, DescriptorSize, rsdp);
 }

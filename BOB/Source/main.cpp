@@ -168,7 +168,7 @@ extern "C" __attribute__((ms_abi)) unsigned long long boot(void* ImageHandle, st
   SystemTable->BootServices->ExitBootServices(ImageHandle, MapKey);
   fill(101, framebuffer.Height-99, (framebuffer.Width-200), 19, 0xffffff);
 
-	void (*KernelMain)(Framebuffer*, PSFFont*, MemoryDescriptor*, unsigned long long int, unsigned long long int, TGAImage*, void*)=((void (*)(Framebuffer*, PSFFont*, MemoryDescriptor*, unsigned long long int, unsigned long long int, TGAImage*, void*))KernelHeaders.e_entry);
-  KernelMain(&framebuffer, font, Map, MapSize, DescriptorSize, BootLogo, rsdp);
+	void (*KernelMain)(Framebuffer*, PSFFont*, MemoryDescriptor*, unsigned long long int, unsigned long long int, void*)=((void (*)(Framebuffer*, PSFFont*, MemoryDescriptor*, unsigned long long int, unsigned long long int, void*))KernelHeaders.e_entry);
+  KernelMain(&framebuffer, font, Map, MapSize, DescriptorSize, rsdp);
   return 0;
 }

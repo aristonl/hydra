@@ -18,6 +18,7 @@ Interrupt void DoubleFaultHandler(InterruptFrame* frame);
 Interrupt void GeneralProtectionFaultHandler(InterruptFrame* frame);
 Interrupt void PS2KeyboardHandler(InterruptFrame* frame);
 Interrupt void PS2MouseHandler(InterruptFrame* frame);
+Interrupt void PITHandler(InterruptFrame* frame);
 
 void MapPIC();
 void PICEndMaster();
