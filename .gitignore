@@ -10,3 +10,4 @@ Build/ISO/inferno
 .idea/
 build.config
 .vagrant/
+*.log
