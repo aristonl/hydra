@@ -15,7 +15,5 @@ jobs:
         run: sudo apt update
       - name: Install Dependencies
         run: sudo apt install mtools xorriso qemu qemu-system mingw-w64 ovmf
-      - name: make setup
-        run: make setup
       - name: make
         run: make BOB Inferno image iso

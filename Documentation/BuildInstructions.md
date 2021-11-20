@@ -19,10 +19,6 @@ vagrant up
 ```
 If you get an error while building that says Connection to 127.0.0.1 closed. You can ignore it.
 ## Building
-In order to build Echo, you will need to first configure your build by running the following command:
-```bash
-make setup
-```
 It may ask you to enter text so input as needed (ex: Docker Container Name for macOS).
 Following this, you can `git pull` as needed. You won't usually need to reconfigure your build after it.
 <br>
