@@ -16,11 +16,7 @@ extern uint64_t InfernoEnd;
 
 IDTR idtr;
 
-__attribute__((sysv_abi)) void Inferno(Framebuffer* framebuffer, PSFFont* font, MemoryDescriptor* Map, unsigned long long int MapSize, unsigned long long int DescriptorSize, ACPI::RSDP2* rsdp) {
-  InitializeSerialDevice();
-  SetGlobalFramebuffer(framebuffer);
-  SetGlobalFont(font);
-  printf("Inferno");
+__attribute__((sysv_abi)) void Inferno(MemoryDescriptor* Map, unsigned long long int MapSize, unsigned long long int DescriptorSize, ACPI::RSDP2* rsdp) {
   kprintf("Loading Global Descriptor Table...\n\r");
   GDTDescriptor descriptor;
   descriptor.Size = sizeof(GDT)-1;
@@ -114,10 +110,13 @@ __attribute__((sysv_abi)) void Inferno(Framebuffer* framebuffer, PSFFont* font, 
     kprintf("\n\r");
     PCI::EnumeratePCI(mcfg);
   } else kprintf("Could not locate MCFG!\n\r");
-  
-  while(true) asm("hlt");
 }
 
 __attribute__((ms_abi)) void main(Framebuffer* framebuffer, PSFFont* font, MemoryDescriptor* Map, unsigned long long int MapSize, unsigned long long int DescriptorSize, ACPI::RSDP2* rsdp) {
-  Inferno(framebuffer, font, Map, MapSize, DescriptorSize, rsdp);
+  InitializeSerialDevice();
+  SetGlobalFramebuffer(framebuffer);
+  SetGlobalFont(font);
+  Inferno(Map, MapSize, DescriptorSize, rsdp);
+  
+  while(true) asm("hlt");
 }
