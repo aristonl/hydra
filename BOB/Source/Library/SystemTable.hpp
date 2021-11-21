@@ -8,12 +8,9 @@ struct SystemTable {
   struct TableHeaders Headers;
   unsigned short int* FirmwareVendor;
   unsigned int FirmwareVersion;
-  void* ConsoleInputHandle;
-  void* ConsoleInput;
-  void* ConsoleOutputHandle;
+  void* ConsoleInputHandle, *ConsoleInput, *ConsoleOutputHandle;
   struct TextProtocol* ConsoleOutput;
-  void* StandardErrorHandle, *StandardError;
-  void* RuntimeServices;
+  void* StandardErrorHandle, *StandardError, *RuntimeServices;
   struct BootServices* BootServices;
   unsigned long long NumberOfEntries;
   struct ConfigurationTable* ConfigurationTable;

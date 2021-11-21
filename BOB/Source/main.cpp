@@ -33,7 +33,7 @@ void fill(unsigned int x, unsigned int y, unsigned int width, unsigned int heigh
 extern "C" __attribute__((ms_abi)) unsigned long long boot(void* ImageHandle, struct SystemTable* SystemTable) {
   unsigned long long status = 0;
   CheckStatus SystemTable->BootServices->SetWatchdogTimer(0, 0, 0, 0);
-  CheckStatus SystemTable->ConsoleOutput->ClearScreen(SystemTable->ConsoleOutput);
+  CheckStatus SystemTable->ConsoleOutput->Clear(SystemTable->ConsoleOutput);
 
   MemoryDescriptor* Map = 0;
 	unsigned long long int MapSize, MapKey, DescriptorSize;
@@ -68,15 +68,15 @@ extern "C" __attribute__((ms_abi)) unsigned long long boot(void* ImageHandle, st
     unsigned long long headerSize = sizeof(struct TGAHeader);
     CheckStatus SystemTable->BootServices->AllocatePool(2, headerSize, (void**)&header);
     CheckStatus image->Read(image, &headerSize, header);
-    unsigned long long bufferSize = header->width*header->height*header->bbp/8;
+    unsigned long long bufferSize = header->Width*header->Height*header->BytesPerPixel/8;
     void* buffer; {
       CheckStatus image->SetPosition(image, headerSize);
       CheckStatus SystemTable->BootServices->AllocatePool(2, bufferSize, (void**)&buffer);
       CheckStatus image->Read(image, &bufferSize, buffer);
     }
     CheckStatus SystemTable->BootServices->AllocatePool(2, sizeof(struct TGAImage), (void**)&BootLogo);
-    BootLogo->header_ptr = header;
-    BootLogo->buffer = buffer;
+    BootLogo->Pointer = header;
+    BootLogo->Buffer = buffer;
     CheckStatus image->Close(image);
   }
 
@@ -90,15 +90,15 @@ extern "C" __attribute__((ms_abi)) unsigned long long boot(void* ImageHandle, st
     unsigned long long headerSize = sizeof(struct TGAHeader);
     CheckStatus SystemTable->BootServices->AllocatePool(2, headerSize, (void**)&header);
     CheckStatus image->Read(image, &headerSize, header);
-    unsigned long long bufferSize = header->width*header->height*header->bbp/8;
+    unsigned long long bufferSize = header->Width*header->Height*header->BytesPerPixel/8;
     void* buffer; {
       CheckStatus image->SetPosition(image, headerSize);
       CheckStatus SystemTable->BootServices->AllocatePool(2, bufferSize, (void**)&buffer);
       CheckStatus image->Read(image, &bufferSize, buffer);
     }
     CheckStatus SystemTable->BootServices->AllocatePool(2, sizeof(struct TGAImage), (void**)&ErrorIcon);
-    ErrorIcon->header_ptr = header;
-    ErrorIcon->buffer = buffer;
+    ErrorIcon->Pointer = header;
+    ErrorIcon->Buffer = buffer;
     CheckStatus image->Close(image);
   }
 
@@ -111,8 +111,8 @@ extern "C" __attribute__((ms_abi)) unsigned long long boot(void* ImageHandle, st
   CheckStatus SystemTable->BootServices->AllocatePool(2, sizeof(PSFHeader), (void**)&fontHeader);
   unsigned long long fontSize = sizeof(fontHeader);
   CheckStatus fontFile->Read(fontFile, &fontSize, fontHeader);
-  if (fontHeader->magic[0] == 0x36 || fontHeader->magic[1] == 0x04) {
-    unsigned long long glyphBufferSize = fontHeader->charSize*256;
+  if (fontHeader->Magic[0] == 0x36 || fontHeader->Magic[1] == 0x04) {
+    unsigned long long glyphBufferSize = fontHeader->GlyphSize*256;
     void* glyphBuffer; {
       CheckStatus fontFile->SetPosition(fontFile, sizeof(PSFHeader));
       CheckStatus SystemTable->BootServices->AllocatePool(2, glyphBufferSize, (void**)&glyphBuffer);
@@ -138,26 +138,26 @@ extern "C" __attribute__((ms_abi)) unsigned long long boot(void* ImageHandle, st
     CheckStatus KernelFile->Read(KernelFile, &size, &KernelHeaders);
   }
 
-  if (memcmp(&KernelHeaders.e_ident[0], "\u007fELF\0", 4) != 0 || KernelHeaders.e_ident[4] != 2 || KernelHeaders.e_ident[5] != 1 || KernelHeaders.e_type != 2 || KernelHeaders.e_machine != 62 || KernelHeaders.e_version != 1) {
-    CheckStatus SystemTable->ConsoleOutput->OutputString(SystemTable->ConsoleOutput, (unsigned short int*) L"Error whilst loading Inferno!\r\nPlease DO NOT modify Inferno without experience!");
+  if (memcmp(&KernelHeaders.Identifier[0], "\u007fELF\0", 4) != 0 || KernelHeaders.Identifier[4] != 2 || KernelHeaders.Identifier[5] != 1 || KernelHeaders.Type != 2 || KernelHeaders.Machine != 62 || KernelHeaders.Version != 1) {
+    CheckStatus SystemTable->ConsoleOutput->Print(SystemTable->ConsoleOutput, (unsigned short int*) L"Error whilst loading Inferno!\r\nPlease DO NOT modify Inferno without experience!");
     return 1;
   }
 
   ELFProgramHeaders* ProgramHeaders; {
-    CheckStatus KernelFile->SetPosition(KernelFile, KernelHeaders.e_phoff);
-    unsigned long long size = KernelHeaders.e_phnum*KernelHeaders.e_phentsize;
+    CheckStatus KernelFile->SetPosition(KernelFile, KernelHeaders.ProgramHeaderOffset);
+    unsigned long long size = KernelHeaders.ProgramHeaderEntries*KernelHeaders.ProgramHeaderEntrySize;
     CheckStatus SystemTable->BootServices->AllocatePool(2, size, (void**)&ProgramHeaders);
     CheckStatus KernelFile->Read(KernelFile, &size, ProgramHeaders);
   }
 
-  for (ELFProgramHeaders* ProgramHeader=ProgramHeaders;(char*)ProgramHeader<(char*)ProgramHeaders+KernelHeaders.e_phnum*KernelHeaders.e_phentsize;ProgramHeader=(ELFProgramHeaders*)((char*)ProgramHeader+KernelHeaders.e_phentsize)) {
-    switch (ProgramHeader->p_type) {
+  for (ELFProgramHeaders* ProgramHeader=ProgramHeaders;(char*)ProgramHeader<(char*)ProgramHeaders+KernelHeaders.ProgramHeaderEntries*KernelHeaders.ProgramHeaderEntrySize;ProgramHeader=(ELFProgramHeaders*)((char*)ProgramHeader+KernelHeaders.ProgramHeaderEntrySize)) {
+    switch (ProgramHeader->Type) {
       case 1: {
-        int pages=(ProgramHeader->p_memsz+0x1000-1)/0x1000;
-        unsigned long long segment=ProgramHeader->p_paddr;
+        int pages=(ProgramHeader->MemorySize+0x1000-1)/0x1000;
+        unsigned long long segment=ProgramHeader->PhysicalAddress;
         CheckStatus SystemTable->BootServices->AllocatePages(AllocateAddress, 2, pages, &segment);
-        CheckStatus KernelFile->SetPosition(KernelFile, ProgramHeader->p_offset);
-        unsigned long long size = ProgramHeader->p_filesz;
+        CheckStatus KernelFile->SetPosition(KernelFile, ProgramHeader->Offset);
+        unsigned long long size = ProgramHeader->FileSize;
         CheckStatus KernelFile->Read(KernelFile, &size, (void*)segment);
         break;
       }
@@ -184,7 +184,7 @@ extern "C" __attribute__((ms_abi)) unsigned long long boot(void* ImageHandle, st
   SystemTable->BootServices->ExitBootServices(ImageHandle, MapKey);
   fill(101, framebuffer.Height-99, (framebuffer.Width-200), 19, 0xffffff);
 
-	void (*KernelMain)(Framebuffer*, PSFFont*, MemoryDescriptor*, unsigned long long int, unsigned long long int, void*)=((void (*)(Framebuffer*, PSFFont*, MemoryDescriptor*, unsigned long long int, unsigned long long int, void*))KernelHeaders.e_entry);
+	void (*KernelMain)(Framebuffer*, PSFFont*, MemoryDescriptor*, unsigned long long int, unsigned long long int, void*)=((void (*)(Framebuffer*, PSFFont*, MemoryDescriptor*, unsigned long long int, unsigned long long int, void*))KernelHeaders.Entry);
   KernelMain(&framebuffer, font, Map, MapSize, DescriptorSize, rsdp);
   fill(0, 0, framebuffer.Width, framebuffer.Height, 0);
   PrintTGA(ErrorIcon, SystemTable, framebuffer, framebuffer.Width/2, framebuffer.Height/2);

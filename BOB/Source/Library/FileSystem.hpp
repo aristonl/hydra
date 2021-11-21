@@ -25,9 +25,7 @@ struct LoadedImageProtocol {
 #ifndef FileInfo
 
 struct FileInfo {
-  unsigned long long Size;
-  unsigned long long FileSize;
-  unsigned long long PhysicalSize;
+  unsigned long long Size, FileSize, PhysicalSize;
   void* CreateTime, *LastAccessTime, *ModificationTime;
   unsigned long long Attribute;
   unsigned short int FileName[];

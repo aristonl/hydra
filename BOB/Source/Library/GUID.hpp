@@ -2,8 +2,7 @@
 
 struct GUID {
   unsigned int Data1;
-  unsigned short Data2;
-  unsigned short Data3;
+  unsigned short Data2, Data3;
   unsigned char Data4[8];
 };
 
@@ -31,13 +30,13 @@ struct GUID ACPI20TableGUID = {0x8868e871, 0xe4f1, 0x11d3, {0xbc, 0x22, 0x00, 0x
 #ifndef CompareGUID
 
 unsigned long long CompareGUID(GUID* GUID1, GUID* GUID2) {
-  int *g1, *g2, r;
-  g1 = (int *) GUID1;
-  g2 = (int *) GUID2;
-  r = g1[0] - g2[0];
-  r |= g1[1] - g2[1];
-  r |= g1[2] - g2[2];
-  r |= g1[3] - g2[3];
+  int* g1, *g2, r;
+  g1 = (int*)GUID1;
+  g2 = (int*)GUID2;
+  r = g1[0]-g2[0];
+  r |= g1[1]-g2[1];
+  r |= g1[2]-g2[2];
+  r |= g1[3]-g2[3];
   return r;
 }
 

@@ -1,7 +1,7 @@
 #ifndef PSFHeader
 
 struct PSFHeader {
-  unsigned char magic[2], mode, charSize;
+  unsigned char Magic[2], Mode, GlyphSize;
 };
 
 #endif

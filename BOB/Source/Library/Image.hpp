@@ -1,11 +1,11 @@
 #ifndef TGAHeader
 
 struct TGAHeader {
-	unsigned char id_length, color_map_type, image_type;
-	unsigned short color_map_index, color_map_length;
-	unsigned char depth;
-	unsigned short xorg, yorg, width, height;
-	unsigned char bbp, descriptor;
+	unsigned char IDSize, ColorMapType, ImageType;
+	unsigned short ColorMapIndex, ColorMapSize;
+	unsigned char Depth;
+	unsigned short X, Y, Width, Height;
+	unsigned char BytesPerPixel, Descriptor;
 } __attribute__((packed));
 
 #endif
@@ -13,8 +13,8 @@ struct TGAHeader {
 #ifndef TGAImage
 
 struct TGAImage {
-  struct TGAHeader* header_ptr;
-  void* buffer;
+  struct TGAHeader* Pointer;
+  void* Buffer;
 };
 
 #endif
@@ -22,9 +22,9 @@ struct TGAImage {
 #ifndef PrintTGA
 
 void PrintTGA(struct TGAImage* image, struct SystemTable* SystemTable, Framebuffer framebuffer, unsigned int x0, unsigned int y0) {
-  unsigned int* img = (unsigned int*)image->buffer;
-  unsigned int height = image->header_ptr->height;
-  unsigned int width = image->header_ptr->width;
+  unsigned int* img = (unsigned int*)image->Buffer;
+  unsigned int height = image->Pointer->Height;
+  unsigned int width = image->Pointer->Width;
   for (unsigned long long dy=0;dy<height;dy++) {
     for (unsigned long long dx=0;dx<width;dx++) {
       unsigned long long offset = dx+(height*dy);

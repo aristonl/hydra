@@ -6,10 +6,7 @@ enum AllocationType { AllocateAnyPages, AllocateMaxAddress, AllocateAddress, Max
 
 struct MemoryDescriptor {
   unsigned int Type;
-  unsigned long long PhysicalStart;
-  unsigned long long VirtualStart;
-  unsigned long long NumberOfPages;
-  unsigned long long Attribute;
+  unsigned long long PhysicalStart, VirtualStart, NumberOfPages, Attribute;
 };
 
 #endif
