@@ -22,9 +22,9 @@ This repository has 3 main sections, BOB (our bootloader), Inferno (the kernel),
 - Memory Drivers (Allocation, Paging, etc...)
 - Panic Screen (blue screen)
 - PS2 Keyboard and Mouse drivers
+- PCI Driver
 
 ## Coming Soon
-- PCI Driver
 - AHCI Driver
 - ext2 File System Support
 
