@@ -8,6 +8,5 @@
 Build/ISO/inferno
 .vscode/
 .idea/
-build.config
 .vagrant/
 *.log
