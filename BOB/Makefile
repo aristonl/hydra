@@ -9,4 +9,4 @@ Build/%.o: Source/%.cpp
 	@-x86_64-w64-mingw32-gcc -Werror -m64 -maccumulate-outgoing-args -ffreestanding -c $^ -o $@
 
 all: $(Objects)
-	@x86_64-w64-mingw32-gcc Build/main.o -Werror -m64 -nostdlib -shared -Wl,-dll -Wl,--subsystem,10 -e boot -o ../Build/ISO/EFI/BOOT/bootx64.efi
+	@x86_64-w64-mingw32-gcc $(Objects) -Werror -m64 -nostdlib -shared -Wl,-dll -Wl,--subsystem,10 -e boot -o ../Build/ISO/EFI/BOOT/bootx64.efi
