@@ -10,11 +10,11 @@ Directories = $(wildcard Source/*)
 
 Build/Drivers/Interrupts/Interrupts.o: Source/Drivers/Interrupts/Interrupts.cpp
 	@-mkdir -p $(@D)
-	@-gcc -ffreestanding -fshort-wchar -mabi=sysv -no-pie -mno-red-zone -mgeneral-regs-only -c $^ -o $@
+	@-gcc -ffreestanding -fshort-wchar -mabi=sysv -no-pie -mno-red-zone -mgeneral-regs-only -fno-exceptions -c $^ -o $@
 
 Build/%.o: Source/%.cpp
 	@-mkdir -p $(@D)
-	@-g++ -ffreestanding -fshort-wchar -fstack-protector -mno-red-zone -mabi=sysv -no-pie -c $^ -o $@
+	@-g++ -ffreestanding -fshort-wchar -fstack-protector -mno-red-zone -mabi=sysv -no-pie -fno-exceptions -c $^ -o $@
 
 Build/%.so: Source/%.s
 	@-mkdir -p $(@D)

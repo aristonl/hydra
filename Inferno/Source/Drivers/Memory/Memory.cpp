@@ -43,6 +43,10 @@ void* memset(void* s, uint8_t c, uint64_t len) {
 }
 
 bool Bitmap::operator[](uint64_t index) {
+  return Get(index);
+}
+
+bool Bitmap::Get(uint64_t index) {
   if (index >= Size*8) return false;
   uint64_t byteIndex = index/8;
   uint8_t bitIndex = index%8;
@@ -348,6 +352,7 @@ void HeapSegHdr::CombineForward() {
   if (!next->free) return;
   if (next == LastHdr) LastHdr = this;
   if (next->next != NULL) next->next->last = this;
+  next = next->next;
   length = length + next->length + sizeof(HeapSegHdr);
 }
 

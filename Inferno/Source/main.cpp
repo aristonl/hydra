@@ -17,7 +17,7 @@ extern uint64_t InfernoEnd;
 IDTR idtr;
 
 __attribute__((sysv_abi)) void Inferno(MemoryDescriptor* Map, unsigned long long int MapSize, unsigned long long int DescriptorSize, ACPI::RSDP2* rsdp) {
-  kprintf("Loading Global Descriptor Table...\n\r");
+  kprintf("Loading Global Descriptor Table...\n");
   GDTDescriptor descriptor;
   descriptor.Size = sizeof(GDT)-1;
   descriptor.Offset = (uint64_t)&DefaultGDT;
@@ -29,7 +29,7 @@ __attribute__((sysv_abi)) void Inferno(MemoryDescriptor* Map, unsigned long long
   uint64_t kernelPages = (uint64_t)kernelSize/4096+1;
   Allocator.LockPages(&InfernoStart, kernelPages);
 
-  kprintf("Loading Page Table...\n\r");
+  kprintf("Loading Page Table...\n");
   PageTable* pageTable = (PageTable*)Allocator.RequestPage();
   memset(pageTable, 0, 0x1000);
   pageTableManager = PageTableManager(pageTable);
@@ -49,37 +49,37 @@ __attribute__((sysv_abi)) void Inferno(MemoryDescriptor* Map, unsigned long long
   idtr.Limit = 0x0FFF;
   idtr.Offset = (uint64_t)Allocator.RequestPage();
 
-  kprintf("Loading Page Fault interrupt...\n\r");
+  kprintf("Loading Page Fault interrupt...\n");
   InterruptDescriptorTableEntry* PageFault = (InterruptDescriptorTableEntry*)(idtr.Offset + 0xE * sizeof(InterruptDescriptorTableEntry));
   PageFault->SetOffset((uint64_t)PageFaultHandler);
   PageFault->type_attr = IDT_TA_InterruptGate;
   PageFault->selector = 0x08;
 
-  kprintf("Loading Double Fault interrupt...\n\r");
+  kprintf("Loading Double Fault interrupt...\n");
   InterruptDescriptorTableEntry* DoubleFault = (InterruptDescriptorTableEntry*)(idtr.Offset + 0x8 * sizeof(InterruptDescriptorTableEntry));
   DoubleFault->SetOffset((uint64_t)DoubleFaultHandler);
   DoubleFault->type_attr = IDT_TA_InterruptGate;
   DoubleFault->selector = 0x08;
 
-  kprintf("Loading General Protection Fault interrupt...\n\r");
+  kprintf("Loading General Protection Fault interrupt...\n");
   InterruptDescriptorTableEntry* GeneralProtectionFault = (InterruptDescriptorTableEntry*)(idtr.Offset + 0xD * sizeof(InterruptDescriptorTableEntry));
   GeneralProtectionFault->SetOffset((uint64_t)GeneralProtectionFaultHandler);
   GeneralProtectionFault->type_attr = IDT_TA_InterruptGate;
   GeneralProtectionFault->selector = 0x08;
 
-  kprintf("Loading PS2 Keyboard interrupt...\n\r");
+  kprintf("Loading PS2 Keyboard interrupt...\n");
   InterruptDescriptorTableEntry* PS2Keyboard = (InterruptDescriptorTableEntry*)(idtr.Offset + 0x21 * sizeof(InterruptDescriptorTableEntry));
   PS2Keyboard->SetOffset((uint64_t)PS2KeyboardHandler);
   PS2Keyboard->type_attr = IDT_TA_InterruptGate;
   PS2Keyboard->selector = 0x08;
 
-  kprintf("Loading PS2 Mouse interrupt...\n\r");
+  kprintf("Loading PS2 Mouse interrupt...\n");
   InterruptDescriptorTableEntry* PS2Mouse = (InterruptDescriptorTableEntry*)(idtr.Offset + 0x2C * sizeof(InterruptDescriptorTableEntry));
   PS2Mouse->SetOffset((uint64_t)PS2MouseHandler);
   PS2Mouse->type_attr = IDT_TA_InterruptGate;
   PS2Mouse->selector = 0x08;
 
-  kprintf("Loading PIT...\n\r");
+  kprintf("Loading PIT...\n");
   InterruptDescriptorTableEntry* PITInterrupt = (InterruptDescriptorTableEntry*)(idtr.Offset + 0x20 * sizeof(InterruptDescriptorTableEntry));
   PITInterrupt->SetOffset((uint64_t)PITHandler);
   PITInterrupt->type_attr = IDT_TA_InterruptGate;
@@ -95,8 +95,8 @@ __attribute__((sysv_abi)) void Inferno(MemoryDescriptor* Map, unsigned long long
 
   PIT::SetDivisor(2000);
 
-  kprintf(to_string((Allocator.GetFreeMem()/1024/1024)));
-  kprintf(" MB of RAM Free\n\r");
+  kprintf(to_string(((Allocator.GetFreeMem()+Allocator.GetUsedMem()+Allocator.GetReservedMem())/1024/1024)));
+  kprintf(" MB of RAM Free\n");
 
   
   ACPI::SDTHeader* xsdt = (ACPI::SDTHeader*)(rsdp->XSDTAddress);
@@ -107,9 +107,9 @@ __attribute__((sysv_abi)) void Inferno(MemoryDescriptor* Map, unsigned long long
     for (int t=0;t<4;t++) {
       kputchar(mcfg->Header.Signature[t]);
     }
-    kprintf("\n\r");
+    kprintf("\n");
     PCI::EnumeratePCI(mcfg);
-  } else kprintf("Could not locate MCFG!\n\r");
+  } else kprintf("Could not locate MCFG!\n");
 }
 
 __attribute__((ms_abi)) void main(Framebuffer* framebuffer, PSFFont* font, MemoryDescriptor* Map, unsigned long long int MapSize, unsigned long long int DescriptorSize, ACPI::RSDP2* rsdp) {

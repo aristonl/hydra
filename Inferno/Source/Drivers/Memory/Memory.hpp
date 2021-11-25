@@ -15,6 +15,7 @@ class Bitmap {
     size_t Size;
     uint8_t* Buffer;
     bool operator[](uint64_t index);
+    bool Get(uint64_t index);
     bool Set(uint64_t index, bool value);
 };
 
@@ -102,3 +103,8 @@ extern PageFrameAllocator Allocator;
 extern PageTableManager pageTableManager;
 
 void* memcpy(void *dst, const void *src, size_t len);
+
+inline void* operator new(long unsigned int size) { return malloc(size); }
+inline void* operator new[](long unsigned int size) { return malloc(size); }
+
+inline void operator delete(void* p) { free(p); }
