@@ -4,6 +4,7 @@ A 64-Bit Operating System for ARM and x64 built in C++.
 ## Badges
 ![Ubuntu](https://github.com/Null-LLC/Echo/actions/workflows/ubuntu.yml/badge.svg)
 [![CodeFactor](https://www.codefactor.io/repository/github/null-llc/echo/badge)](https://www.codefactor.io/repository/github/null-llc/echo)
+![GitHub language count](https://img.shields.io/github/languages/count/Null-LLC/Echo?style=flat)
 
 ## About
 Echo, originally started as Hydra, is a Operating System built in C++ built on top of the
