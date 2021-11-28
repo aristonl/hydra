@@ -24,6 +24,19 @@ void putc(char c, unsigned int xOff, unsigned int yOff) {
   }
 }
 
+void printf(char c) {
+  putc(c, CursorX, CursorY);
+  CursorX+=8;
+  if (CursorX >= framebuffer->Width-8) {
+    CursorX=0;
+    CursorY+=16;
+  } else if (CursorY > framebuffer->Height-16) {
+    CursorY=0;
+    CursorX=0;
+    memset(framebuffer->Address, 0, framebuffer->Size);
+  }
+}
+
 void printf(const char* format, ...) {
   va_list args;
   va_start(args, format);
@@ -63,7 +76,7 @@ void printf(const char* format, ...) {
       chr++;
       if (*chr == 'd') {
         unsigned int i = va_arg(args, int);
-        printf(i);
+        printf((long long) i);
       } else if (*chr == 'c') {
         unsigned int i = va_arg(args, int);
         putc(i, CursorX, CursorY);
