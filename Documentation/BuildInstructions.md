@@ -19,7 +19,6 @@ vagrant up
 ```
 If you get an error while building that says Connection to 127.0.0.1 closed. You can ignore it.
 ## Building
-It may ask you to enter text so input as needed (ex: Docker Container Name for macOS).
 Following this, you can `git pull` as needed. You won't usually need to reconfigure your build after it.
 <br>
 Once your ready to run, you can build and run Echo with:
