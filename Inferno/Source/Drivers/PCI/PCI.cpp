@@ -1,5 +1,4 @@
 #include "PCI.hpp"
-#include "../AHCI/AHCI.hpp"
 
 namespace PCI {
   void EnumerateFunction(unsigned long long Address, unsigned long long function) {
@@ -14,16 +13,6 @@ namespace PCI {
     kprintf(" - 0x");
     kprintf(to_hstring(DeviceHeader->DeviceID));
     kprintf("\n");
-    switch (DeviceHeader->Class) {
-      case 0x01:
-        switch (DeviceHeader->SubClass) {
-          case 0x06:
-            switch (DeviceHeader->ProgramInterface) {
-              case 0x01:
-                new AHCI::AHCIDriver(DeviceHeader);
-            }
-        }
-    }
   }
   void EnumerateDevice(unsigned long long Address, unsigned long long device) {
     unsigned long long offset = device << 15;
