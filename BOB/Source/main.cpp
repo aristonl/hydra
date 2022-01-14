@@ -155,7 +155,13 @@ extern "C" __attribute__((ms_abi)) unsigned long long boot(void* ImageHandle, st
       case 1: {
         int pages=(ProgramHeader->MemorySize+0x1000-1)/0x1000;
         unsigned long long segment=ProgramHeader->PhysicalAddress;
-        CheckStatus SystemTable->BootServices->AllocatePages(AllocateAddress, 2, pages, &segment);
+        /*
+         * CheckStatus SystemTable->BootServices->AllocatePages(AllocateAddress, 2, pages, &segment);
+         * 
+         *      Here lies the issue.
+         *      The issue is that the bootloader is not allocating the memory for the kernel correctly.
+         *      Causing the kernel to continuously load the same memory without clearing it.
+         */
         CheckStatus KernelFile->SetPosition(KernelFile, ProgramHeader->Offset);
         unsigned long long size = ProgramHeader->FileSize;
         CheckStatus KernelFile->Read(KernelFile, &size, (void*)segment);

@@ -1,6 +1,0 @@
-- AHCI
-
-- FileSystem (ext2)
-- Ring 3
-- Toolchain
-- BASH
