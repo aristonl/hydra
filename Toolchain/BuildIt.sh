@@ -100,71 +100,64 @@ fi
 
 # === DOWNLOAD AND PATCH ===
 
-mkdir "$DIR/Tarballs"
-pushd "$DIR/Tarballs"
-    # Build aarch64-gdb for cross-debugging support on x86 systems
-    if [ "$ARCH" = "aarch64" ]; then
-        md5=""
-        if [ -e "$GDB_PKG" ]; then
-            md5="$($MD5SUM $GDB_PKG | cut -f1 -d' ')"
-            echo "bu md5='$md5'"
-        fi
-        if [ "$md5" != ${GDB_MD5SUM} ] ; then
-            rm -f $GDB_PKG
-            curl -LO "$GDB_BASE_URL/$GDB_PKG"
-        else
-            echo "Skipped downloading gdb"
-        fi
-    fi
+# check if the tarballs folder exists
+if [ ! -d "$DIR/Tarballs" ]; then
+    mkdir -p "$DIR/Tarballs"
+else
+    buildstep download echo "Tarballs folder exists."
+    buildstep download echo "Checking if tarballs are up-to-date..." # TODO: check if tarballs are up-to-date
+fi
 
-    md5=""
+pushd "$DIR/Tarballs"
+
+    # === BINUTILS ===
+
+    BINUTILS_MD5=""
+
     if [ -e "$BINUTILS_PKG" ]; then
         md5="$($MD5SUM $BINUTILS_PKG | cut -f1 -d' ')"
-        echo "bu md5='$md5'"
+        echo "bu md5='$BINUTILS_MD5'"
     fi
-    if [ "$md5" != ${BINUTILS_MD5SUM} ] ; then
-        rm -f $BINUTILS_PKG
-        curl -LO "$BINUTILS_BASE_URL/$BINUTILS_PKG"
+    if [ ! -d "$DIR/Tarballs/$BINUTILS_PKG" ] ; then
+        if [ ! -e "$BINUTILS_PKG" ]; then
+            buildstep download echo "Downloading binutils..."
+            curl -LO "$BINUTILS_BASE_URL/$BINUTILS_PKG"
+        fi
+
+        if [ -d ${BINUTILS_NAME} ]; then
+            rm -rf "${BINUTILS_NAME}"
+            rm -rf "$DIR/Build/$ARCH/$BINUTILS_NAME"
+        fi
     else
-        echo "Skipped downloading binutils"
+        buildstep download echo "binutils already downloaded. Skipping download."
     fi
 
-    md5=""
+    buildstep download echo "Extracting binutils..."
+    tar -xvf "$BINUTILS_PKG"
+
+    pushd ${BINUTILS_NAME}
+    buildstep patching echo "Patching binutils..."
+    patch -p1 < "$PATCHPATH/binutils.patch"
+    popd
+
+    # === GCC ===
+
+    GCC_MD5=""
+
     if [ -e "$GCC_PKG" ]; then
         md5="$($MD5SUM ${GCC_PKG} | cut -f1 -d' ')"
         echo "gc md5='$md5'"
     fi
-    if [ "$md5" != ${GCC_MD5SUM} ] ; then
-        rm -f $GCC_PKG
-        curl -LO "$GCC_BASE_URL/$GCC_NAME/$GCC_PKG"
-    else
-        echo "Skipped downloading gcc"
-    fi
-
-    if [ "$ARCH" = "aarch64" ]; then
-        if [ -d ${GDB_NAME} ]; then
-            rm -rf "${GDB_NAME}"
-            rm -rf "$DIR/Build/$ARCH/$GDB_NAME"
+    if [ ! -d "$DIR/Tarballs/$GCC_PKG" ] ; then
+        if [ ! -e "$GCC_PKG" ]; then
+            buildstep download echo "Downloading GCC..."
+            curl -LO "$GCC_BASE_URL/$GCC_NAME/$GCC_PKG"
         fi
-        echo "Extracting GDB..."
-        tar -xzf ${GDB_PKG}
-
-        pushd ${GDB_NAME}
-
-        popd
+        buildstep download echo "Extracting GCC..."
+        tar -xvf "$GCC_PKG"
+    else
+        buildstep download echo "GCC already downloaded. Skipping download."
     fi
-
-    if [ -d ${BINUTILS_NAME} ]; then
-        rm -rf "${BINUTILS_NAME}"
-        rm -rf "$DIR/Build/$ARCH/$BINUTILS_NAME"
-    fi
-    echo "Extracting binutils..."
-    tar -xzf ${BINUTILS_PKG}
-
-    pushd ${BINUTILS_NAME}
-    echo "Patching binutils..."
-    patch -p1 < "$PATCHPATH/binutils.patch"
-    popd
 
     if [ -d ${GCC_NAME} ]; then
         # Drop the previously patched extracted dir
@@ -172,6 +165,7 @@ pushd "$DIR/Tarballs"
         # Also drop the build dir
         rm -rf "$DIR/Build/$ARCH/$GCC_NAME"
     fi
+
     echo "Extracting gcc..."
     tar -xzf $GCC_PKG
     pushd $GCC_NAME
@@ -248,9 +242,9 @@ pushd "$DIR/Build/$ARCH"
     pushd "$BUILD"
         mkdir -p Root/usr/include/
         SRC_ROOT=$($REALPATH "$DIR"/..)
-        FILES=$(find "$SRC_ROOT"/Libraries/LibC "$SRC_ROOT"/Libraries/LibM "$SRC_ROOT"/Libraries/LibPthread -name '*.h' -print)
+        FILES=$(find "$SRC_ROOT"/Libraries/LibC "$SRC_ROOT"/Libraries/LibM -name '*.h' -print)
         for header in $FILES; do
-            target=$(echo "$header" | sed -e "s@$SRC_ROOT/Libraries/LibC@@" -e "s@$SRC_ROOT/Libraries/LibM@@" -e "s@$SRC_ROOT/Libraries/LibPthread@@")
+            target=$(echo "$header" | sed -e "s@$SRC_ROOT/Libraries/LibC@@" -e "s@$SRC_ROOT/Libraries/LibM@@")
             buildstep "system_headers" $INSTALL -D "$header" "Root/usr/include/$target"
         done
         unset SRC_ROOT
