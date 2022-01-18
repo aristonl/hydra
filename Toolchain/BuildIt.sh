@@ -38,7 +38,7 @@ fi
 export CFLAGS="-g0 -O2 -mtune=native"
 export CXXFLAGS="-g0 -O2 -mtune=native"
 
-BINUTILS_VERSION="2.33.1"
+BINUTILS_VERSION="2.36"
 BINUTILS_MD5SUM="1e55743d73c100b7a0d67ffb32398cdb"
 BINUTILS_NAME="binutils-$BINUTILS_VERSION"
 BINUTILS_PKG="${BINUTILS_NAME}.tar.gz"
@@ -50,7 +50,7 @@ GDB_NAME="gdb-$GDB_VERSION"
 GDB_PKG="${GDB_NAME}.tar.gz"
 GDB_BASE_URL="https://ftp.gnu.org/gnu/gdb"
 
-GCC_VERSION="10.3.0"
+GCC_VERSION="11.1.0"
 GCC_MD5SUM="dc6886bd44bb49e2d3d662aed9729278"
 GCC_NAME="gcc-$GCC_VERSION"
 GCC_PKG="${GCC_NAME}.tar.gz"

@@ -3,14 +3,14 @@ index a318a4686..808badcb0 100755
 --- a/config.sub
 +++ b/config.sub
 @@ -1343,7 +1343,7 @@ case $os in
- 	     | hpux* | unos* | osf* | luna* | dgux* | auroraux* | solaris* \
- 	     | sym* | kopensolaris* | plan9* \
- 	     | amigaos* | amigados* | msdos* | newsos* | unicos* | aof* \
--	     | aos* | aros* | cloudabi* | sortix* \
-+	     | aos* | aros* | cloudabi* | sortix* | echo* \
- 	     | nindy* | vxsim* | vxworks* | ebmon* | hms* | mvs* \
- 	     | clix* | riscos* | uniplus* | iris* | isc* | rtu* | xenix* \
- 	     | knetbsd* | mirbsd* | netbsd* \
+	     | hpux* | unos* | osf* | luna* | dgux* | auroraux* | solaris* \
+	     | sym* |  plan9* | psp* | sim* | xray* | os68k* | v88r* \
+	     | hiux* | abug | nacl* | netware* | windows* \
+-	     | os9* | macos* | osx* | ios* \
++	     | os9* | macos* | osx* | ios* | hydra* \
+	     | mpw* | magic* | mmixware* | mon960* | lnews* \
+	     | amigaos* | amigados* | msdos* | newsos* | unicos* | aof* \
+	     | aos* | aros* | cloudabi* | sortix* | twizzler* \
 diff --git a/fixincludes/mkfixinc.sh b/fixincludes/mkfixinc.sh
 index df90720b7..d17a16fff 100755
 --- a/fixincludes/mkfixinc.sh
@@ -19,7 +19,7 @@ index df90720b7..d17a16fff 100755
 
  # Check for special fix rules for particular targets
  case $machine in
-+    *-echo* | \
++    *-hydra* | \
      i?86-*-cygwin* | \
      i?86-*-mingw32* | \
      x86_64-*-mingw32* | \
@@ -31,7 +31,7 @@ index cf1a87e2e..0ea5c7fa7 100644
 
  # Common parts for widely ported systems.
  case ${target} in
-+*-*-echo*)
++*-*-hydra*)
 +  gas=yes
 +  gnu_ld=yes
 +  default_use_cxa_atexit=yes
@@ -45,10 +45,10 @@ index cf1a87e2e..0ea5c7fa7 100644
  esac
 
  case ${target} in
-+i[34567]86-*-echo*)
++i[34567]86-*-hydra)
 +    tm_file="${tm_file} i386/unix.h i386/att.h dbxelf.h elfos.h glibc-stdint.h i386/i386elf.h echo.h"
 +    ;;
-+x86_64-*-echo*)
++x86_64-*-hydra*)
 +    tm_file="${tm_file} i386/unix.h i386/att.h dbxelf.h elfos.h glibc-stdint.h i386/i386elf.h i386/x86-64.h echo.h"
 +    ;;
  aarch64*-*-elf | aarch64*-*-fuchsia* | aarch64*-*-rtems*)
@@ -58,11 +58,11 @@ diff --git a/gcc/config/echo.h b/gcc/config/echo.h
 new file mode 100644
 index 000000000..e9fb8ab0d
 --- /dev/null
-+++ b/gcc/config/echo.h
++++ b/gcc/config/hydra.h
 @@ -0,0 +1,34 @@
 +/* Useful if you wish to make target-specific GCC changes. */
-+#undef TARGET_echo
-+#define TARGET_echo 1
++#undef TARGET_hydra
++#define TARGET_hydra 1
 +
 +#undef STANDARD_STARTFILE_PREFIX
 +#define STANDARD_STARTFILE_PREFIX "/libs/"
@@ -88,7 +88,7 @@ index 000000000..e9fb8ab0d
 +#define TARGET_OS_CPP_BUILTINS()      \
 +   do                                 \
 +   {                                  \
-+      builtin_define("__echo__");    \
++      builtin_define("__hydra__");    \
 +      builtin_define("__unix__");     \
 +      builtin_assert("system=echo"); \
 +      builtin_assert("system=unix");  \
@@ -102,11 +102,11 @@ index 1ff415923..91543e550 100644
  	tmake_file="$tmake_file nvptx/t-nvptx"
  	extra_parts="crt0.o"
  	;;
-+i[34567]86-*-echo*)
++i[34567]86-*-hydra*)
 +	extra_parts="$extra_parts crti.o crtbegin.o crtbeginS.o crtend.o crtendS.o crtn.o"
 +	tmake_file="$tmake_file i386/t-crtstuff t-crtstuff-pic t-libgcc-pic"
 +	;;
-+x86_64-*-echo*)
++x86_64-*-hydra*)
 +	extra_parts="$extra_parts crti.o crtbegin.o crtbeginS.o crtend.o crtendS.o crtn.o"
 +	tmake_file="$tmake_file i386/t-crtstuff t-crtstuff-pic t-libgcc-pic"
 +	;;
@@ -121,7 +121,7 @@ index 9f9c5a241..40027b90c 100755
 
  # Base decisions on target environment.
  case "${host}" in
-+  *-echo*)
++  *-hydra*)
 +
 +  # All these tests are for C++; save the language and the compiler flags.
 +  # The CXXFLAGS thing is suspicious, but based on similar bits previously
@@ -138,7 +138,7 @@ index 9f9c5a241..40027b90c 100755
 +
 +  # Check for -ffunction-sections -fdata-sections
 +  { $as_echo "$as_me:${as_lineno-$LINENO}: checking for g++ that supports -ffunction-sections -fdata-sections" >&5
-+$as_echo_n "checking for g++ that supports -ffunction-sections -fdata-sections... " >&6; }
++$as_hydra_n "checking for g++ that supports -ffunction-sections -fdata-sections... " >&6; }
 +  CXXFLAGS='-g -Werror -ffunction-sections -fdata-sections'
 +  cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 +/* end confdefs.h.  */

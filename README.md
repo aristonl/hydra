@@ -4,12 +4,13 @@ A 64-Bit Operating System for ARM and x64 built in C++.
 ## Badges
 ![Ubuntu](https://github.com/Null-LLC/Hydra/actions/workflows/ubuntu.yml/badge.svg)
 [![CodeFactor](https://www.codefactor.io/repository/github/null-llc/Hydra/badge)](https://www.codefactor.io/repository/github/null-llc/Hydra)
+[![GitHub stars](https://img.shields.io/github/stars/null-llc/Hydra.svg?style=social)](
 ![GitHub language count](https://img.shields.io/github/languages/count/Null-LLC/Hydra?style=flat)
 
 ## About
-Hydra, originally started as Hydra, is a Operating System built in C++ built on top of the
+Hydra, is a Operating System built in C++ built on top of the
 custom Inferno kernel. It is made for ARM64 and x64 UEFI Machines.
-This repository has 3 main sections, BOB (our bootloader), Inferno (the kernel), and Hydra
+This repository has 3 main sections, BOB (our bootloader), Inferno (the kernel), and Echo
 (the operating system itself).
 <!-- TODO: Work on expanding this section. To me (Thomas Lim), it doesn't look that descriptive. -->
 <!-- Update 08/31/2021 2354: I still think it doesn't look like enough...-->

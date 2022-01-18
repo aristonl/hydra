@@ -7,13 +7,13 @@ index 13d678e1..2f7f7174 100644
  # START OF targmatch.h
  #ifdef BFD64
 +
-+  i[3-7]86-*-echo*)
++  i[3-7]86-*-hydra*)
 +    targ_defvec=i386_elf32_vec
 +    targ_selvecs=
 +    targ64_selvecs=x86_64_elf64_vec
 +    ;;
 +#ifdef BFD64
-+  x86_64-*-echo*)
++  x86_64-*-hydra*)
 +    targ_defvec=x86_64_elf64_vec
 +    targ_selvecs=i386_elf32_vec
 +    want64=true
@@ -27,15 +27,15 @@ diff --git a/config.sub b/config.sub
 index 5b158ac4..f4e60010 100755
 --- a/config.sub
 +++ b/config.sub
-@@ -1346,7 +1346,7 @@ case $os in
- 	     | hpux* | unos* | osf* | luna* | dgux* | auroraux* | solaris* \
- 	     | sym* | kopensolaris* | plan9* \
- 	     | amigaos* | amigados* | msdos* | newsos* | unicos* | aof* \
--	     | aos* | aros* | cloudabi* | sortix* \
-+	     | aos* | aros* | cloudabi* | sortix* | echo* \
- 	     | nindy* | vxsim* | vxworks* | ebmon* | hms* | mvs* \
- 	     | clix* | riscos* | uniplus* | iris* | isc* | rtu* | xenix* \
- 	     | knetbsd* | mirbsd* | netbsd* \
+@@ -1700,7 +1700,7 @@ case $os in
+	     | hpux* | unos* | osf* | luna* | dgux* | auroraux* | solaris* \
+	     | sym* |  plan9* | psp* | sim* | xray* | os68k* | v88r* \
+	     | hiux* | abug | nacl* | netware* | windows* \
+-	     | os9* | macos* | osx* | ios* \
++	     | os9* | macos* | osx* | ios* | hydra* \
+	     | mpw* | magic* | mmixware* | mon960* | lnews* \
+	     | amigaos* | amigados* | msdos* | newsos* | unicos* | aof* \
+	     | aos* | aros* | cloudabi* | sortix* | twizzler* \
 diff --git a/gas/configure.tgt b/gas/configure.tgt
 index a4828c4c..73fafe3b 100644
 --- a/gas/configure.tgt
@@ -44,7 +44,7 @@ index a4828c4c..73fafe3b 100644
  generic_target=${cpu_type}-$vendor-$os
  # Note: This table is alpha-sorted, please try to keep it that way.
  case ${generic_target} in
-+  i386-*-echo*)     fmt=elf;;
++  i386-*-hydra*)     fmt=elf;;
    aarch64*-*-elf*)			fmt=elf;;
    aarch64*-*-fuchsia*)			fmt=elf;;
    aarch64*-*-linux*)			fmt=elf em=linux
@@ -56,7 +56,7 @@ index 0509c2e5..ab9d6dd9 100644
  	eelf32xstormy16.c \
  	eelf32xtensa.c \
  	eelf_i386.c \
-+	eelf_i386_echo.c \
++	eelf_i386_hydra.c \
  	eelf_i386_be.c \
  	eelf_i386_fbsd.c \
  	eelf_i386_ldso.c \
@@ -64,7 +64,7 @@ index 0509c2e5..ab9d6dd9 100644
  	eelf_k1om.c \
  	eelf_k1om_fbsd.c \
  	eelf_x86_64.c \
-+	eelf_x86_64_echo.c \
++	eelf_x86_64_hydra.c \
  	eelf_x86_64_cloudabi.c \
  	eelf_x86_64_fbsd.c \
  	eelf_x86_64_nacl.c \
@@ -76,7 +76,7 @@ index 9898392a..ffb27087 100644
  	eelf32xstormy16.c \
  	eelf32xtensa.c \
  	eelf_i386.c \
-+	eelf_i386_echo.c \
++	eelf_i386_hydra.c \
  	eelf_i386_be.c \
  	eelf_i386_fbsd.c \
  	eelf_i386_ldso.c \
@@ -84,7 +84,7 @@ index 9898392a..ffb27087 100644
  	eelf_k1om.c \
  	eelf_k1om_fbsd.c \
  	eelf_x86_64.c \
-+	eelf_x86_64_echo.c \
++	eelf_x86_64_hydra.c \
  	eelf_x86_64_cloudabi.c \
  	eelf_x86_64_fbsd.c \
  	eelf_x86_64_nacl.c \
@@ -97,13 +97,13 @@ index c81bc8a7..d58b7321 100644
  # break the alpha sorting.
  case "${targ}" in
 +i[3-7]86-*-echo*)
-+			targ_emul=elf_i386_echo
++			targ_emul=elf_i386_hydra
 +			targ_extra_emuls=elf_i386
-+			targ64_extra_emuls="elf_x86_64_echo elf_x86_64"
++			targ64_extra_emuls="elf_x86_64_hydra elf_x86_64"
 +			;;
 +x86_64-*-echo*)
-+			targ_emul=elf_x86_64_echo
-+			targ_extra_emuls="elf_i386_echo elf_x86_64 elf_i386"
++			targ_emul=elf_x86_64_hydra
++			targ_extra_emuls="elf_i386_hydra elf_x86_64 elf_i386"
 +			;;
  aarch64_be-*-elf)	targ_emul=aarch64elfb
  			targ_extra_emuls="aarch64elf aarch64elf32 aarch64elf32b armelfb armelf" ;;
