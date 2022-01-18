@@ -27,15 +27,15 @@ diff --git a/config.sub b/config.sub
 index 5b158ac4..f4e60010 100755
 --- a/config.sub
 +++ b/config.sub
-@@ -1346,7 +1346,7 @@ case $os in
- 	     | hpux* | unos* | osf* | luna* | dgux* | auroraux* | solaris* \
- 	     | sym* | kopensolaris* | plan9* \
- 	     | amigaos* | amigados* | msdos* | newsos* | unicos* | aof* \
--	     | aos* | aros* | cloudabi* | sortix* \
-+	     | aos* | aros* | cloudabi* | sortix* | echo* \
- 	     | nindy* | vxsim* | vxworks* | ebmon* | hms* | mvs* \
- 	     | clix* | riscos* | uniplus* | iris* | isc* | rtu* | xenix* \
- 	     | knetbsd* | mirbsd* | netbsd* \
+@@ -1700,7 +1700,7 @@ case $os in
+	     | hpux* | unos* | osf* | luna* | dgux* | auroraux* | solaris* \
+	     | sym* |  plan9* | psp* | sim* | xray* | os68k* | v88r* \
+	     | hiux* | abug | nacl* | netware* | windows* \
+-	     | os9* | macos* | osx* | ios* \
++	     | os9* | macos* | osx* | ios* | echo* \
+	     | mpw* | magic* | mmixware* | mon960* | lnews* \
+	     | amigaos* | amigados* | msdos* | newsos* | unicos* | aof* \
+	     | aos* | aros* | cloudabi* | sortix* | twizzler* \
 diff --git a/gas/configure.tgt b/gas/configure.tgt
 index a4828c4c..73fafe3b 100644
 --- a/gas/configure.tgt

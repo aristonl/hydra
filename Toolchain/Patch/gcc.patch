@@ -3,14 +3,14 @@ index a318a4686..808badcb0 100755
 --- a/config.sub
 +++ b/config.sub
 @@ -1343,7 +1343,7 @@ case $os in
- 	     | hpux* | unos* | osf* | luna* | dgux* | auroraux* | solaris* \
- 	     | sym* | kopensolaris* | plan9* \
- 	     | amigaos* | amigados* | msdos* | newsos* | unicos* | aof* \
--	     | aos* | aros* | cloudabi* | sortix* \
-+	     | aos* | aros* | cloudabi* | sortix* | echo* \
- 	     | nindy* | vxsim* | vxworks* | ebmon* | hms* | mvs* \
- 	     | clix* | riscos* | uniplus* | iris* | isc* | rtu* | xenix* \
- 	     | knetbsd* | mirbsd* | netbsd* \
+	     | hpux* | unos* | osf* | luna* | dgux* | auroraux* | solaris* \
+	     | sym* |  plan9* | psp* | sim* | xray* | os68k* | v88r* \
+	     | hiux* | abug | nacl* | netware* | windows* \
+-	     | os9* | macos* | osx* | ios* \
++	     | os9* | macos* | osx* | ios* | echo* \
+	     | mpw* | magic* | mmixware* | mon960* | lnews* \
+	     | amigaos* | amigados* | msdos* | newsos* | unicos* | aof* \
+	     | aos* | aros* | cloudabi* | sortix* | twizzler* \
 diff --git a/fixincludes/mkfixinc.sh b/fixincludes/mkfixinc.sh
 index df90720b7..d17a16fff 100755
 --- a/fixincludes/mkfixinc.sh
