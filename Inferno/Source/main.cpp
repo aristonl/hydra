@@ -95,7 +95,7 @@ __attribute__((sysv_abi)) void Inferno(MemoryDescriptor* Map, unsigned long long
 
   PIT::SetDivisor(2000);
 
-  kprintf(to_string(((Allocator.GetFreeMem()+Allocator.GetUsedMem()+Allocator.GetReservedMem())/1024/1024)));
+  kprintf(to_string(((Allocator.GetFreeMem()+Allocator.GetUsedMem())/1024/1024)));
   kprintf(" MB of RAM Free\n");
 
   
@@ -117,6 +117,6 @@ __attribute__((ms_abi)) void main(Framebuffer* framebuffer, PSFFont* font, Memor
   SetGlobalFramebuffer(framebuffer);
   SetGlobalFont(font);
   Inferno(Map, MapSize, DescriptorSize, rsdp);
-  
+
   while(true) asm("hlt");
 }

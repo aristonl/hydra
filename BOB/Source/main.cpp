@@ -7,27 +7,6 @@
 #include "Library/String.hpp"
 #include "Library/ELF.hpp"
 
-Framebuffer framebuffer;
-
-void putpixel(unsigned int x, unsigned int y, unsigned int color) {
-  *(unsigned int*)((unsigned int*)framebuffer.Address + x + (y * framebuffer.PPSL)) = color;
-}
-
-void addBar() {
-  for (unsigned int y=framebuffer.Height-100;y<=framebuffer.Height-100+20;y++) putpixel(100,y,0xcccccc);
-  for (unsigned int x=100;x<=framebuffer.Width-100;x++) putpixel(x,framebuffer.Height-100,0xcccccc);
-  for (unsigned int x=100;x<=framebuffer.Width-100;x++) putpixel(x,framebuffer.Height-100+20,0xcccccc);
-  for (unsigned int y=framebuffer.Height-100;y<=framebuffer.Height-100+20;y++) putpixel(framebuffer.Width-100,y,0xcccccc);
-}
-
-void fill(unsigned int x, unsigned int y, unsigned int width, unsigned int height, unsigned int color) {
-  for (int j = y; j < y+height; j++) {
-    for (int i = x; i < x+width; i++) {
-      putpixel(i,j,color);
-    }
-  }
-}
-
 void* memset(void* s, unsigned char c, unsigned long long len) {
   unsigned char *dst = (unsigned char*) s;
   while (len > 0) {
@@ -41,6 +20,7 @@ void* memset(void* s, unsigned char c, unsigned long long len) {
 #define CheckStatus status = 
 
 extern "C" __attribute__((ms_abi)) unsigned long long boot(void* ImageHandle, struct SystemTable* SystemTable) {
+  Framebuffer framebuffer;
   unsigned long long status = 0;
   CheckStatus SystemTable->BootServices->SetWatchdogTimer(0, 0, 0, 0);
   CheckStatus SystemTable->ConsoleOutput->Clear(SystemTable->ConsoleOutput);
@@ -59,7 +39,6 @@ extern "C" __attribute__((ms_abi)) unsigned long long boot(void* ImageHandle, st
   CheckStatus SystemTable->BootServices->LocateProtocol(&gopGUID, (void*)0, (void**)&gop);
   framebuffer = Framebuffer(gop->Mode->Address, gop->Mode->Size, gop->Mode->ModeInfo->Width, gop->Mode->ModeInfo->Height, gop->Mode->ModeInfo->PPSL);
 
-  addBar();
   LoadedImageProtocol* LoadedImage;
   CheckStatus SystemTable->BootServices->HandleProtocol(ImageHandle, &LoadedImageProtocolGUID, (void**)&LoadedImage);
   DevicePathProtocol* DevicePath;
@@ -68,12 +47,11 @@ extern "C" __attribute__((ms_abi)) unsigned long long boot(void* ImageHandle, st
   CheckStatus SystemTable->BootServices->HandleProtocol(LoadedImage->DeviceHandle, &FileSystemProtocolGUID, (void**)&Volume);
   FileProtocol* FS;
   CheckStatus Volume->OpenVolume(Volume, &FS);
-  fill(101, framebuffer.Height-99, (framebuffer.Width-200)/7, 19, 0xffffff);
 
   struct TGAImage* BootLogo;
   {
     FileProtocol* image;
-    CheckStatus FS->Open(FS, &image, (unsigned short*) L"Echo.tga", 0x0000000000000001, 0);
+    CheckStatus FS->Open(FS, &image, (unsigned short*) L"Hydra.tga", 0x0000000000000001, 0);
     struct TGAHeader* header;
     unsigned long long headerSize = sizeof(struct TGAHeader);
     CheckStatus SystemTable->BootServices->AllocatePool(2, headerSize, (void**)&header);
@@ -114,7 +92,6 @@ extern "C" __attribute__((ms_abi)) unsigned long long boot(void* ImageHandle, st
 
   FileProtocol* fontFile;
   CheckStatus FS->Open(FS, &fontFile, (unsigned short*) L"font.psf", 0x0000000000000001, 0);
-  fill(101, framebuffer.Height-99, (framebuffer.Width-200)/6, 19, 0xffffff);
 
   PSFHeader* fontHeader;
   PSFFont* font;
@@ -132,11 +109,9 @@ extern "C" __attribute__((ms_abi)) unsigned long long boot(void* ImageHandle, st
       font->GlyphBuffer = glyphBuffer;
     }
   }
-  fill(101, framebuffer.Height-99, (framebuffer.Width-200)/5, 19, 0xffffff);
 
   FileProtocol* KernelFile;
   CheckStatus FS->Open(FS, &KernelFile, (unsigned short*) L"inferno", 0x0000000000000001, 0);
-  fill(101, framebuffer.Height-99, (framebuffer.Width-200)/4, 19, 0xffffff);
 
   ELFHeaders KernelHeaders; {
     unsigned long long FileInfoSize;
@@ -165,7 +140,7 @@ extern "C" __attribute__((ms_abi)) unsigned long long boot(void* ImageHandle, st
       case 1: {
         int pages=(ProgramHeader->MemorySize+0x1000-1)/0x1000;
         unsigned long long segment=ProgramHeader->PhysicalAddress;
-        memset((void*)segment, 0, pages*0x1000);
+        memset((void*)segment, 0, pages*4096+1);
         CheckStatus KernelFile->SetPosition(KernelFile, ProgramHeader->Offset);
         unsigned long long size = ProgramHeader->FileSize;
         CheckStatus KernelFile->Read(KernelFile, &size, (void*)segment);
@@ -173,7 +148,6 @@ extern "C" __attribute__((ms_abi)) unsigned long long boot(void* ImageHandle, st
       }
     }
   }
-  fill(101, framebuffer.Height-99, (framebuffer.Width-200)/3, 19, 0xffffff);
 
   ConfigurationTable* configTable = SystemTable->ConfigurationTable;
 	void* rsdp = (void*)0; 
@@ -183,20 +157,16 @@ extern "C" __attribute__((ms_abi)) unsigned long long boot(void* ImageHandle, st
 		if (CompareGUID(&configTable[index].VendorGUID, &ACPI2TableGUID) && strcmp((unsigned char*)"RSD PTR ", (unsigned char*)configTable->VendorTable, 8)) rsdp = (void*)configTable->VendorTable;
 		configTable++;
 	}
-  fill(101, framebuffer.Height-99, (framebuffer.Width-200)/2, 19, 0xffffff);
 
   if (status != 0) {
-    fill(0, 0, framebuffer.Width, framebuffer.Height, 0);
     PrintTGA(ErrorIcon, SystemTable, framebuffer, framebuffer.Width/2, framebuffer.Height/2);
     while(1) asm("hlt");
   }
 
   SystemTable->BootServices->ExitBootServices(ImageHandle, MapKey);
-  fill(101, framebuffer.Height-99, (framebuffer.Width-200), 19, 0xffffff);
 
 	void (*KernelMain)(Framebuffer*, PSFFont*, MemoryDescriptor*, unsigned long long int, unsigned long long int, void*)=((void (*)(Framebuffer*, PSFFont*, MemoryDescriptor*, unsigned long long int, unsigned long long int, void*))KernelHeaders.Entry);
   KernelMain(&framebuffer, font, Map, MapSize, DescriptorSize, rsdp);
-  fill(0, 0, framebuffer.Width, framebuffer.Height, 0);
   PrintTGA(ErrorIcon, SystemTable, framebuffer, framebuffer.Width/2, framebuffer.Height/2);
   return 0;
 }
