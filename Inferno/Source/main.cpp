@@ -117,6 +117,7 @@ __attribute__((ms_abi)) void main(Framebuffer* framebuffer, PSFFont* font, Memor
   SetGlobalFramebuffer(framebuffer);
   SetGlobalFont(font);
   Inferno(Map, MapSize, DescriptorSize, rsdp);
+  printf("Hello, World!\n");
 
   while(true) asm("hlt");
 }
