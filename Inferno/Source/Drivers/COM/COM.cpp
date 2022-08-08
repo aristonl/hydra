@@ -15,6 +15,7 @@ void InitializeSerialDevice() {
   if (inb(0x3f8 + 0) != 0xAE) return;
   outb(0x3f8 + 4, 0x0F);
   COM1Active = true;
+  kprintf("\n\nInferno: Serial Device Initialized!\n");
 }
 
 int SerialRecieveEvent() { return inb(0x3f8 + 5) & 1; }
