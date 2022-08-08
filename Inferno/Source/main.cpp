@@ -27,6 +27,7 @@ __attribute__((sysv_abi)) void Inferno() {
 __attribute__((ms_abi)) void main() {
   InitializeSerialDevice();
   Inferno();
+  kprintf("Hello, world!\n");
 
   while(true) asm("hlt");
 }
