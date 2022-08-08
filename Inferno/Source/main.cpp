@@ -7,6 +7,7 @@ extern unsigned long long InfernoStart;
 extern unsigned long long InfernoEnd;
 
 __attribute__((sysv_abi)) void Inferno() {
+  // Enable GDT
   #if EnableGDT == true
     __attribute__((aligned(0x1000)))
     GDT::Table Table = {
@@ -27,6 +28,8 @@ __attribute__((sysv_abi)) void Inferno() {
 __attribute__((ms_abi)) void main() {
   InitializeSerialDevice();
   Inferno();
+  
+  // Once finished say hello and halt
   kprintf("Hello, world!\n");
 
   while(true) asm("hlt");
