@@ -29,6 +29,7 @@ This repository has 3 main sections, BOB (our bootloader), Inferno (the kernel),
 ## Coming Soon
 - AHCI Driver
 - ext2 File System Support
+- Custom toolchain
 
 ## Links
 [Discord](https://discord.gg/MGHjJ2VjjC)
