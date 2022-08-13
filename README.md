@@ -24,7 +24,7 @@ This repository has 3 main sections, BOB (our bootloader), Inferno (the kernel),
 - Custom toolchain
 
 ## Links
-[Discord](https://discord.gg/MGHjJ2VjjC)
+[Discord](https://discord.gg/SNXBh4w3nW)
 
 
 
