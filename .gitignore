@@ -10,3 +10,17 @@ Build/ISO/inferno
 .idea/
 .vagrant/
 *.log
+
+# Makefiles
+Makefile
+
+build/
+
+# Ninja Build files
+build.ninja
+rules.ninja
+
+# CMake
+CMakeFiles/
+CMakeCache.txt
+cmake_install.cmake
