@@ -4,8 +4,6 @@
 #include <string.h>
 #include <errno.h>
 #include <unistd.h>
-#include <Kernel/Syscall.h>
-#include <std/printf.cpp>
 
 extern "C" {
 
@@ -24,7 +22,7 @@ int printf(const char* fmt, ...)
 {
     va_list ap;
     va_start(ap, fmt);
-    int ret = printfInternal(sys_putch, nullptr, fmt, ap);
+    //int ret = printfInternal(sys_putch, nullptr, fmt, ap);
     va_end(ap);
     return ret;
 }
@@ -38,7 +36,7 @@ int sprintf(char* buffer, const char* fmt, ...)
 {
     va_list ap;
     va_start(ap, fmt);
-    int ret = printfInternal(buffer_putch, buffer, fmt, ap);
+    //int ret = printfInternal(buffer_putch, buffer, fmt, ap);
     buffer[ret] = '\0';
     va_end(ap);
     return ret;
@@ -46,7 +44,7 @@ int sprintf(char* buffer, const char* fmt, ...)
 
 void perror(const char* s)
 {
-    printf("%s: %s\n", s, strerror(errno));
+    //printf("%s: %s\n", s, strerror(errno));
 }
 
 }
