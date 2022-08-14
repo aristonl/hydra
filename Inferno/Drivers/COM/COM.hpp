@@ -1,6 +1,6 @@
 #ifndef COM
 #define COM
-#include "../IO/IO.hpp"
+#include <Inferno/Drivers/IO/IO.hpp>
 
 void InitializeSerialDevice();
 char AwaitSerialResponse();

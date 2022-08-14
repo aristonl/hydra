@@ -1,5 +1,5 @@
-#include "../../Config.hpp"
-#include "../../../../Libraries/LibC/stdint.h"
+#include <Inferno/Config.hpp>
+#include <LibC/stdint.h>
 
 #if EnableGDT == true
   #ifndef GDT
