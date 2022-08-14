@@ -1,2 +1,2 @@
 add_subdirectory(LibC)
-# add_subdirectory(LibM)
+add_subdirectory(LibM)

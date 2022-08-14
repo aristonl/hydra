@@ -11,3 +11,4 @@ include_directories(${CMAKE_CURRENT_BINARY_DIR})
 include_directories(${CMAKE_CURRENT_BINARY_DIR}/Libraries)
 
 add_subdirectory(Inferno)
+add_subdirectory(Libraries)
