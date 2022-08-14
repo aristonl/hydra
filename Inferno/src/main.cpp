@@ -1,7 +1,7 @@
-#include <Inferno/Config.hpp>
-#include <Inferno/Drivers/IO/IO.hpp>
-#include <Inferno/Drivers/COM/COM.hpp>
-#include <Inferno/Drivers/GDT/GDT.hpp>
+#include <Config.hpp>
+#include <Drivers/IO/IO.hpp>
+#include <Drivers/COM/COM.hpp>
+#include <Drivers/GDT/GDT.hpp>
 
 extern unsigned long long InfernoStart;
 extern unsigned long long InfernoEnd;
@@ -30,7 +30,7 @@ __attribute__((ms_abi)) int main() {
   Inferno();
   
   // Once finished say hello and halt
-  kprintf("Hello, world!\n");
+  kprintf("Google sucks!\n");
 
   while(true) asm("hlt");
 }
