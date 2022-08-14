@@ -1,5 +1,4 @@
-#include "../../Config.hpp"
-#include "../../../../Libraries/LibC/stdint.h"
+#include <Config.hpp>
 
 #if EnableGDT == true
   #ifndef GDT

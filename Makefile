@@ -18,7 +18,7 @@ BOB:
 	@-make -C "BOB" > /dev/null >&1
 
 Inferno:
-	@-cd Inferno > /dev/null >&1;make Inferno > /dev/null >&1
+	@-cd Inferno > /dev/null >&1;ninja;mv Inferno ../Build/ISO/inferno > /dev/null >&1
 
 image:
 ifeq ($(shell [ -e Build/ISO/Hydra.img ] && echo 1 || echo 0), 0)

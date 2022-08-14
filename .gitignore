@@ -19,6 +19,8 @@ build/
 # Ninja Build files
 build.ninja
 rules.ninja
+.ninja_deps
+.ninja_log
 
 # CMake
 CMakeFiles/
