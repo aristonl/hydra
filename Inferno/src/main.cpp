@@ -1,7 +1,7 @@
-#include "Config.hpp"
-#include "Drivers/IO/IO.hpp"
-#include "Drivers/COM/COM.hpp"
-#include "Drivers/GDT/GDT.hpp"
+#include <Config.hpp>
+#include <Drivers/IO/IO.hpp>
+#include <Drivers/COM/COM.hpp>
+#include <Drivers/GDT/GDT.hpp>
 
 extern unsigned long long InfernoStart;
 extern unsigned long long InfernoEnd;
@@ -25,12 +25,12 @@ __attribute__((sysv_abi)) void Inferno() {
   #endif
 }
 
-__attribute__((ms_abi)) void main() {
+__attribute__((ms_abi)) int main() {
   InitializeSerialDevice();
   Inferno();
   
   // Once finished say hello and halt
-  kprintf("Hello, world!\n");
+  kprintf("Google sucks!\n");
 
   while(true) asm("hlt");
 }
