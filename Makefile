@@ -16,9 +16,6 @@ Build: $(BUILD_INSTRUCTIONS)
 vagrant:
 	@vagrant ssh -c "cd /vagrant/;make BOB Inferno image iso"
 
-BOB:
-	@-make -C "BOB" > /dev/null >&1
-
 Inferno:
 	@mv Inferno/Inferno Build/ISO/inferno
 
