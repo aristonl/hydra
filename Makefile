@@ -2,6 +2,8 @@ QEMU_MEMORY = 256M
 
 .PHONY: BOB Inferno Build
 
+default: ninja Build emulate
+
 BUILD_INSTRUCTIONS =
 ifeq ($(shell echo `uname`), Darwin)
 	BUILD_INSTRUCTIONS = vagrant
@@ -16,6 +18,9 @@ vagrant:
 
 BOB:
 	@-make -C "BOB" > /dev/null >&1
+
+Inferno:
+	@mv Inferno/Inferno Build/ISO/inferno
 
 image:
 ifeq ($(shell [ -e Build/ISO/Hydra.img ] && echo 1 || echo 0), 0)
@@ -78,3 +83,8 @@ clean:
 	@rm -r Build/Hydra.iso Build/ISO/Hydra.img Build/ISO/inferno Build/ISO/EFI/BOOT/bootx64.efi
 	@rm -r BOB/Build/
 	@rm -r Inferno/Build/
+
+
+ninja:
+	@cmake -GNinja .
+	@ninja

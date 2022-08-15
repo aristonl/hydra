@@ -5,10 +5,10 @@
 
 __BEGIN_DECLS
 
-void* malloc(size_t);
+void* malloc(long unsigned int);
 void free(void*);
-void* calloc(size_t nmemb, size_t);
-void* realloc(void *ptr, size_t);
+void* calloc(long unsigned int nmemb, long unsigned int);
+void* realloc(void *ptr, long unsigned int);
 
 void exit(int status);
 void abort();
