@@ -13,3 +13,5 @@ LoadGDT:
   push rdi
   retfq
 global LoadGDT
+
+section .note.GNU-stack noalloc noexec nowrite progbits

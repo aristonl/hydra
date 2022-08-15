@@ -17,6 +17,7 @@ set(LIBC_HEADER
 	stdint.h
 )
 
+add_link_options(-nostdlib)
 add_library(C SHARED ${LIBC_SOURCES})
 
 SET_TARGET_PROPERTIES (C PROPERTIES PUBLIC_HEADER "${LIBC_HEADER}")

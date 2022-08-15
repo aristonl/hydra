@@ -10,5 +10,6 @@ SECTIONS {
         *(COMMON)
         *(.bss)
     }
+    /DISCARD/ : { *(.note.GNU-stack) }
 	InfernoEnd = .;
 }

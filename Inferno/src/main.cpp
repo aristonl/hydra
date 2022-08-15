@@ -30,7 +30,7 @@ __attribute__((ms_abi)) int main() {
   Inferno();
   
   // Once finished say hello and halt
-  kprintf("Google sucks!\n");
+  kprintf("Impostor!\n");
 
   while(true) asm("hlt");
 }

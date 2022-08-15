@@ -17,9 +17,6 @@ vagrant:
 BOB:
 	@-make -C "BOB" > /dev/null >&1
 
-Inferno:
-	@-cd Inferno > /dev/null >&1;ninja;mv Inferno ../Build/ISO/inferno > /dev/null >&1
-
 image:
 ifeq ($(shell [ -e Build/ISO/Hydra.img ] && echo 1 || echo 0), 0)
 	@dd if=/dev/zero of=Build/ISO/Hydra.img bs=512 count=93750 > /dev/null 2>&1
