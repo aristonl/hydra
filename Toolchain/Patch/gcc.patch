@@ -46,15 +46,15 @@ index cf1a87e2e..0ea5c7fa7 100644
 
  case ${target} in
 +i[34567]86-*-hydra)
-+    tm_file="${tm_file} i386/unix.h i386/att.h dbxelf.h elfos.h glibc-stdint.h i386/i386elf.h echo.h"
++    tm_file="${tm_file} i386/unix.h i386/att.h dbxelf.h elfos.h glibc-stdint.h i386/i386elf.h hydra.h"
 +    ;;
 +x86_64-*-hydra*)
-+    tm_file="${tm_file} i386/unix.h i386/att.h dbxelf.h elfos.h glibc-stdint.h i386/i386elf.h i386/x86-64.h echo.h"
++    tm_file="${tm_file} i386/unix.h i386/att.h dbxelf.h elfos.h glibc-stdint.h i386/i386elf.h i386/x86-64.h hydra.h"
 +    ;;
  aarch64*-*-elf | aarch64*-*-fuchsia* | aarch64*-*-rtems*)
  	tm_file="${tm_file} dbxelf.h elfos.h newlib-stdint.h"
  	tm_file="${tm_file} aarch64/aarch64-elf.h aarch64/aarch64-errata.h aarch64/aarch64-elf-raw.h"
-diff --git a/gcc/config/echo.h b/gcc/config/echo.h
+diff --git a/gcc/config/hydra.h b/gcc/config/hydra.h
 new file mode 100644
 index 000000000..e9fb8ab0d
 --- /dev/null
@@ -70,7 +70,7 @@ index 000000000..e9fb8ab0d
 +#define MATH_LIBRARY ""
 +
 +/* Default arguments you want when running your
-+   i686-echo-gcc/x86_64-echo-gcc toolchain */
++   i686-hydra-gcc/x86_64-hydra-gcc toolchain */
 +#undef LIB_SPEC
 +#define LIB_SPEC "-lc" /* link against c library */
 +
@@ -90,7 +90,7 @@ index 000000000..e9fb8ab0d
 +   {                                  \
 +      builtin_define("__hydra__");    \
 +      builtin_define("__unix__");     \
-+      builtin_assert("system=echo"); \
++      builtin_assert("system=hydra"); \
 +      builtin_assert("system=unix");  \
 +      builtin_assert("system=posix"); \
 +   } while (0);
@@ -6094,7 +6094,7 @@ index fe1828835..7a717c65e 100644
  AC_DEFUN([GLIBCXX_CROSSCONFIG],[
  # Base decisions on target environment.
  case "${host}" in
-+  *-echo*)
++  *-hydra*)
 +    GLIBCXX_CHECK_COMPILER_FEATURES
 +    GLIBCXX_CHECK_LINKER_FEATURES
 +    GLIBCXX_CHECK_MATH_SUPPORT

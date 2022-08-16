@@ -96,12 +96,12 @@ index c81bc8a7..d58b7321 100644
  # architecture variants should be kept together even if their names
  # break the alpha sorting.
  case "${targ}" in
-+i[3-7]86-*-echo*)
++i[3-7]86-*-hydra*)
 +			targ_emul=elf_i386_hydra
 +			targ_extra_emuls=elf_i386
 +			targ64_extra_emuls="elf_x86_64_hydra elf_x86_64"
 +			;;
-+x86_64-*-echo*)
++x86_64-*-hydra*)
 +			targ_emul=elf_x86_64_hydra
 +			targ_extra_emuls="elf_i386_hydra elf_x86_64 elf_i386"
 +			;;
@@ -112,28 +112,28 @@ index c81bc8a7..d58b7321 100644
  NATIVE_LIB_DIRS='/usr/local/lib /lib /usr/lib'
  case "${target}" in
  
-+*-*-echo*)
++*-*-hydra*)
 +  NATIVE_LIB_DIRS='/Libraries/'
 +  ;;
 +
  *-*-dragonfly*)
    NATIVE_LIB_DIRS='/lib /usr/lib /usr/pkg/lib /usr/local/lib'
    ;;
-diff --git a/ld/emulparams/elf_i386_echo.sh b/ld/emulparams/elf_i386_echo.sh
+diff --git a/ld/emulparams/elf_i386_hydra.sh b/ld/emulparams/elf_i386_hydra.sh
 new file mode 100644
 index 00000000..1369b907
 --- /dev/null
-+++ b/ld/emulparams/elf_i386_echo.sh
++++ b/ld/emulparams/elf_i386_hydra.sh
 @@ -0,0 +1,4 @@
 +. ${srcdir}/emulparams/elf_i386.sh
 +GENERATE_SHLIB_SCRIPT=yes
 +GENERATE_PIE_SCRIPT=yes
 +TEXT_START_ADDR=0x400000
-diff --git a/ld/emulparams/elf_x86_64_echo.sh b/ld/emulparams/elf_x86_64_echo.sh
+diff --git a/ld/emulparams/elf_x86_64_hydra.sh b/ld/emulparams/elf_x86_64_hydra.sh
 new file mode 100644
 index 00000000..f4097a25
 --- /dev/null
-+++ b/ld/emulparams/elf_x86_64_echo.sh
++++ b/ld/emulparams/elf_x86_64_hydra.sh
 @@ -0,0 +1,2 @@
 +. ${srcdir}/emulparams/elf_x86_64.sh
 +TEXT_START_ADDR=0x400000

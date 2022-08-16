@@ -2,14 +2,14 @@
 set -eo pipefail
 # This file will need to be run in bash, for now.
 
-echo "Echo Cross-Compiler/Toolchain Build Script"
+echo "Hydra Cross-Compiler/Toolchain Build Script"
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 echo "$DIR"
 
 ARCH=${ARCH:-"x86_64"}
-TARGET="$ARCH-pc-echo"
+TARGET="$ARCH-pc-hydra"
 PREFIX="$DIR/Local/$ARCH"
 BUILD="../Build/$ARCH"
 SYSROOT="$BUILD/Root"
@@ -38,20 +38,20 @@ fi
 export CFLAGS="-g0 -O2 -mtune=native"
 export CXXFLAGS="-g0 -O2 -mtune=native"
 
-BINUTILS_VERSION="2.36"
-BINUTILS_MD5SUM="1e55743d73c100b7a0d67ffb32398cdb"
+BINUTILS_VERSION="2.38"
+BINUTILS_MD5SUM="f430dff91bdc8772fcef06ffdc0656ab"
 BINUTILS_NAME="binutils-$BINUTILS_VERSION"
 BINUTILS_PKG="${BINUTILS_NAME}.tar.gz"
 BINUTILS_BASE_URL="https://ftp.gnu.org/gnu/binutils"
 
-GDB_VERSION="10.2"
-GDB_MD5SUM="7aeb896762924ae9a2ec59525088bada"
+GDB_VERSION="11.2"
+GDB_MD5SUM="b5674bef1fbd6beead889f80afa6f269"
 GDB_NAME="gdb-$GDB_VERSION"
 GDB_PKG="${GDB_NAME}.tar.gz"
 GDB_BASE_URL="https://ftp.gnu.org/gnu/gdb"
 
-GCC_VERSION="11.1.0"
-GCC_MD5SUM="dc6886bd44bb49e2d3d662aed9729278"
+GCC_VERSION="12.1.0"
+GCC_MD5SUM="7854cdccc3a7988aa37fb0d0038b8096"
 GCC_NAME="gcc-$GCC_VERSION"
 GCC_PKG="${GCC_NAME}.tar.gz"
 GCC_BASE_URL="https://ftp.gnu.org/gnu/gcc"
@@ -254,8 +254,8 @@ pushd "$DIR/Build/$ARCH"
         perl -pi -e 's/-no-pie/-nopie/g' "$DIR/Tarballs/gcc-$GCC_VERSION/gcc/configure"
     fi
 
-    if [ ! -f "$DIR/Tarballs/gcc-$GCC_VERSION/gcc/config/echo-userland.h" ]; then
-        cp "$DIR/Tarballs/gcc-$GCC_VERSION/gcc/config/echo.h" "$DIR/Tarballs/gcc-$GCC_VERSION/gcc/config/echo-kernel.h"
+    if [ ! -f "$DIR/Tarballs/gcc-$GCC_VERSION/gcc/config/hydra-userland.h" ]; then
+        cp "$DIR/Tarballs/gcc-$GCC_VERSION/gcc/config/hydra.h" "$DIR/Tarballs/gcc-$GCC_VERSION/gcc/config/hydra-kernel.h"
     fi
 
     rm -rf gcc
