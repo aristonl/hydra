@@ -21,16 +21,16 @@ __attribute__((sysv_abi)) void Inferno() {
     descriptor.size = sizeof(Table)-1;
     descriptor.offset = (unsigned long long)&Table;
     LoadGDT(&descriptor);
-    kprintf("Loaded GDT...\n");
+    kprintf("\r\e[92m[INFO] Loaded GDT...\e[0m\n\r");
   #endif
 }
 
-__attribute__((ms_abi)) int main() {
+__attribute__((ms_abi)) [[noreturn]] void main() {
   InitializeSerialDevice();
   Inferno();
   
   // Once finished say hello and halt
-  kprintf("Impostor!\n");
+  kprintf("\e[92m[INFO] Done!\e[0m\n\r");
 
   while(true) asm("hlt");
 }

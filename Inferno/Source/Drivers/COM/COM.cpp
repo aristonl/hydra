@@ -18,7 +18,7 @@ void InitializeSerialDevice() {
   outb(0x3f8 + 4, 0x0F);
   // Report active
   COM1Active = true;
-  kprintf("\n\nInferno: Serial Device Initialized!\n");
+  kprintf("\r\e[92m[INFO] Serial Device Initialized...\e[0m\n\r");
 }
 
 // Check if data is being received on COM1

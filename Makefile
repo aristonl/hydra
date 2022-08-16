@@ -42,7 +42,7 @@ ifeq ($(shell [ -e /tmp/OVMF_CODE.fd ] && [ -e /tmp/OVMF_VARS.fd ] && echo 1 || 
 	@wget https://github.com/Null-LLC/OVMF/raw/main/OVMF_CODE.fd -O /tmp/OVMF_CODE.fd > /dev/null 2>&1
 	@wget https://github.com/Null-LLC/OVMF/raw/main/OVMF_VARS.fd -O /tmp/OVMF_VARS.fd > /dev/null 2>&1
 endif
-	@qemu-system-x86_64 -machine q35 -drive format=raw,file=Build/Hydra.iso -drive if=pflash,format=raw,unit=0,file=/tmp/OVMF_CODE.fd,readonly=on -drive if=pflash,format=raw,unit=1,file=/tmp/OVMF_VARS.fd -m $(QEMU_MEMORY) -net none -cpu qemu64 -serial file:serial.log -s -S > /dev/null 2>&1
+	@qemu-system-x86_64 -machine q35 -drive format=raw,file=Build/Hydra.iso -drive if=pflash,format=raw,unit=0,file=/tmp/OVMF_CODE.fd,readonly=on -drive if=pflash,format=raw,unit=1,file=/tmp/OVMF_VARS.fd -m $(QEMU_MEMORY) -net none -cpu qemu64 -serial stdio -s -S > /dev/null 2>&1
 else
 ifeq ($(shell [ -e /tmp/OVMF_VARS.fd ] && echo 1 || echo 0), 0)
 ifeq ($(shell [ -e /usr/share/OVMF/OVMF_VARS.fd ] && echo 1 || echo 0), 1)
@@ -53,7 +53,7 @@ else
 	@cp /usr/share/OVMF/x64/OVMF_CODE.fd /tmp/OVMF_CODE.fd
 endif
 endif
-	@qemu-system-x86_64 -machine q35 -drive format=raw,file=Build/Hydra.iso -drive if=pflash,format=raw,unit=0,file=/tmp/OVMF_CODE.fd,readonly=on -drive if=pflash,format=raw,unit=1,file=/tmp/OVMF_VARS.fd -m $(QEMU_MEMORY) -net none -cpu qemu64 -serial file:serial.log -s -S > /dev/null 2>&1
+	@qemu-system-x86_64 -machine q35 -drive format=raw,file=Build/Hydra.iso -drive if=pflash,format=raw,unit=0,file=/tmp/OVMF_CODE.fd,readonly=on -drive if=pflash,format=raw,unit=1,file=/tmp/OVMF_VARS.fd -m $(QEMU_MEMORY) -net none -cpu qemu64 -serial stdio -s -S > /dev/null 2>&1
 endif
 
 emulate:
@@ -62,7 +62,7 @@ ifeq ($(shell [ -e /tmp/OVMF_CODE.fd ] && [ -e /tmp/OVMF_VARS.fd ] && echo 1 || 
 	@wget https://github.com/Null-LLC/OVMF/raw/main/OVMF_CODE.fd -O /tmp/OVMF_CODE.fd > /dev/null 2>&1
 	@wget https://github.com/Null-LLC/OVMF/raw/main/OVMF_VARS.fd -O /tmp/OVMF_VARS.fd > /dev/null 2>&1
 endif
-	@qemu-system-x86_64 -machine q35 -drive format=raw,file=Build/Hydra.iso -drive if=pflash,format=raw,unit=0,file=/tmp/OVMF_CODE.fd,readonly=on -drive if=pflash,format=raw,unit=1,file=/tmp/OVMF_VARS.fd -m $(QEMU_MEMORY) -net none -cpu qemu64 -serial file:serial.log > /dev/null 2>&1
+	@qemu-system-x86_64 -machine q35 -drive format=raw,file=Build/Hydra.iso -drive if=pflash,format=raw,unit=0,file=/tmp/OVMF_CODE.fd,readonly=on -drive if=pflash,format=raw,unit=1,file=/tmp/OVMF_VARS.fd -m $(QEMU_MEMORY) -net none -cpu qemu64 -device virtio-serial,max_ports=2 
 else
 ifeq ($(shell [ -e /tmp/OVMF_VARS.fd ] && echo 1 || echo 0), 0)
 ifeq ($(shell [ -e /usr/share/OVMF/OVMF_VARS.fd ] && echo 1 || echo 0), 1)
@@ -73,7 +73,7 @@ else
 	@cp /usr/share/OVMF/x64/OVMF_CODE.fd /tmp/OVMF_CODE.fd
 endif
 endif
-	@qemu-system-x86_64 -machine q35 -drive format=raw,file=Build/Hydra.iso -drive if=pflash,format=raw,unit=0,file=/tmp/OVMF_CODE.fd,readonly=on -drive if=pflash,format=raw,unit=1,file=/tmp/OVMF_VARS.fd -m $(QEMU_MEMORY) -net none -cpu qemu64 -serial file:serial.log > /dev/null 2>&1
+	@qemu-system-x86_64 -machine q35 -drive format=raw,file=Build/Hydra.iso -drive if=pflash,format=raw,unit=0,file=/tmp/OVMF_CODE.fd,readonly=on -drive if=pflash,format=raw,unit=1,file=/tmp/OVMF_VARS.fd -m $(QEMU_MEMORY) -net none -cpu qemu64 -serial mon:stdio
 endif
 
 clean:
