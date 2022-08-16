@@ -1,4 +1,4 @@
-QEMU_MEMORY = 256M
+QEMU_MEMORY = 48M
 
 .PHONY: BOB Inferno Build
 

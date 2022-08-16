@@ -14,6 +14,7 @@ add_subdirectory(Inferno)
 add_subdirectory(Libraries)
 
 add_custom_target(Build
+	COMMAND ninja
 	COMMAND ninja install-inferno image iso
 	USES_TERMINAL
 )
@@ -23,7 +24,12 @@ add_custom_target(install-inferno
 	USES_TERMINAL
 )
 
+if(NOT EXISTS Build/ISO/Hydra.img)
+	set(imagecmd dd if=/dev/zero of=Build/ISO/Hydra.img bs=512 count=93750)
+endif()
+
 add_custom_target(image
+	COMMAND ${imagecmd}
 	COMMAND mformat -i Build/ISO/Hydra.img -F ::
 	COMMAND mmd -i Build/ISO/Hydra.img ::/EFI
 	COMMAND mmd -i Build/ISO/Hydra.img ::/EFI/BOOT
