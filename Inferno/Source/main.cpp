@@ -1,7 +1,7 @@
 #include <Config.hpp>
-#include <Drivers/IO/IO.hpp>
-#include <Drivers/COM/COM.hpp>
-#include <Drivers/GDT/GDT.hpp>
+#include <IO.hpp>
+#include <COM.hpp>
+#include <GDT.hpp>
 #include <Interrupts.hpp>
 
 __attribute__((interrupt)) void test(void*) {

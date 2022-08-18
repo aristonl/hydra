@@ -1,4 +1,4 @@
-#include <Drivers/COM/COM.hpp>
+#include <COM.hpp>
 
 bool COM1Active = false;
 
