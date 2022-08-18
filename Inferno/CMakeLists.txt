@@ -10,8 +10,8 @@ file(GLOB_RECURSE ASM_SRCS Source/*.s)
 set_source_files_properties(${ASM_SRCS} PROPERTIES LANGUAGE ASM_NASM)
 
 # Compile
-set(CMAKE_CXX_FLAGS "-ffreestanding -fshort-wchar -g -mabi=sysv -no-pie -mno-red-zone -mgeneral-regs-only -fstack-protector -fno-exceptions")
-add_link_options(-static -Bsymbolic -nostdlib -e main)
+set(CMAKE_CXX_FLAGS "-ffreestanding -fshort-wchar -g -mabi=sysv -no-pie -mno-red-zone -mgeneral-regs-only -O2 -fno-stack-protector -fno-exceptions")
+add_link_options(-static -Bsymbolic -fno-stack-protector -nostdlib -e main)
 include_directories(Include)
 add_executable(Inferno ${CPP_SRCS} ${ASM_SRCS})
 

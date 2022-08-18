@@ -3,10 +3,9 @@
 #include <COM.hpp>
 #include <GDT.hpp>
 #include <Interrupts.hpp>
-
-__attribute__((interrupt)) void test(void*) {
-	kprintf("The test interrupt was requested successfully!\n\r");
-}
+#include <Interrupts/Syscall.hpp>
+#include <Interrupts/PageFault.hpp>
+#include <Interrupts/DoublePageFault.hpp>
 
 extern unsigned long long InfernoStart;
 extern unsigned long long InfernoEnd;
@@ -32,14 +31,16 @@ __attribute__((sysv_abi)) void Inferno() {
 	Interrupts::CreateIDT();
 
 	// Create a test ISR
-	Interrupts::CreateISR(0, (void*)test);
+	Interrupts::CreateISR(0x80, (void*)Syscall);
+	Interrupts::CreateISR(0x0E, (void*)PageFault);
+	Interrupts::CreateISR(0x08, (void*)DoublePageFault);
 
 	// Load IDT
 	Interrupts::EnableInterrupts();
 	kprintf("\r\e[92m[INFO] Loaded IDT...\e[0m\n\r");
 
 	// IRQ Test
-	asm volatile("int $0x0");
+	asm volatile("int $0x80");
 }
 
 __attribute__((ms_abi)) [[noreturn]] void main() {
@@ -48,6 +49,7 @@ __attribute__((ms_abi)) [[noreturn]] void main() {
   
   // Once finished say hello and halt
   kprintf("\e[92m[INFO] Done!\e[0m\n\r");
+  kprintf("String: %s\n\r", "Hello, world!");
 
   while(true) asm("hlt");
 }
