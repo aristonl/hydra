@@ -5,7 +5,6 @@
 *.iso
 *.DS_Store
 Build/ISO/inferno
-.vscode/
 .idea/
 .vagrant/
 *.log
