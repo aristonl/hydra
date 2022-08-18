@@ -22,5 +22,5 @@
 
     extern "C" void LoadGDT(GDT::Descriptor* descriptor);
 
-  #endif
-#endif
+  #endif /* GDT */
+#endif /* EnableGDT */
