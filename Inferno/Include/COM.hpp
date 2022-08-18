@@ -5,6 +5,6 @@
 void InitializeSerialDevice();
 char AwaitSerialResponse();
 void kputchar(char a);
-int kprintf(const char* fmt, ...);
+void kprintf(const char* str);
 
 #endif

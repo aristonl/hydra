@@ -49,7 +49,6 @@ __attribute__((ms_abi)) [[noreturn]] void main() {
   
   // Once finished say hello and halt
   kprintf("\e[92m[INFO] Done!\e[0m\n\r");
-  kprintf("String: %s\n\r", "Hello, world!");
 
   while(true) asm("hlt");
 }
