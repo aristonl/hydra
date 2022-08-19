@@ -6,12 +6,9 @@
 *.DS_Store
 Build/ISO/inferno
 .idea/
-.vagrant/
 *.log
 
 # Makefiles
-Makefile
-
 build/
 
 # Ninja Build files
