@@ -9,6 +9,8 @@ Build/ISO/inferno
 *.log
 
 # Makefiles
+Makefile
+
 build/
 
 # Ninja Build files
