@@ -1,8 +1,8 @@
 #include <Config.hpp>
 #include <IO.hpp>
 #include <GDT.hpp>
+#include <COM.hpp>
 #include <Interrupts.hpp>
-#include <Syscall.hpp>
 #include <Interrupts/Syscall.hpp>
 #include <Interrupts/PageFault.hpp>
 #include <Interrupts/DoublePageFault.hpp>
@@ -38,6 +38,8 @@ __attribute__((sysv_abi)) void Inferno() {
 	// Load IDT
 	Interrupts::EnableInterrupts();
 	kprintf("\r\e[92m[INFO] Loaded IDT...\e[0m\n\r");
+
+	asm("int $0x80");
 }
 
 __attribute__((ms_abi)) [[noreturn]] void main() {
