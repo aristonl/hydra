@@ -1,5 +1,4 @@
 #include <COM.hpp>
-#include "../../Libraries/LibC/stdarg.h"
 
 bool COM1Active = false;
 

@@ -1,8 +1,8 @@
 #include <Config.hpp>
 #include <IO.hpp>
-#include <COM.hpp>
 #include <GDT.hpp>
 #include <Interrupts.hpp>
+#include <Syscall.hpp>
 #include <Interrupts/Syscall.hpp>
 #include <Interrupts/PageFault.hpp>
 #include <Interrupts/DoublePageFault.hpp>
@@ -31,20 +31,16 @@ __attribute__((sysv_abi)) void Inferno() {
 	Interrupts::CreateIDT();
 
 	// Create a test ISR
-	Interrupts::CreateISR(0x80, (void*)Syscall);
+	Interrupts::CreateISR(0x80, (void*)SyscallHandler);
 	Interrupts::CreateISR(0x0E, (void*)PageFault);
 	Interrupts::CreateISR(0x08, (void*)DoublePageFault);
 
 	// Load IDT
 	Interrupts::EnableInterrupts();
 	kprintf("\r\e[92m[INFO] Loaded IDT...\e[0m\n\r");
-
-	// IRQ Test
-	asm volatile("int $0x80");
 }
 
 __attribute__((ms_abi)) [[noreturn]] void main() {
-  InitializeSerialDevice();
   Inferno();
   
   // Once finished say hello and halt
