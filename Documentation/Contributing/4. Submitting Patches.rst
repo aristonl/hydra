@@ -49,10 +49,10 @@ If you've already formatted your patches and saved them to a directory
 a patch series.
 
 To send a single patch, simply run:
-    $ git send-email --to=lambda-engine@googlegroups.com patches/0001-Add-a-new-function.patch
+    $ git send-email --to=hydra-inferno@googlegroups.com patches/0001-Add-a-new-function.patch
 
 To send a patch series, run:
-    $ git send-email --to=lambda-engine@googlegroups.com patches/
+    $ git send-email --to=hydra-inferno@googlegroups.com patches/
 
 Once you send your patches, wait for a maintainer to review them. They
 will sign off on your patch, apply it to their tree and you can delete

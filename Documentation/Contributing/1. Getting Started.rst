@@ -1,6 +1,6 @@
-=================================
-Getting Started developing Lambda
-=================================
+================================
+Getting Started developing Hydra
+================================
 This folder contains documentation on developing Hydra and
 what rules to follow.
 
