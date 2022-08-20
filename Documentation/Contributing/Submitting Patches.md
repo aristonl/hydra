@@ -14,12 +14,11 @@ This patch creates a patch file from the first commit from HEAD (aka
 latest commit at HEAD). The -o option specifies the directory to save
 to (i.e. patches/).
 
-## Sending your patches
-The recommended way to send your patches is to use git send-email.
-If you're using another email client, read EmailClients.rst. This
-document will show you how to use git send-email to send your patches.
+If you need to make a revision of your patch based on replies you've recieved,
+you can amend a previous commit with `git commit --amend` and append `-v2` to
+the format patch command used prior.
 
-## Setup your git config
+### Setup your git config
 An example of a git config file using Gmail as your SMTP.
 
 ```
@@ -31,17 +30,15 @@ An example of a git config file using Gmail as your SMTP.
     smtpencryption = tls
 ```
 
-## Sending your patch
+## Send your patch to the mailing list
 To send your patch to the mailing list there are three ways of doing
 so. The first two is to use git send-email through already formatted
 patches or to generate the patch without saving to a file and sending
 it. The third way is to use another email client (ie. neomutt) and send
 the patch via the email client. You can find how to do the latter in
 EmailClients.rst.
-```
-git send-email with formatted patches
-```
 
+### git send-email with formatted patches
 If you've already formatted your patches and saved them to a directory
 (ie. patches/), you can send the patches either as a single patch or as
 a patch series.
