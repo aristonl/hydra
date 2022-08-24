@@ -7,35 +7,12 @@ custom Inferno kernel. It is made for ARM64 and x64 UEFI Machines.
 This repository has 3 main sections, BOB (our bootloader), Inferno (the kernel), and Hydra
 (the operating system itself).
 
-## Features
-- Custom EFI Bootloader
-- Custom Boot Logo
-- Custom LibC Library
-- USTAR File System support
-- Interrupts
-- Memory Drivers (Allocation, Paging, etc...)
-- Panic Screen (blue screen)
-- PS2 Keyboard and Mouse drivers
-- PCI Driver
-
-## Coming Soon
-- AHCI Driver
-- ext2 File System Support
-- Custom toolchain
+## Notice
+If you create a PR to this repository via GitHub, your PR will be declined, please use ssh://git.n11.dev/hydra instead.
+Also, if your commit includes code relating to adding support for BIOS or x86 machines it will be declined. Our OS is strictly for 64bit machines with UEFI, we will accept any working fixes/features for 64bit machines.
 
 ## Links
 [Discord](https://discord.gg/SNXBh4w3nW)
-
-
-
-## Contributors
-**Ariston Lorenzo** - [@aristonl](https://github.com/aristonl)
-
-**Levi Hicks** - [@FiReLScar](https://github.com/FiReLScar)
-
-**Genesis Banzon** - [@myst330](https://github.com/myst330)
-
-**Nola G** - [@gingerwitch64](https://github.com/gingerwitch64)
 
 ## License
 Hydra and Inferno are licensed under the MIT License.
