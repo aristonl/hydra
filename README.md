@@ -4,12 +4,15 @@ A 64-Bit Operating System for ARM and x64 built in C++.
 ## About
 Hydra, is a Operating System built in C++ built on top of the
 custom Inferno kernel. It is made for ARM64 and x64 UEFI Machines.
-This repository has 3 main sections, BOB (our bootloader), Inferno (the kernel), and Hydra
+This repository has 2 main sections, Inferno (the kernel), and Hydra
 (the operating system itself).
 
 ## Notice
 If you create a PR to this repository via GitHub, your PR will be declined, please read CONTRIBUTING.md and
 Documentation/Contributing for more info.
+<br>
+BOB is now located at https://github.com/N11Software/BOB.git.
+<br>
 Also, if your commit includes code relating to adding support for BIOS or x86 machines it will be declined. Our OS is strictly for 64bit machines with UEFI, we will accept any working fixes/features for 64bit machines.
 
 ## Links
