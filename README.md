@@ -8,7 +8,8 @@ This repository has 3 main sections, BOB (our bootloader), Inferno (the kernel),
 (the operating system itself).
 
 ## Notice
-If you create a PR to this repository via GitHub, your PR will be declined, please use ssh://git.n11.dev/hydra instead.
+If you create a PR to this repository via GitHub, your PR will be declined, please read CONTRIBUTING.md and
+Documentation/Contributing for more info.
 Also, if your commit includes code relating to adding support for BIOS or x86 machines it will be declined. Our OS is strictly for 64bit machines with UEFI, we will accept any working fixes/features for 64bit machines.
 
 ## Links
