@@ -16,7 +16,7 @@ Following this, you can `git pull` as needed. You won't usually need to reconfig
 <br>
 Once your ready to run, you can build and run Hydra with:
 ```bash
-cmake .
+cmake -GNinja .
 ninja
 ninja Build emulate
 ```
