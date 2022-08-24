@@ -41,3 +41,15 @@ void* memset(void* destptr, int value, unsigned long int size) {
     for (;size--;) *pd++ = value;
     return destptr;
 }
+
+void* memcpy(void* destptr, void const* srcptr, unsigned long int size) {
+    unsigned long int dest = (unsigned long int)destptr;
+    unsigned long int src = (unsigned long int)srcptr;
+    if (!(dest&3)&&!(src&3)&&size>=12) {
+        unsigned long int a = size/sizeof(unsigned long int);
+        asm volatile("rep movsq" : "=S"(src), "=D"(dest) : "S"(src), "D"(dest), "c"(a) : "memory");
+        size-=a*sizeof(unsigned long int);
+        if (size==0) return destptr;
+    }
+    return destptr;
+}

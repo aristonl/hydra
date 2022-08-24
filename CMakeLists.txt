@@ -20,7 +20,7 @@ add_custom_target(Build
 )
 
 add_custom_target(install-inferno
-	COMMAND mv Inferno/Inferno Build/ISO/inferno
+	COMMAND mv Inferno/Inferno Build/ISO/kernel
 	USES_TERMINAL
 )
 
@@ -34,10 +34,8 @@ add_custom_target(image
 	COMMAND mmd -i Build/ISO/Hydra.img ::/EFI
 	COMMAND mmd -i Build/ISO/Hydra.img ::/EFI/BOOT
 	COMMAND mcopy -i Build/ISO/Hydra.img Build/ISO/EFI/BOOT/bootx64.efi ::/EFI/BOOT
-	COMMAND mcopy -i Build/ISO/Hydra.img Build/ISO/Hydra.tga ::
 	COMMAND mcopy -i Build/ISO/Hydra.img Build/ISO/error.tga ::
-	COMMAND mcopy -i Build/ISO/Hydra.img Build/ISO/font.psf ::
-	COMMAND mcopy -i Build/ISO/Hydra.img Build/ISO/inferno ::
+	COMMAND mcopy -i Build/ISO/Hydra.img Build/ISO/kernel ::
 	COMMAND mcopy -i Build/ISO/Hydra.img Build/ISO/startup.nsh ::
 	USES_TERMINAL
 )
@@ -47,13 +45,12 @@ add_custom_target(iso
 	USES_TERMINAL
 )
 
+if(NOT EXISTS /tmp/OVMF_CODE.fd)
+	set(preqemu wget https://github.com/Null-LLC/OVMF/raw/main/OVMF_CODE.fd -O /tmp/OVMF_CODE.fd && wget https://github.com/Null-LLC/OVMF/raw/main/OVMF_VARS.fd -O /tmp/OVMF_VARS.fd)
+endif()
+
 add_custom_target(emulate
+	COMMAND ${preqemu}
 	COMMAND qemu-system-x86_64 -machine q35 -drive format=raw,file=Build/Hydra.iso -drive if=pflash,format=raw,unit=0,file=/tmp/OVMF_CODE.fd,readonly=on -drive if=pflash,format=raw,unit=1,file=/tmp/OVMF_VARS.fd -m 256M -net none -cpu qemu64 -serial mon:stdio
 	USES_TERMINAL
-)
-
-add_custom_target(clean-build
-	@rm -r Build/Hydra.iso Build/ISO/Hydra.img Build/ISO/inferno Build/ISO/EFI/BOOT/bootx64.efi
-	@rm -r BOB/Build/
-	@rm -r Inferno/Build/
 )

@@ -14,11 +14,13 @@
 #include <Interrupts/Syscall.hpp>
 #include <Interrupts/PageFault.hpp>
 #include <Interrupts/DoublePageFault.hpp>
+#include <BOB.hpp>
+#include <Memory/Mem_.hpp>
 
 extern unsigned long long InfernoStart;
 extern unsigned long long InfernoEnd;
 
-__attribute__((sysv_abi)) void Inferno() {
+__attribute__((sysv_abi)) void Inferno(BOB* bob) {
 	// Create GDT
 	#if EnableGDT == true
 		GDT::Table GDT = {
@@ -50,11 +52,11 @@ __attribute__((sysv_abi)) void Inferno() {
 	asm("int $0x80");
 }
 
-__attribute__((ms_abi)) [[noreturn]] void main() {
-  Inferno();
-  
-  // Once finished say hello and halt
-  kprintf("\e[92m[INFO] Done!\e[0m\n\r");
+__attribute__((ms_abi)) [[noreturn]] void main(BOB* bob) {
+	Inferno(bob);
 
-  while(true) asm("hlt");
+	// Once finished say hello and halt
+	kprintf("\e[92m[INFO] Done!\e[0m\n\r");
+
+	while(true) asm("hlt");
 }

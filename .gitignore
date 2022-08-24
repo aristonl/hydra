@@ -8,7 +8,7 @@
 *.img
 *.iso
 *.DS_Store
-Build/ISO/inferno
+Build/ISO/kernel
 .idea/
 *.log
 
