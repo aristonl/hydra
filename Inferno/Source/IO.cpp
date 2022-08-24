@@ -1,3 +1,11 @@
+//========= Copyright N11 Software, All rights reserved. ============//
+//
+// File: IO.cpp
+// Purpose: 
+// Maintainer: FiReLScar
+//
+//===================================================================//
+
 #include <IO.hpp>
 
 void outb(unsigned short port, unsigned char value) {

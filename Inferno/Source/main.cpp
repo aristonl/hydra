@@ -1,3 +1,11 @@
+//========= Copyright N11 Software, All rights reserved. ============//
+//
+// File: main.cpp
+// Purpose: Main point of the kernel.
+// Maintainer: aristonl, FiReLScar
+//
+//===================================================================//
+
 #include <Config.hpp>
 #include <IO.hpp>
 #include <GDT.hpp>

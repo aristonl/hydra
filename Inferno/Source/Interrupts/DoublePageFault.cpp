@@ -1,3 +1,11 @@
+//========= Copyright N11 Software, All rights reserved. ============//
+//
+// File: DoublePageFault.cpp
+// Purpose: 
+// Maintainer: FiReLScar
+//
+//===================================================================//
+
 #include <Interrupts/DoublePageFault.hpp>
 #include <COM.hpp>
 
