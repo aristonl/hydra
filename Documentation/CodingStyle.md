@@ -134,31 +134,33 @@ the top of files.
  * be placed at the end of the comment block.
  */
 ```
-<br>
 **NOTE**
 <br>
 If the `@argument` has multiple lines, the continuation should start on the
 same column as the previous line.
-```
-* @argument: some long description
-*            that continues on next lines
+```cpp
+/**
+ * @argument: some long description
+ *            that continues on next lines
+ */
 ```
 or:
+```cpp
+/**
+ * @argument:
+ *         some long description
+ *         that continues on next lines
+ */
 ```
-* @argument:
-*         some long description
-*         that continues on next lines
-```
-<br>
 Any return values should be in a dedicated section called `Return`.
+```cpp
+/**
+ * Return:
+ * 0 - OK
+ * -EINVAL - invalid argument
+ * -ENOMEM - out of memory
+ */
 ```
-* Return:
-* 0 - OK
-* -EINVAL - invalid argument
-* -ENOMEM - out of memory
-```
-
-
 
 ### #endif
 All `#endif` statements must have a comment to what `#if`/`#ifndef`; it belongs to.
