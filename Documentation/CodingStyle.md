@@ -1,5 +1,14 @@
 # N11 Software Coding Style
-This document contains information on the general coding guidelines are for N11 Software. 
+This document contains information on the general coding guidelines are for 
+N11 Software. Being honest, this coding style is our (mainly, levi and
+ariston's) personal preference and we'll try not to **force** it down your
+throat, but this is preferred for any and all N11 projects. Please try your
+best to adhere to this.
+<br>
+First off, I'd suggest printing out a copy of the GNU coding standards, and 
+NOT read it. Burn them, it's a great symbolic gesture.
+<br>
+Anyway, here goes:
 
 ## Indentation
 
@@ -7,7 +16,10 @@ This document contains information on the general coding guidelines are for N11 
 Tabs should be used in place of spaces when indenting code.
 
 ### Indent Size
-Indent size is 4 spaces.
+Indent size is 4 spaces. This should be a good indicator of when you have
+over-engineered your code. If you need around 3-6 levels of indentation,
+you might want to consider fixing some parts of your code; >6 levels and 
+your best bet is restart the whole thing and write it again.
 
 ```cpp
 int foo() {
@@ -18,10 +30,14 @@ int foo() {
 ```
 
 ### Bracket Placing
-Brackets should be on the same line as its parent statement
+Brackets should be on the same line as its parent statement.
 ```cpp
 if (foo == true) {
 	// code.
+}
+
+int main(int x) {
+	// more code.
 }
 ```
 
@@ -34,7 +50,7 @@ good time to check to see if something is over-engineered. In the case of emails
 commit descriptions, etc., these should all follow the 80 line limit since it's
 better for our (by default) 80 x 60 terminal windows.
 
-## Notation
+## Naming
 
 ### Hungarian Notation
 "Hungarian Notation" was a common practice back in 90's C/C++ style for Windows
@@ -68,21 +84,81 @@ String mimeType();
 
 ## Comments
 
-### Copyright Header
+### Comment Header
+We haven't enforced this too much lately but, try your best to put this at
+the top of files.
 ```cpp
 //========= Copyright N11 Software, All rights reserved. ============//
 //
+// File: ---
 // Purpose: ---
+// Maintainer: ---
 //
 //===================================================================//
 ```
 
-### Declaration Header
+### Multi-Line Comments
 ```cpp
-//===================================================================//
-//
-//===================================================================//
+/*
+ * This is the preferred style for multi-line
+ * comments in all N11 project source code.
+ * Please use it consistently.
+ *
+ * Description:  A column of asterisks on the left side,
+ * with beginning and ending almost-blank lines.
+ */
 ```
+
+### Function Documentation
+```cpp
+/**
+ * function_name() - Brief description of function.
+ * @arg1: Describe the first argument.
+ * @arg2: Describe the second argument.
+ *        One can provide multiple line descriptions
+ *        for arguments.
+ *
+ * A longer description, with more discussion of the function function_name()
+ * that might be useful to those using or modifying it. Begins with an
+ * empty comment line, and may include additional embedded empty
+ * comment lines.
+ *
+ * The longer description may have multiple paragraphs.
+ *
+ * Context: Describes whether the function can sleep, what locks it takes,
+ *          releases, or expects to be held. It can extend over multiple
+ *          lines.
+ * Return: Describe the return value of function_name.
+ *
+ * The return value description can also have multiple paragraphs, and should
+ * be placed at the end of the comment block.
+ */
+```
+<br>
+**NOTE**
+<br>
+If the `@argument` has multiple lines, the continuation should start on the
+same column as the previous line.
+```
+* @argument: some long description
+*            that continues on next lines
+```
+or:
+```
+* @argument:
+*         some long description
+*         that continues on next lines
+```
+<br>
+Any return values should be in a dedicated section called `Return`.
+```
+* Return:
+* 0 - OK
+* -EINVAL - invalid argument
+* -ENOMEM - out of memory
+```
+
+
 
 ### #endif
 All `#endif` statements must have a comment to what `#if`/`#ifndef`; it belongs to.

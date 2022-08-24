@@ -1,3 +1,11 @@
+//========= Copyright N11 Software, All rights reserved. ============//
+//
+// File: Interrupts.hpp
+// Purpose: 
+// Maintainer: FiReLScar
+//
+//===================================================================//
+
 #ifndef Interrupts
 
 namespace Interrupts {
@@ -17,4 +25,4 @@ namespace Interrupts {
   void CreateISR(unsigned char index, void* handler);
 }
 
-#endif /* Interrupts */
+#endif // Interrupts

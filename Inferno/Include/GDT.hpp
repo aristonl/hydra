@@ -1,3 +1,11 @@
+//========= Copyright N11 Software, All rights reserved. ============//
+//
+// File: GDT.hpp
+// Purpose:
+// Maintainer: FiReLScar
+//
+//===================================================================//
+
 #include <Config.hpp>
 
 #if EnableGDT == true
@@ -22,5 +30,5 @@
 
     extern "C" void LoadGDT(GDT::Descriptor* descriptor);
 
-  #endif /* GDT */
-#endif /* EnableGDT */
+  #endif // GDT
+#endif // EnableGDT
