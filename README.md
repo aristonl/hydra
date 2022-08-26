@@ -13,7 +13,7 @@ Documentation/Contributing for more info.
 <br>
 BOB is now located at https://github.com/N11Software/BOB.git.
 <br>
-Also, if your commit includes code relating to adding support for BIOS or x86 machines it will be declined. Our OS is strictly for 64bit machines with UEFI, we will accept any working fixes/features for 64bit machines.
+Also, if your commit includes code relating to adding support for BIOS or x86 machines, we will not be accepting your code on the mainline and we will not maintain your code.
 
 ## Links
 [Discord](https://discord.gg/SNXBh4w3nW)
