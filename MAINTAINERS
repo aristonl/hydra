@@ -1,0 +1,35 @@
+
+			Maintainer list
+
+	M: *Mail* patches to mailing list: <address@domain>
+	R: *Reviewer*: FullName <address@domain>
+	   	This reviewer should be CCed on patches.
+	S: *Status*, one of the following:
+	   	Maintained:	Someone looks after it
+	  	Orphan:		No current maintainer [but you can take
+	   				the roles as you write more code]
+	 	Obsolete:	Old code. Anything with this tagged basically
+					means this code has been replaced with something
+					better and you should be using that instead.
+	B: URL for where to file *bugs*. 
+		This can be a github page or a mailing list.
+	C: URL for *chat*.
+		Server or channle where developers are. Can be IRC or Discord.
+	G: *Git* repository link.
+	
+DOCUMENTATION
+M:	hydra-inferno@googlegroups.com
+R:	Genesis Banzon <mysteriousrazor330@gmail.com>
+S: 	Maintained
+B:	https://github.com/N11Software/hydra
+C:	https://discord.gg/SNXBh4w3nW
+G: 	ssh://git.n11.dev/hydra
+
+THE REST:
+M:	hydra-inferno@googlegroups.com
+R:	Levi Hicks <levih@n11.dev>
+R:	Ariston Lorenzo <aristonl@n11.dev>
+S:	Playing bridge
+B:	hydra-inferno@googlegroups.com
+C:	https://discord.gg/SNXBh4w3nW
+G:	ssh://git.n11.dev/hydra
