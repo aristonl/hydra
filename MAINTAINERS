@@ -25,6 +25,13 @@ B:	https://github.com/N11Software/hydra
 C:	https://discord.gg/SNXBh4w3nW
 G: 	ssh://git.n11.dev/hydra
 
+STABLE TREE
+M:	hydra-inferno@googlegroups.com
+R:	Ariston Lorenzo <4tl0renz0@gmail.com>
+S:	Maintained
+G:	ssh://git.n11.dev/hydra-stable
+G:	https://github.com/aristonl/hydra.git
+
 THE REST:
 M:	hydra-inferno@googlegroups.com
 R:	Levi Hicks <levih@n11.dev>
