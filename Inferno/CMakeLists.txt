@@ -16,3 +16,41 @@ include_directories(Include)
 add_executable(Inferno ${CPP_SRCS} ${ASM_SRCS})
 
 set_target_properties(Inferno PROPERTIES LINK_DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/linker.ld)
+
+add_custom_command(TARGET Inferno POST_BUILD
+	COMMAND mv ${CMAKE_CURRENT_SOURCE_DIR}/Inferno ${CMAKE_CURRENT_SOURCE_DIR}/../Build/ISO/kernel
+	USES_TERMINAL
+)
+
+if(NOT EXISTS Build/ISO/Hydra.img)
+	set(imagecmd dd if=/dev/zero of=${CMAKE_CURRENT_SOURCE_DIR}/../Build/ISO/Hydra.img bs=512 count=93750)
+endif()
+
+add_custom_command(TARGET Inferno POST_BUILD
+	COMMAND ${imagecmd}
+	COMMAND mformat -i ${CMAKE_CURRENT_SOURCE_DIR}/../Build/ISO/Hydra.img -F ::
+	COMMAND mmd -i ${CMAKE_CURRENT_SOURCE_DIR}/../Build/ISO/Hydra.img ::/EFI
+	COMMAND mmd -i ${CMAKE_CURRENT_SOURCE_DIR}/../Build/ISO/Hydra.img ::/EFI/BOOT
+	COMMAND mcopy -i ${CMAKE_CURRENT_SOURCE_DIR}/../Build/ISO/Hydra.img ${CMAKE_CURRENT_SOURCE_DIR}/../Build/ISO/EFI/BOOT/bootx64.efi ::/EFI/BOOT
+	COMMAND mcopy -i ${CMAKE_CURRENT_SOURCE_DIR}/../Build/ISO/Hydra.img ${CMAKE_CURRENT_SOURCE_DIR}/../Build/ISO/error.tga ::
+	COMMAND mcopy -i ${CMAKE_CURRENT_SOURCE_DIR}/../Build/ISO/Hydra.img ${CMAKE_CURRENT_SOURCE_DIR}/../Build/ISO/kernel ::
+	COMMAND mcopy -i ${CMAKE_CURRENT_SOURCE_DIR}/../Build/ISO/Hydra.img ${CMAKE_CURRENT_SOURCE_DIR}/../Build/ISO/startup.nsh ::
+	USES_TERMINAL
+)
+
+add_custom_command(TARGET Inferno POST_BUILD
+	COMMAND xorriso -as mkisofs -R -f -e Hydra.img -no-emul-boot -V "Hydra" -o ${CMAKE_CURRENT_SOURCE_DIR}/../Build/Hydra.iso ${CMAKE_CURRENT_SOURCE_DIR}/../Build/ISO/
+	USES_TERMINAL
+)
+
+if(NOT EXISTS /tmp/OVMF_CODE.fd)
+	set(preqemu wget https://github.com/Null-LLC/OVMF/raw/main/OVMF_CODE.fd -O /tmp/OVMF_CODE.fd && wget https://github.com/Null-LLC/OVMF/raw/main/OVMF_VARS.fd -O /tmp/OVMF_VARS.fd)
+endif()
+
+add_custom_target(Emulate
+	COMMAND ${preqemu}
+	COMMAND qemu-system-x86_64 -machine q35 -drive format=raw,file=${CMAKE_CURRENT_SOURCE_DIR}/../Build/Hydra.iso -drive if=pflash,format=raw,unit=0,file=/tmp/OVMF_CODE.fd,readonly=on -drive if=pflash,format=raw,unit=1,file=/tmp/OVMF_VARS.fd -m 256M -net none -cpu qemu64 -serial mon:stdio
+	USES_TERMINAL
+)
+
+add_dependencies(Emulate Inferno)

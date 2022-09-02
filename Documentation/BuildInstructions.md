@@ -17,8 +17,7 @@ Following this, you can `git pull` as needed. You won't usually need to reconfig
 Once your ready to run, you can build and run Hydra with:
 ```bash
 cmake -GNinja .
-ninja
-ninja Build emulate
+ninja Emulate
 ```
 A QEMU window will open and will virtualize Hydra. You can also find the in the `$HYDRA_REPO_DIRECTORY/Build` directory .iso files if needed.
 ## More Information
