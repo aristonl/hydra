@@ -27,3 +27,7 @@ rules.ninja
 CMakeFiles/
 CMakeCache.txt
 cmake_install.cmake
+
+# Patches
+.patch
+patches/
