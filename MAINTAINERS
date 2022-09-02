@@ -14,7 +14,7 @@
 	B: URL for where to file *bugs*. 
 		This can be a github page or a mailing list.
 	C: URL for *chat*.
-		Server or channle where developers are. Can be IRC or Discord.
+		Server or channel where developers are. Can be IRC or Discord.
 	G: *Git* repository link.
 	
 DOCUMENTATION
@@ -25,10 +25,17 @@ B:	https://github.com/N11Software/hydra
 C:	https://discord.gg/SNXBh4w3nW
 G: 	ssh://git.n11.dev/hydra
 
+STABLE TREE
+M:	hydra-inferno@googlegroups.com
+R:	Ariston Lorenzo <4tl0renz0@gmail.com>
+S:	Maintained
+G:	ssh://git.n11.dev/hydra-stable
+G:	https://github.com/aristonl/hydra.git
+
 THE REST:
 M:	hydra-inferno@googlegroups.com
 R:	Levi Hicks <levih@n11.dev>
-R:	Ariston Lorenzo <aristonl@n11.dev>
+R:	Ariston Lorenzo <4tl0renz0@gmail.com>
 S:	Playing bridge
 B:	hydra-inferno@googlegroups.com
 C:	https://discord.gg/SNXBh4w3nW
