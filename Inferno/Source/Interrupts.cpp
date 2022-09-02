@@ -19,9 +19,17 @@ namespace Interrupts {
 		};
 	}
 
-	void EnableInterrupts() {
+    void Enable() {
+        asm("sti");
+    }
+
+    void Disable() {
+        asm("cli");
+    }
+
+	void LoadIDT() {
 		__asm__ volatile ("lidt %0" : : "m"(IDT));
-		__asm__ volatile ("sti");
+		Enable();
 	}
 
     void CreateISR(unsigned char index, void* handler) {

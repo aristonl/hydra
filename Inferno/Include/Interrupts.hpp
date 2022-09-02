@@ -21,8 +21,9 @@ namespace Interrupts {
     unsigned long long base;
   }__attribute__((packed)) Table;
   
-  void CreateIDT(), EnableInterrupts();
+  void CreateIDT(), LoadIDT();
   void CreateISR(unsigned char index, void* handler);
+  void Enable(), Disable();
 }
 
 #endif // Interrupts
