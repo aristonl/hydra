@@ -47,10 +47,10 @@ if(NOT EXISTS /tmp/OVMF_CODE.fd)
 	set(preqemu wget https://github.com/Null-LLC/OVMF/raw/main/OVMF_CODE.fd -O /tmp/OVMF_CODE.fd && wget https://github.com/Null-LLC/OVMF/raw/main/OVMF_VARS.fd -O /tmp/OVMF_VARS.fd)
 endif()
 
-add_custom_target(Emulate
+add_custom_target(emulate
 	COMMAND ${preqemu}
 	COMMAND qemu-system-x86_64 -machine q35 -drive format=raw,file=${CMAKE_CURRENT_SOURCE_DIR}/../Build/Hydra.iso -drive if=pflash,format=raw,unit=0,file=/tmp/OVMF_CODE.fd,readonly=on -drive if=pflash,format=raw,unit=1,file=/tmp/OVMF_VARS.fd -m 256M -net none -cpu qemu64 -serial mon:stdio
 	USES_TERMINAL
 )
 
-add_dependencies(Emulate Inferno)
+add_dependencies(emulate Inferno)
