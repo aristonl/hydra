@@ -4,14 +4,18 @@ set -eo pipefail
 
 echo "Hydra Cross-Compiler/Toolchain Build Script"
 
+echo "Building to target: ${TARGET}"
+
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
-echo "$DIR"
+echo "Current Directory: $DIR"
+echo "Build Directory: $BUILD"
+echo "Sysroot Directory: $SYSROOT"
 
 ARCH=${ARCH:-"x86_64"}
 TARGET="$ARCH-pc-hydra"
 PREFIX="$DIR/Local/$ARCH"
-BUILD="../Build/$ARCH"
+BUILD="$DIR/Build/$ARCH"
 SYSROOT="$BUILD/Root"
 
 MAKE="make"
@@ -61,6 +65,20 @@ buildstep() {
     shift
     "$@" 2>&1 | sed $'s|^|\x1b[34m['"${NAME}"$']\x1b[39m |'
 }
+
+mkdir -p $BUILD
+
+pushd "$BUILD/"
+echo "XXX echo libc and libm headers"
+    mkdir -p $BUILD/Root/usr/include/
+    SRC_ROOT=$($REALPATH "$DIR"/..)
+    FILES=$(find "$SRC_ROOT"/Libraries/LibC "$SRC_ROOT"/Libraries/LibM -name '*.h' -print)
+    for header in $FILES; do
+        target=$(echo "$header" | sed -e "s@$SRC_ROOT/Libraries/LibC@@" -e "s@$SRC_ROOT/Libraries/LibM@@")
+        buildstep "system_headers" $INSTALL -D "$header" "Root/usr/include/$target"
+    done
+    unset SRC_ROOT
+popd
 
 # === DEPENDENCIES ===
 buildstep dependencies echo "Checking whether 'make' is available..."
@@ -179,7 +197,6 @@ pushd "$DIR/Tarballs"
     fi
 popd
 
-
 # === COMPILE AND INSTALL ===
 
 rm -rf "$PREFIX"
@@ -189,9 +206,7 @@ if [ -z "$MAKEJOBS" ]; then
     MAKEJOBS=$($NPROC)
 fi
 
-mkdir -p "$DIR/Build/$ARCH"
-
-pushd "$DIR/Build/$ARCH"
+pushd "$BUILD"
     unset PKG_CONFIG_LIBDIR # Just in case
 
     if [ "$ARCH" = "aarch64" ]; then
@@ -237,19 +252,6 @@ pushd "$DIR/Build/$ARCH"
         buildstep "binutils/install" "$MAKE" install || exit 1
     popd
 
-    echo "XXX echo libc, libm and libpthread headers"
-    mkdir -p "$BUILD"
-    pushd "$BUILD"
-        mkdir -p Root/usr/include/
-        SRC_ROOT=$($REALPATH "$DIR"/..)
-        FILES=$(find "$SRC_ROOT"/Libraries/LibC "$SRC_ROOT"/Libraries/LibM -name '*.h' -print)
-        for header in $FILES; do
-            target=$(echo "$header" | sed -e "s@$SRC_ROOT/Libraries/LibC@@" -e "s@$SRC_ROOT/Libraries/LibM@@")
-            buildstep "system_headers" $INSTALL -D "$header" "Root/usr/include/$target"
-        done
-        unset SRC_ROOT
-    popd
-
     if [ "$SYSTEM_NAME" = "OpenBSD" ]; then
         perl -pi -e 's/-no-pie/-nopie/g' "$DIR/Tarballs/gcc-$GCC_VERSION/gcc/configure"
     fi
@@ -267,12 +269,10 @@ pushd "$DIR/Build/$ARCH"
                                             --target="$TARGET" \
                                             --with-sysroot="$SYSROOT" \
                                             --disable-nls \
-                                            --with-newlib \
-                                            --enable-shared \
+                                            --disable-shared \
+											--disable-threads \
                                             --enable-languages=c,c++ \
-                                            --enable-default-pie \
-                                            --enable-lto \
-                                            --enable-threads=posix \
+											--without-headers \
                                             ${TRY_USE_LOCAL_TOOLCHAIN:+"--quiet"} || exit 1
 
         echo "XXX build gcc and libgcc"

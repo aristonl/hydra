@@ -17,11 +17,12 @@ Following this, you can `git pull` as needed. You won't usually need to reconfig
 Once your ready to run, you can build and run Hydra with:
 ```bash
 cmake -GNinja .
-ninja Emulate
+ninja
 ```
-A QEMU window will open and will virtualize Hydra. You can also find the in the `$HYDRA_REPO_DIRECTORY/Build` directory .iso files if needed.
-## More Information
-If you want to build just an ISO file for use on a virtual machine software (i.e. VirtualBox), you can run:
-```bash
-ninja Inferno image iso
-```
+This will build the ISO and save it into the `$HYDRA_ROOT/Build` folder.
+
+## Emulating
+You can use the ISO in other virtualization software such as VirtualBox or
+VMWare or use QEMU to emulate it. You can either write up the command
+yourself or use the default QEMU command that comes with CMakeLists.txt
+which can be ran with `ninja Emulate`.
