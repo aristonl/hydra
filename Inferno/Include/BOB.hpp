@@ -10,7 +10,7 @@ struct BOB {
 	unsigned long long DescriptorSize, MapSize;
 	MemoryDescriptor* MemoryMap;
 
-    Framebuffer* framebuffer;
+  Framebuffer* framebuffer;
 };
 
 #endif /* BOB */

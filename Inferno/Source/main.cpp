@@ -15,6 +15,7 @@
 #include <Interrupts/PageFault.hpp>
 #include <Interrupts/DoublePageFault.hpp>
 #include <BOB.hpp>
+#include <CPUID.hpp>
 #include <Memory/Mem_.hpp>
 
 extern unsigned long long InfernoStart;
