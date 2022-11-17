@@ -1,15 +1,28 @@
+//========= Copyright N11 Software, All rights reserved. ============//
+//
+// File: assert.h
+// Purpose: Header file for POSIX program assertion
+// Author: Ariston Lorenzo <aristonl@n11.dev>
+//
+//===================================================================//
+
 #pragma once
 
 #include <sys/cdefs.h>
 
+#ifdef NDEBUG
+#define assert(e) ((void)0)
+#endif /* NDEBUG */
+
 __BEGIN_DECLS
 
-void __assertion_failed(const char* msg, const char* file, unsigned line, const char* func);
+void __assert_fail(const char* msg, const char* file, unsigned line, const char* function)
 
-#define assert(expr) (static_cast<bool>(expr) ? (void)0 : __assertion_failed(#expr, __FILE__, __LINE__, __PRETTY_FUNCTION__))
-#define CRASH() do { asm volatile("ud2"); } while(0)
+// This isn't used but it's for standard compliance
+void __assert(const char* msg, const char* file, unsigned line);
+
+#define assert(e) (static_cast <bool> (e) ? void (0) : __assert (#e, __FILE__, __LINE__, __PRETTY_FUNCTION__))
 #define ASSERT assert
-#define RELEASE_ASSERT assert
-#define ASSERT_NOT_REACHED() assert(false)
+#define ASSERT_NOT_REACHED assert(false)
 
 __END_DECLS
