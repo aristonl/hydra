@@ -30,7 +30,7 @@ M:	hydra-inferno@googlegroups.com
 R:	Ariston Lorenzo <aristonl@n11.dev>
 S:	Maintained
 G:	ssh://git.n11.dev/hydra-stable
-G:	https://github.com/aristonl/hydra.git
+G:	https://github.com/aristonl/hydra.git (mirror)
 
 THE REST:
 M:	hydra-inferno@googlegroups.com
@@ -40,3 +40,4 @@ S:	Playing bridge
 B:	hydra-inferno@googlegroups.com
 C:	https://discord.gg/SNXBh4w3nW
 G:	ssh://git.n11.dev/hydra
+G:  https://github.com/N11Software/hydra.git
