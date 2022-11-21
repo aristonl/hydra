@@ -6,8 +6,6 @@
 //
 //===================================================================//
 
-#ifndef PageFault
+#pragma once
 
 __attribute__((interrupt)) void DoublePageFault(void*);
-
-#endif // PageFault

@@ -6,8 +6,6 @@
 //
 //===================================================================//
 
-#ifndef Syscall
+#pragma once
 
 __attribute__((interrupt)) void SyscallHandler(void*);
-
-#endif // Syscall

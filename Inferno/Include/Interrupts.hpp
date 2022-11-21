@@ -6,7 +6,7 @@
 //
 //===================================================================//
 
-#ifndef Interrupts
+#pragma once
 
 namespace Interrupts {
   typedef struct {
@@ -25,5 +25,3 @@ namespace Interrupts {
   void CreateISR(unsigned char index, void* handler);
   void Enable(), Disable();
 }
-
-#endif // Interrupts

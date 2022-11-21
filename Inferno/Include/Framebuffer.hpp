@@ -1,4 +1,12 @@
-#ifndef Framebuffer
+//========= Copyright N11 Software, All rights reserved. ============//
+//
+// File: Framebuffer.hpp
+// Purpose: Holds the class for the display framebuffer
+// Maintainer: FiReLScar
+//
+//===================================================================//
+
+#pragma once
 
 class Framebuffer {
   public:
@@ -14,5 +22,3 @@ class Framebuffer {
     unsigned long long Size;
     unsigned int Width, Height, PPSL;
 };
-
-#endif /* Framebuffer */

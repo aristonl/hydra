@@ -6,14 +6,10 @@
 //
 //===================================================================//
 
-#ifndef COM
-#define COM
-
+#pragma once
 #include <IO.hpp>
 
 void InitializeSerialDevice();
 char AwaitSerialResponse();
 void kputchar(char a);
 void kprintf(const char* str);
-
-#endif //COM

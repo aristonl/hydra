@@ -6,11 +6,9 @@
 //
 //===================================================================//
 
+#pragma once
 #include <Config.hpp>
-
 #if EnableGDT == true
-  #ifndef GDT
-
     namespace GDT {
       struct Descriptor {
         unsigned short size;
@@ -29,6 +27,4 @@
     }
 
     extern "C" void LoadGDT(GDT::Descriptor* descriptor);
-
-  #endif // GDT
 #endif // EnableGDT
