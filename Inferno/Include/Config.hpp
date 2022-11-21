@@ -6,9 +6,6 @@
 //
 //===================================================================//
 
-#ifndef Config
-#define Config
+#pragma once
 
 #define EnableGDT true
-
-#endif // Config

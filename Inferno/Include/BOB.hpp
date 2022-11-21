@@ -1,4 +1,12 @@
-#ifndef BOB
+//========= Copyright N11 Software, All rights reserved. ============//
+//
+// File: BOB.hpp
+// Purpose:
+// Maintainer: FiReLScar
+//
+//===================================================================//
+
+#pragma once
 #include <Framebuffer.hpp>
 
 struct MemoryDescriptor {
@@ -12,5 +20,3 @@ struct BOB {
 
   Framebuffer* framebuffer;
 };
-
-#endif /* BOB */
