@@ -13,7 +13,7 @@ echo "Build Directory: $BUILD"
 echo "Sysroot Directory: $SYSROOT"
 
 ARCH=${ARCH:-"x86_64"}
-TARGET="$ARCH-pc-hydra"
+TARGET="$ARCH-hydra"
 PREFIX="$DIR/Local/$ARCH"
 BUILD="$DIR/Build/$ARCH"
 SYSROOT="$BUILD/Root"
@@ -235,8 +235,8 @@ pushd "$BUILD"
         buildstep "binutils/configure" "$DIR"/Tarballs/$BINUTILS_NAME/configure --prefix="$PREFIX" \
                                                  --target="$TARGET" \
                                                  --with-sysroot="$SYSROOT" \
-                                                 --enable-shared \
                                                  --disable-nls \
+												 --disable-werror
                                                  ${TRY_USE_LOCAL_TOOLCHAIN:+"--quiet"} || exit 1
         if [ "$SYSTEM_NAME" = "Darwin" ]; then
             # under macOS generated makefiles are not resolving the "intl"
@@ -269,10 +269,7 @@ pushd "$BUILD"
                                             --target="$TARGET" \
                                             --with-sysroot="$SYSROOT" \
                                             --disable-nls \
-                                            --disable-shared \
-											--disable-threads \
                                             --enable-languages=c,c++ \
-											--without-headers \
                                             ${TRY_USE_LOCAL_TOOLCHAIN:+"--quiet"} || exit 1
 
         echo "XXX build gcc and libgcc"

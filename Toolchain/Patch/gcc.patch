@@ -36,7 +36,7 @@ index cf1a87e2e..0ea5c7fa7 100644
 +  gnu_ld=yes
 +  default_use_cxa_atexit=yes
 +  use_gcc_stdint=provide
-+  native_system_header_dir=/Libraries/
++  native_system_header_dir=/usr/include/
 +  ;;
  *-*-darwin*)
    tmake_file="t-darwin "
