@@ -1,5 +1,6 @@
 set(LIBC_SOURCES
 	assert.cpp
+	stdlib.cpp
 )
 
 set(LIBC_HEADER
