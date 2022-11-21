@@ -13,7 +13,7 @@
 extern "C" {
 
 	extern void __assert_fail(const char* msg, const char* file, unsigned line, const char* function) {
-		printf("ASSERTION FAILED: %s\n:%u in %s\n", msg, file, line, function);
+		printf("ASSERTION FAILED: %s\n:%s in %d\n", msg, file, line, function);
 		abort();
 	}
 

@@ -1,4 +1,4 @@
-#include "../LibC/assert.h"
+// #include "../LibC/assert.h"
 #include "math.h"
 #include "../LibC/stdint.h"
 #include "../LibC/stdlib.h"
@@ -360,19 +360,19 @@ long double log2l(long double x) NOEXCEPT
 
 double frexp(double, int*) NOEXCEPT
 {
-    ASSERT_NOT_REACHED();
+    //ASSERT_NOT_REACHED();
     return 0;
 }
 
 float frexpf(float, int*) NOEXCEPT
 {
-    ASSERT_NOT_REACHED();
+    //ASSERT_NOT_REACHED();
     return 0;
 }
 
 long double frexpl(long double, int*) NOEXCEPT
 {
-    ASSERT_NOT_REACHED();
+    //ASSERT_NOT_REACHED();
     return 0;
 }
 

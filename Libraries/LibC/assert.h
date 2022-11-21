@@ -16,7 +16,7 @@
 
 __BEGIN_DECLS
 
-void __assert_fail(const char* msg, const char* file, unsigned line, const char* function)
+void __assert_fail(const char* msg, const char* file, unsigned line, const char* function);
 
 // This isn't used but it's for standard compliance
 void __assert(const char* msg, const char* file, unsigned line);
