@@ -47,9 +47,26 @@ if(NOT EXISTS /tmp/OVMF_CODE.fd)
 	set(preqemu wget https://github.com/Null-LLC/OVMF/raw/main/OVMF_CODE.fd -O /tmp/OVMF_CODE.fd && wget https://github.com/Null-LLC/OVMF/raw/main/OVMF_VARS.fd -O /tmp/OVMF_VARS.fd)
 endif()
 
+# I'ma be honest, probably a better way to do this is to run it thru a shell 
+# script (like Serenity) so we don't have to make custom targets for emulate
+# and no display emulate and instead we could run something like:
+#
+# 		./run no-display
+#
+# or something like that. Would make life much easier...
+# 
+# 	- aristonl
+#	P.S. wouldn't it be easier just to move the emulate targets to the root
+#		 CMakeLists.txt?
 add_custom_target(emulate
 	COMMAND ${preqemu}
 	COMMAND qemu-system-x86_64 -machine q35 -drive format=raw,file=${CMAKE_CURRENT_SOURCE_DIR}/../Build/Hydra.iso -drive if=pflash,format=raw,unit=0,file=/tmp/OVMF_CODE.fd,readonly=on -drive if=pflash,format=raw,unit=1,file=/tmp/OVMF_VARS.fd -m 256M -net none -cpu qemu64 -serial mon:stdio
+	USES_TERMINAL
+)
+
+add_custom_target(emulate-no-display
+	COMMAND ${preqemu}
+	COMMAND qemu-system-x86_64 -machine q35 -drive format=raw,file=${CMAKE_CURRENT_SOURCE_DIR}/../Build/Hydra.iso -drive if=pflash,format=raw,unit=0,file=/tmp/OVMF_CODE.fd,readonly=on -drive if=pflash,format=raw,unit=1,file=/tmp/OVMF_VARS.fd -m 256M -net none -cpu qemu64 -display none -serial mon:stdio
 	USES_TERMINAL
 )
 
