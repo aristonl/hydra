@@ -47,7 +47,8 @@ __attribute__((sysv_abi)) void Inferno(BOB* bob) {
 	Interrupts::CreateISR(0x0E, (void*)PageFault);
 	Interrupts::CreateISR(0x08, (void*)DoublePageFault);
 
-	Memory memory;
+	Memory memory(bob);
+	memory.Allocate(InfernoStart, InfernoEnd);
 
 	// Load IDT
 	Interrupts::LoadIDT();
