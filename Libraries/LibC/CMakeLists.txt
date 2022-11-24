@@ -18,6 +18,7 @@ set(LIBC_HEADER
 	stdint.h
 )
 
+set(CMAKE_CXX_FLAGS "-ffreestanding")
 add_link_options(-nostdlib)
 add_library(C SHARED ${LIBC_SOURCES})
 
