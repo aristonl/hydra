@@ -1,10 +1,10 @@
 set(LIBC_SOURCES
-	assert.cpp
+	#assert.cpp
 	stdlib.cpp
 )
 
 set(LIBC_HEADER
-	assert.h
+	#assert.h
 	bits/pthread_integration.h
 	ctype.h
 	errno.h

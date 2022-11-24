@@ -6,7 +6,7 @@
 __BEGIN_DECLS
 
 void* malloc(size_t size);
-void free(void*);
+void free(void* ptr);
 void* calloc(long unsigned int nmemb, long unsigned int);
 void* realloc(void *ptr, long unsigned int);
 
