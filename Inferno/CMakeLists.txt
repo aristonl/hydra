@@ -60,7 +60,7 @@ endif()
 #		 CMakeLists.txt?
 add_custom_target(emulate
 	COMMAND ${preqemu}
-	COMMAND qemu-system-x86_64 -gdb serial -machine q35 -drive format=raw,file=${CMAKE_CURRENT_SOURCE_DIR}/../Build/Hydra.iso -drive if=pflash,format=raw,unit=0,file=/tmp/OVMF_CODE.fd,readonly=on -drive if=pflash,format=raw,unit=1,file=/tmp/OVMF_VARS.fd -m 256M -net none -cpu qemu64 -serial mon:stdio
+	COMMAND qemu-system-x86_64 -machine q35 -drive format=raw,file=${CMAKE_CURRENT_SOURCE_DIR}/../Build/Hydra.iso -drive if=pflash,format=raw,unit=0,file=/tmp/OVMF_CODE.fd,readonly=on -drive if=pflash,format=raw,unit=1,file=/tmp/OVMF_VARS.fd -m 256M -net none -cpu qemu64 -serial mon:stdio
 	USES_TERMINAL
 )
 

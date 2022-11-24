@@ -17,7 +17,6 @@
 #include <BOB.hpp>
 #include <CPUID.hpp>
 #include <Memory/Mem_.hpp>
-#include <Memory/Memory.hpp>
 
 extern unsigned long long InfernoStart;
 extern unsigned long long InfernoEnd;
@@ -46,9 +45,6 @@ __attribute__((sysv_abi)) void Inferno(BOB* bob) {
 	Interrupts::CreateISR(0x80, (void*)SyscallHandler);
 	Interrupts::CreateISR(0x0E, (void*)PageFault);
 	Interrupts::CreateISR(0x08, (void*)DoublePageFault);
-
-	Memory memory(bob);
-	memory.Allocate(InfernoStart, InfernoEnd);
 
 	// Load IDT
 	Interrupts::LoadIDT();
