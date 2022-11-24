@@ -1,24 +1,8 @@
-set(LIBC_SOURCES
-	#assert.cpp
-	stdlib.cpp
-)
+file(GLOB_RECURSE LIBC_SOURCES *.cpp)
 
-set(LIBC_HEADER
-	#assert.h
-	bits/pthread_integration.h
-	ctype.h
-	errno.h
-	fcntl.h
-	float.h
-	limits.h
-	pthread/pthread.h
-	pthreadtypes.h
-	stdarg.h
-	stddef.h
-	stdint.h
-)
+file(GLOB_RECURSE LIBC_HEADER include/*.h)
 
-set(CMAKE_CXX_FLAGS "-ffreestanding")
+set(CMAKE_CXX_FLAGS "-ffreestanding -Wbuiltin-declaration-mismatch")
 add_link_options(-nostdlib)
 add_library(C SHARED ${LIBC_SOURCES})
 

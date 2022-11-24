@@ -1,7 +1,7 @@
 // #include "../LibC/assert.h"
 #include "math.h"
-#include "../LibC/stdint.h"
-#include "../LibC/stdlib.h"
+#include <stdint.h>
+#include <stdlib.h>
 
 template<size_t>
 constexpr double e_to_power();

@@ -1,8 +1,8 @@
 #pragma once
 
-#include "../LibC/float.h"
-#include "../LibC/limits.h"
-#include "../LibC/sys/cdefs.h"
+#include <float.h>
+#include <limits.h>
+#include <sys/cdefs.h>
 
 #if __cplusplus >= 201103L
 #    define NOEXCEPT noexcept
