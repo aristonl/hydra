@@ -39,7 +39,7 @@ add_custom_command(TARGET Inferno POST_BUILD
 )
 
 add_custom_command(TARGET Inferno POST_BUILD
-	COMMAND xorriso -as mkisofs -R -f -e Hydra.img -no-emul-boot -V "Hydra" -o ${CMAKE_CURRENT_SOURCE_DIR}/../Build/Hydra.iso ${CMAKE_CURRENT_SOURCE_DIR}/../Build/ISO/
+	COMMAND xorriso -as mkisofs -R -f -e Hydra.img -no-emul-boot -V "Hydra" -o ${CMAKE_CURRENT_SOURCE_DIR}/../Build/Hydra.iso ${CMAKE_CURRENT_SOURCE_DIR}/../Build/ISO/ > /dev/null 2>&1
 	USES_TERMINAL
 )
 
