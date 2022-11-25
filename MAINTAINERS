@@ -11,6 +11,7 @@
 	 	Obsolete:	Old code. Anything with this tagged basically
 					means this code has been replaced with something
 					better and you should be using that instead.
+	D: *Directories* maintained.
 	B: URL for where to file *bugs*. 
 		This can be a github page or a mailing list.
 	C: URL for *chat*.
@@ -22,13 +23,15 @@ M:	hydra-inferno@googlegroups.com
 R:	Genesis Banzon <mysteriousrazor330@gmail.com>
 S: 	Maintained
 B:	https://github.com/N11Software/hydra
+D:	docs/*
 C:	https://discord.gg/SNXBh4w3nW
 G: 	ssh://git.n11.dev/hydra
 
 LIBRARIES
-M: hydra-inferno@googlegroups.com
-R: Ariston Lorenzo <aristonl@n11.dev>
-S: Maintained
+M: 	hydra-inferno@googlegroups.com
+R: 	Ariston Lorenzo <aristonl@n11.dev>
+S: 	Maintained
+D: 	lib/*
 
 STABLE TREE
 M:	hydra-inferno@googlegroups.com
@@ -42,6 +45,7 @@ M:	hydra-inferno@googlegroups.com
 R:	Levi Hicks <levih@n11.dev>
 R:	Ariston Lorenzo <aristonl@n11.dev>
 S:	crying inside
+D:	*
 B:	hydra-inferno@googlegroups.com
 C:	https://discord.gg/SNXBh4w3nW
 G:	ssh://git.n11.dev/hydra
