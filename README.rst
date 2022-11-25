@@ -12,6 +12,17 @@ What is Hydra/Infero?
   We aim to have what you'd expect in a usual Unix system like multitasking,
   virtual memory, shared libraries, good memory management, etc..
 
+What hardware can it run on?
+----------------------------
+  As of v0.1, Inferno targets x86_64 with future plans to target ARM64.
+  32-bit architectures aren't planned for later releases.
+
+How can I contribute?
+---------------------
+  We accept any useful patches whether they are coding style fixes, small
+  changes, or even new drivers, features, etc.. For more info on how to
+  contribute, see docs/contributing for more info.
+
 Contact
 -------
   You can contact us via `Discord <https://discord.gg/SNXBh4w3nW>`_ or
