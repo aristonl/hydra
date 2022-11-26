@@ -10,16 +10,23 @@
 #include <IO.hpp>
 #include <GDT.hpp>
 #include <COM.hpp>
-#include <Interrupts.hpp>
+#include <Interrupts/Interrupts.hpp>
 #include <Interrupts/Syscall.hpp>
 #include <Interrupts/PageFault.hpp>
 #include <Interrupts/DoublePageFault.hpp>
 #include <BOB.hpp>
-#include <CPUID.hpp>
+#include <cpuid.h>
 #include <Memory/Mem_.hpp>
+#include <Interrupts/APIC.hpp>
 
 extern unsigned long long InfernoStart;
 extern unsigned long long InfernoEnd;
+
+bool check_apic(void) {
+    unsigned int eax, unused, edx;
+    __get_cpuid(1, &eax, &unused, &unused, &edx);
+    return edx & 1 << 9;
+}
 
 __attribute__((sysv_abi)) void Inferno(BOB* bob) {
 	// Create GDT
@@ -46,15 +53,19 @@ __attribute__((sysv_abi)) void Inferno(BOB* bob) {
 	Interrupts::CreateISR(0x0E, (void*)PageFault);
 	Interrupts::CreateISR(0x08, (void*)DoublePageFault);
 
+	// Load APIC
+	if (APIC::Capable()) {
+		APIC::Enable();
+		kprintf("\r\e[92m[INFO] Loaded APIC...\e[0m\n\r");
+	}
+
 	// Load IDT
 	Interrupts::LoadIDT();
 	kprintf("\r\e[92m[INFO] Loaded IDT...\e[0m\n\r");
 
-	kprintf("Result: %x\n\r", 0x1000);
-
-	// asm("int $0x80");
+	kprintf("Result: %d\n\r", 1234);
 	unsigned long res = 0;
-	asm volatile("int $0x80": "=a"(res): "a"(15), "d"((unsigned long)"google"): "rcx", "r11", "memory");
+	asm volatile("int $0x80": "=a"(res): "a"(1), "d"((unsigned long)"google"), "D"((unsigned long)0): "rcx", "r11", "memory");
 }
 
 __attribute__((ms_abi)) [[noreturn]] void main(BOB* bob) {

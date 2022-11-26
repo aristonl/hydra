@@ -6,7 +6,7 @@
 //
 //===================================================================//
 
-#include <Interrupts.hpp>
+#include <Interrupts/Interrupts.hpp>
 
 namespace Interrupts {
     Entry ISR[256];
