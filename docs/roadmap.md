@@ -7,6 +7,7 @@ Subject to change.
  - [x] Basic LibC
  - [x] kprintf function
  - [x] Serial support
+ - [ ] Multitasking
  - [ ] Paging MM
  - [ ] Virtual MM
  - [ ] APIC
