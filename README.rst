@@ -3,8 +3,8 @@
 Hydra/Inferno
 =============
 
-What is Hydra/Infero?
----------------------
+What is Hydra/Inferno?
+----------------------
   Hydra/Inferno is an operating system/kernel written from scratch by 
   Ariston Lorenzo, Levi Hicks, and other developers.  The project aims 
   towards UNIX/POSIX compliance.
