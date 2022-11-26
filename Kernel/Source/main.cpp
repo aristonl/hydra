@@ -52,7 +52,9 @@ __attribute__((sysv_abi)) void Inferno(BOB* bob) {
 
 	kprintf("Result: %x\n\r", 0x1000);
 
-	asm("int $0x80");
+	// asm("int $0x80");
+	unsigned long res = 0;
+	asm volatile("int $0x80": "=a"(res): "a"(15), "d"((unsigned long)"google"): "rcx", "r11", "memory");
 }
 
 __attribute__((ms_abi)) [[noreturn]] void main(BOB* bob) {
