@@ -50,6 +50,8 @@ __attribute__((sysv_abi)) void Inferno(BOB* bob) {
 	Interrupts::LoadIDT();
 	kprintf("\r\e[92m[INFO] Loaded IDT...\e[0m\n\r");
 
+	kprintf("Result: %x\n\r", 0x1000);
+
 	asm("int $0x80");
 }
 
