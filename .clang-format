@@ -9,5 +9,5 @@ BreakConstructorInitializers: BeforeComma
 IndentPPDirectives: AfterHash
 BreakBeforeBraces: Custom
 BraceWrapping:
-  AfterFunction: true
+  AfterFunction: false
 NamespaceIndentation: None
