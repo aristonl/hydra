@@ -11,7 +11,7 @@ Subject to change.
  - [ ] Virtual MM
  - [ ] APIC
  - [ ] CMOS/RTC
- - [ ] Syscalls 
+ - [x] Syscalls 
 
 ### Milestone 2 (v0.1pre2)
  - Toolchain
