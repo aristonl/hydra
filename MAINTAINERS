@@ -29,7 +29,7 @@ G: 	ssh://git.n11.dev/hydra
 
 LIBRARIES
 M: 	hydra-inferno@googlegroups.com
-R: 	Ariston Lorenzo <aristonl@n11.dev>
+R: 	Nola G <nolag@n11.dev>
 S: 	Maintained
 D: 	lib/*
 
