@@ -6,6 +6,7 @@ set(LIBM_HEADER
 	math.h
 )
 
+set(CMAKE_CXX_FLAGS "-ffreestanding -Wno-builtin-declaration-mismatch")
 add_library(M SHARED ${LIBM_SOURCES})
 
 SET_TARGET_PROPERTIES (M PROPERTIES PUBLIC_HEADER "${LIBM_HEADER}")

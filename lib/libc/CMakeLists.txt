@@ -2,7 +2,7 @@ file(GLOB_RECURSE LIBC_SOURCES *.cpp)
 
 file(GLOB_RECURSE LIBC_HEADER include/*.h)
 
-set(CMAKE_CXX_FLAGS "-ffreestanding -Wbuiltin-declaration-mismatch")
+set(CMAKE_CXX_FLAGS "-ffreestanding -Wno-builtin-declaration-mismatch")
 add_link_options(-nostdlib)
 add_library(C SHARED ${LIBC_SOURCES})
 
