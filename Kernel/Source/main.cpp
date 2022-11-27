@@ -28,6 +28,10 @@ bool check_apic(void) {
     return edx & 1 << 9;
 }
 
+void impostor() {
+	kprintf("\rimpostor() called!\r\n");
+}
+
 __attribute__((sysv_abi)) void Inferno(BOB* bob) {
 	// Create GDT
 	#if EnableGDT == true
@@ -52,6 +56,8 @@ __attribute__((sysv_abi)) void Inferno(BOB* bob) {
 	Interrupts::CreateISR(0x80, (void*)SyscallHandler);
 	Interrupts::CreateISR(0x0E, (void*)PageFault);
 	Interrupts::CreateISR(0x08, (void*)DoublePageFault);
+	Interrupts::CreateISR(0x32, (void*)impostor);
+	Interrupts::CreateISR(0x39, (void*)impostor);
 
 	// Load APIC
 	if (APIC::Capable()) {
