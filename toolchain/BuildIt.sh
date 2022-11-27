@@ -72,9 +72,9 @@ pushd "$BUILD/"
 echo "XXX echo libc and libm headers"
     mkdir -p $BUILD/Root/usr/include/
     SRC_ROOT=$($REALPATH "$DIR"/..)
-    FILES=$(find "$SRC_ROOT"/Libraries/LibC "$SRC_ROOT"/Libraries/LibM -name '*.h' -print)
+    FILES=$(find "$SRC_ROOT"/lib/libc "$SRC_ROOT"/libc/libm -name '*.h' -print)
     for header in $FILES; do
-        target=$(echo "$header" | sed -e "s@$SRC_ROOT/Libraries/LibC@@" -e "s@$SRC_ROOT/Libraries/LibM@@")
+        target=$(echo "$header" | sed -e "s@$SRC_ROOT/lib/libc@@" -e "s@$SRC_ROOT/lib/libc@@")
         buildstep "system_headers" $INSTALL -D "$header" "Root/usr/include/$target"
     done
     unset SRC_ROOT
