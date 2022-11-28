@@ -30,18 +30,20 @@ namespace APIC {
         #endif
     }
 
-    void write_register(unsigned int reg, unsigned int value) {
-        unsigned int* apic = (unsigned int*)GetBase();
-        apic[reg / 4] = value;
+    void Write(unsigned int reg, unsigned int value) {
+        unsigned int volatile* apic = (unsigned int volatile*)GetBase();
+        apic[0] = (reg & 0xff) << 4;
+        apic[4] = value;
     }
 
-    unsigned int read_register(unsigned int reg) {
-        unsigned int* apic = (unsigned int*)GetBase();
-        return apic[reg / 4];
+    unsigned int Read(unsigned int reg) {
+        unsigned int volatile* apic = (unsigned int volatile*)GetBase();
+        apic[0] = (reg & 0xff) << 4;
+        return apic[4];
     }
 
     void Enable() {
         SetBase(GetBase());
-        write_register(0xF0, read_register(0xF0) | 0x100);
+        Write(0xF0, Read(0xF0) | 0x100);
     }
 }
