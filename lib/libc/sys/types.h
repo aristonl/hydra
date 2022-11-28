@@ -5,7 +5,7 @@
 __BEGIN_DECLS
 
 typedef unsigned int dword;
-typedef unsigned short word;
+typedef unsigned int word;
 typedef unsigned char byte;
 
 typedef signed int signed_dword;

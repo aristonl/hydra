@@ -42,7 +42,7 @@ fi
 export CFLAGS="-g0 -O2 -mtune=native"
 export CXXFLAGS="-g0 -O2 -mtune=native"
 
-BINUTILS_VERSION="2.38"
+BINUTILS_VERSION="2.39"
 BINUTILS_MD5SUM="f430dff91bdc8772fcef06ffdc0656ab"
 BINUTILS_NAME="binutils-$BINUTILS_VERSION"
 BINUTILS_PKG="${BINUTILS_NAME}.tar.gz"
@@ -54,7 +54,7 @@ GDB_NAME="gdb-$GDB_VERSION"
 GDB_PKG="${GDB_NAME}.tar.gz"
 GDB_BASE_URL="https://ftp.gnu.org/gnu/gdb"
 
-GCC_VERSION="12.1.0"
+GCC_VERSION="12.2.0"
 GCC_MD5SUM="7854cdccc3a7988aa37fb0d0038b8096"
 GCC_NAME="gcc-$GCC_VERSION"
 GCC_PKG="${GCC_NAME}.tar.gz"
@@ -74,7 +74,7 @@ echo "XXX echo libc and libm headers"
     SRC_ROOT=$($REALPATH "$DIR"/..)
     FILES=$(find "$SRC_ROOT"/lib/libc "$SRC_ROOT"/lib/libm -name '*.h' -print)
     for header in $FILES; do
-        target=$(echo "$header" | sed -e "s@$SRC_ROOT/lib/libc@@" -e "s@$SRC_ROOT/lib/libc@@")
+        target=$(echo "$header" | sed -e "s@$SRC_ROOT/lib/libc@@" -e "s@$SRC_ROOT/lib/libm@@")
         buildstep "system_headers" $INSTALL -D "$header" "Root/usr/include/$target"
     done
     unset SRC_ROOT
