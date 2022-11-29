@@ -1,21 +1,105 @@
-MIT License
+N11 PUBLIC SOURCE LICENSE
+Version 1.0 - September 2022
 
-Copyright (c) 2021-2022 N11 Software
+Copyright © 2021-2022 N11 Software.
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
+ +==========+
+ | PREAMBLE |
+ +==========+
 
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
+This document describes a contract between you and N11 Software ("N11").
+Please read it before downloading or using the software.  By 
+downloading and/or using the software, you accept the terms of this 
+license.  If you do not or cannot agree to the terms this license, please 
+do not download or use the software.
+
+ +======================+
+ | TERMS AND CONDITIONS |
+ +======================+
+
+0. This License applies to any program or other work which N11 Software 
+("N11") makes open source/publicly available and which contains a notice 
+placed by N11 stating that it is subject to the terms of this N11 Public 
+Source License version 1.0 (and all other proceeding versions) ("License").
+
+ +----------------+
+ | 1. DEFINITIONS |
+ +----------------+
+
+1.1 "Source Code" means the text files of a program that can have
+patches applied to it, including all modules it contains, any associated 
+interface definition files, scripts used to control compilation scripts 
+used to control compilation and installation of an executable 
+(object code)
+
+1.2 "Object Code" means a compiled version of Source Code that can be
+ran by the user.
+
+1.3 "Patches" mean any addition, deletion, or change of Source Code
+authored by a contributor.
+
+1.4 "Contributor" means any person or entity that creates or
+contributes a patch to the Source Code.
+
+1.5 "You" or "Your" means an individual or legal entity exercising rights
+under this License.  For legal entities, "You" or "Your" includes any
+entity which controls, is controlled by, or is under common control with,
+You, where "control" means:
+
+	(a) the power, direct or indirect, to cause the direction or management
+		of such entity, whether by contract or otherwise
+
+		or
+
+	(b) ownership of fifty per cent (50%) or more of the outstanding shares
+		or beneficial ownership of such entity.
+
+ +-------------------+
+ | 2. PERMITTED USES |
+ +-------------------+
+
+2. Subject to the terms and conditions of this License, N11 hereby grants
+You, effective on the date You accept this License and download the Source
+Code or Object Code to do the following:
+
+2.1 You may use, copy, modify, and distribute Source Code, with or without
+Patches, for publishing or Your internal research and development, provided
+that You must in each instance:
+
+	(a) retain and reproduce in all copies of the Source Code the copyright
+		and other proprietary notices and disclaimers of N11 as they appear 
+		in the Source Code, and keep intact all notices in the Source Code 
+		thatrefer to this License;
+
+	(b) include a copy of this License with every copy of the Source Code You
+		distribute, and You may not offer or impose any terms on such Source
+		Code that alter or restrit this License or the recipient' rights
+		hereunder.
+
+	(c) refrain from using N11 and other affiliated contributors to promote
+		products deriving from this software without written consent.
+
+ +-------------+
+ | 3. WARRANTY |
+ +-------------+
+
+3. The Source Code may contain in whole or in part pre-release, untested, or
+not fully tested works. The Source Code could contain errors that could cause
+failures or the loss of data, and may by incomplete or contain inaccuracies.
+You agree that use of the code, or any portion, is at Your sole and entire
+risk.
 
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+
+ +----------------------+
+ | 4. LIMITED LIABILITY |
+ +----------------------+
+
+4. IN NO EVENT SHALL N11 OR ITS SUPPLIERS BE LIABLE FOR ANY SPECIAL, 
+INCIDENTAL, INDIRECT, OR CONSEQUENTIAL DAMAGES WHATSOEVER  (INCLUDING, 
+WITHOUT LIMITATION, DAMAGES FOR LOSS OF BUSINESS PROFITS, BUSINESS 
+INTERRUPTION, LOSS OF BUSINESS INFORMATION, OR ANY OTHER PECUNIARY LOSS) 
+ARISING OUT OF THE USE OF OR INABILITY TO USE THE SOFTWARE AND SOURCE CODE, 
+EVEN IF N11 HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGES.
