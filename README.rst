@@ -33,5 +33,5 @@ Contact
 
 License
 -------
-  Inferno is licensed and distributed under the MIT License - see the
+  Inferno is licensed under the N11 Public Source License - see the
   accompanying LICENSE file for more details.
