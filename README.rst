@@ -17,6 +17,9 @@ What hardware can it run on?
   As of v0.1, Inferno targets x86_64 with future plans to target ARM64.
   32-bit architectures aren't planned for later releases.
 
+  We do accept 32-bit related patches but they will not be maintained by
+  Ariston or Levi.
+
 How can I contribute?
 ---------------------
   We accept any useful patches whether they are coding style fixes, small
