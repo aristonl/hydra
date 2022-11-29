@@ -23,6 +23,9 @@ extern unsigned long long InfernoStart;
 extern unsigned long long InfernoEnd;
 
 __attribute__((sysv_abi)) void Inferno(BOB* bob) {
+	// CPU ID
+	detect_cpu();
+
 	// Create GDT
 	#if EnableGDT == true
 		GDT::Table GDT = {
