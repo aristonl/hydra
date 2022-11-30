@@ -19,3 +19,9 @@ int detect_cpu(void) {
 	}
 	return 0;
 }
+
+int get_model(void) {
+	unsigned long ebx, unused;
+	cpuid(0, unused, ebx, unused, unused);
+	return ebx;
+}
