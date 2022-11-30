@@ -3,8 +3,8 @@
 
 namespace APIC {
     bool Capable() {
-        unsigned int eax, unused, edx;
-        __get_cpuid(1, &eax, &unused, &unused, &edx);
+        unsigned long eax, unused, edx;
+        cpuid(1, eax, unused, unused, edx);
         return edx & 1 << 9;
     }
 
