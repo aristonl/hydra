@@ -11,7 +11,7 @@
  * I don't plan on moving it.
  */ 
 
-#include <cpuid.h>
+#include <cpu/cpuid.h>
 
 #include <COM.hpp>
 #include <stddef.h>
