@@ -35,4 +35,4 @@ static inline void native_cpuid(unsigned int *eax, unsigned int *ebx,
                             
 
 int detect_cpu(void);
-int cpu_branc(void);
+int cpu_brand(void);
