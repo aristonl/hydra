@@ -1,6 +1,6 @@
 file(GLOB_RECURSE LIBC_SOURCES *.cpp)
 
-file(GLOB_RECURSE LIBC_HEADER include/*.h)
+file(GLOB_RECURSE LIBC_HEADER *.h)
 
 set(CMAKE_CXX_FLAGS "-ffreestanding -Wno-builtin-declaration-mismatch")
 add_link_options(-nostdlib)
