@@ -1,3 +1,16 @@
+//========= Copyright N11 Software, All rights reserved. ============//
+//
+// File: cpuid.cpp
+// Maintainer: aristonl
+//
+//===================================================================//
+
+/* 
+ * This file will probably have to move to 'arch/x86/' at some point
+ * but considering that we don't have code for any other architecture,
+ * I don't plan on moving it.
+ */ 
+
 #include <cpuid.h>
 
 #include <COM.hpp>

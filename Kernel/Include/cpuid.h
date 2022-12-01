@@ -1,3 +1,10 @@
+//========= Copyright N11 Software, All rights reserved. ============//
+//
+// File: cpuid.h
+// Maintainer: aristonl
+//
+//===================================================================//
+
 #pragma once
 
 #include <COM.hpp>
