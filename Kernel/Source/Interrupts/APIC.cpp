@@ -1,5 +1,5 @@
 #include <Interrupts/APIC.hpp>
-#include <cpuid.h>
+#include <cpu/cpuid.h>
 
 namespace APIC {
 bool Capable() {
