@@ -17,7 +17,7 @@
 #include <Interrupts/PageFault.hpp>
 #include <Interrupts/Syscall.hpp>
 #include <Memory/Mem_.hpp>
-#include <cpuid.h>
+#include <cpu/cpuid.h>
 
 extern unsigned long long InfernoStart;
 extern unsigned long long InfernoEnd;
