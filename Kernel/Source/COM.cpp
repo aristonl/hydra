@@ -6,7 +6,7 @@
 //
 //===================================================================//
 
-#include "../../../lib/libc/include/stdarg.h"
+#include <stdarg.h>
 #include <COM.hpp>
 
 bool COM1Active = false;
