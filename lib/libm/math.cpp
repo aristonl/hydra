@@ -33,18 +33,15 @@ constexpr size_t product_odd() { return value * product_odd<value - 2>(); }
 
 extern "C" {
 
-double trunc(double x) NOEXCEPT
-{
+double trunc(double x) NOEXCEPT {
     return (int64_t)x;
 }
 
-double cos(double angle) NOEXCEPT
-{
+double cos(double angle) NOEXCEPT {
     return sin(angle + M_PI_2);
 }
 
-float cosf(float angle) NOEXCEPT
-{
+float cosf(float angle) NOEXCEPT {
     return sinf(angle + M_PI_2);
 }
 
@@ -52,8 +49,7 @@ float cosf(float angle) NOEXCEPT
 // now this works pretty well (and doesn't mess anything up
 // in quake in particular, which is very Floating-Point precision
 // heavy)
-double sin(double angle) NOEXCEPT
-{
+double sin(double angle) NOEXCEPT {
     double ret = 0.0;
     __asm__(
         "fsin"
@@ -63,8 +59,7 @@ double sin(double angle) NOEXCEPT
     return ret;
 }
 
-float sinf(float angle) NOEXCEPT
-{
+float sinf(float angle) NOEXCEPT {
     float ret = 0.0f;
     __asm__(
         "fsin"
@@ -73,8 +68,7 @@ float sinf(float angle) NOEXCEPT
     return ret;
 }
 
-double pow(double x, double y) NOEXCEPT
-{
+double pow(double x, double y) NOEXCEPT {
     // FIXME: Please fix me. I am naive.
     if (isnan(y))
         return y;
@@ -96,23 +90,19 @@ double pow(double x, double y) NOEXCEPT
     return exp2(y * log2(x));
 }
 
-float powf(float x, float y) NOEXCEPT
-{
+float powf(float x, float y) NOEXCEPT {
     return (float)pow(x, y);
 }
 
-double ldexp(double x, int exp) NOEXCEPT
-{
+double ldexp(double x, int exp) NOEXCEPT {
     return x * exp2(exp);
 }
 
-float ldexpf(float x, int exp) NOEXCEPT
-{
+float ldexpf(float x, int exp) NOEXCEPT {
     return x * exp2f(exp);
 }
 
-double tanh(double x) NOEXCEPT
-{
+double tanh(double x) NOEXCEPT {
     if (x > 0) {
         double exponentiated = exp(2 * x);
         return (exponentiated - 1) / (exponentiated + 1);
@@ -122,8 +112,7 @@ double tanh(double x) NOEXCEPT
     return (plusX - minusX) / (plusX + minusX);
 }
 
-static double ampsin(double angle) NOEXCEPT
-{
+static double ampsin(double angle) NOEXCEPT {
     double looped_angle = fmod(M_PI + angle, M_TAU) - M_PI;
     double looped_angle_squared = looped_angle * looped_angle;
 
@@ -139,13 +128,11 @@ static double ampsin(double angle) NOEXCEPT
     return quadratic_term + linear_term;
 }
 
-double tan(double angle) NOEXCEPT
-{
+double tan(double angle) NOEXCEPT {
     return ampsin(angle) / ampsin(M_PI_2 + angle);
 }
 
-double sqrt(double x) NOEXCEPT
-{
+double sqrt(double x) NOEXCEPT {
     double res;
     __asm__("fsqrt"
             : "=t"(res)
@@ -153,8 +140,7 @@ double sqrt(double x) NOEXCEPT
     return res;
 }
 
-float sqrtf(float x) NOEXCEPT
-{
+float sqrtf(float x) NOEXCEPT {
     float res;
     __asm__("fsqrt"
             : "=t"(res)
@@ -162,16 +148,14 @@ float sqrtf(float x) NOEXCEPT
     return res;
 }
 
-double sinh(double x) NOEXCEPT
-{
+double sinh(double x) NOEXCEPT {
     double exponentiated = exp(x);
     if (x > 0)
         return (exponentiated * exponentiated - 1) / 2 / exponentiated;
     return (exponentiated - 1 / exponentiated) / 2;
 }
 
-double log10(double x) NOEXCEPT
-{
+double log10(double x) NOEXCEPT {
     double ret = 0.0;
     __asm__(
         "fldlg2\n"
@@ -183,8 +167,7 @@ double log10(double x) NOEXCEPT
     return ret;
 }
 
-double log(double x) NOEXCEPT
-{
+double log(double x) NOEXCEPT {
     double ret = 0.0;
     __asm__(
         "fldln2\n"
@@ -196,23 +179,19 @@ double log(double x) NOEXCEPT
     return ret;
 }
 
-float logf(float x) NOEXCEPT
-{
+float logf(float x) NOEXCEPT {
     return (float)log(x);
 }
 
-double fmod(double index, double period) NOEXCEPT
-{
+double fmod(double index, double period) NOEXCEPT {
     return index - trunc(index / period) * period;
 }
 
-float fmodf(float index, float period) NOEXCEPT
-{
+float fmodf(float index, float period) NOEXCEPT {
     return index - trunc(index / period) * period;
 }
 
-double exp(double exponent) NOEXCEPT
-{
+double exp(double exponent) NOEXCEPT {
     double res = 0;
     __asm__("fldl2e\n"
             "fmulp\n"
@@ -228,13 +207,11 @@ double exp(double exponent) NOEXCEPT
     return res;
 }
 
-float expf(float exponent) NOEXCEPT
-{
+float expf(float exponent) NOEXCEPT {
     return (float)exp(exponent);
 }
 
-double exp2(double exponent) NOEXCEPT
-{
+double exp2(double exponent) NOEXCEPT {
     double res = 0;
     __asm__("fld1\n"
             "fld %%st(1)\n"
@@ -248,21 +225,18 @@ double exp2(double exponent) NOEXCEPT
     return res;
 }
 
-float exp2f(float exponent) NOEXCEPT
-{
+float exp2f(float exponent) NOEXCEPT {
     return (float)exp2(exponent);
 }
 
-double cosh(double x) NOEXCEPT
-{
+double cosh(double x) NOEXCEPT {
     double exponentiated = exp(-x);
     if (x < 0)
         return (1 + exponentiated * exponentiated) / 2 / exponentiated;
     return (1 / exponentiated + exponentiated) / 2;
 }
 
-double atan2(double y, double x) NOEXCEPT
-{
+double atan2(double y, double x) NOEXCEPT {
     if (x > 0)
         return atan(y / x);
     if (x == 0) {
@@ -277,13 +251,11 @@ double atan2(double y, double x) NOEXCEPT
     return atan(y / x) - M_PI;
 }
 
-float atan2f(float y, float x) NOEXCEPT
-{
+float atan2f(float y, float x) NOEXCEPT {
     return (float)atan2(y, x);
 }
 
-double atan(double x) NOEXCEPT
-{
+double atan(double x) NOEXCEPT {
     if (x < 0)
         return -atan(-x);
     if (x > 1)
@@ -292,8 +264,7 @@ double atan(double x) NOEXCEPT
     return x / (1 + 1 * 1 * squared / (3 + 2 * 2 * squared / (5 + 3 * 3 * squared / (7 + 4 * 4 * squared / (9 + 5 * 5 * squared / (11 + 6 * 6 * squared / (13 + 7 * 7 * squared)))))));
 }
 
-double asin(double x) NOEXCEPT
-{
+double asin(double x) NOEXCEPT {
     if (x > 1 || x < -1)
         return NAN;
     if (x > 0.5 || x < -0.5)
@@ -315,28 +286,23 @@ double asin(double x) NOEXCEPT
     return value;
 }
 
-float asinf(float x) NOEXCEPT
-{
+float asinf(float x) NOEXCEPT {
     return (float)asin(x);
 }
 
-double acos(double x) NOEXCEPT
-{
+double acos(double x) NOEXCEPT {
     return M_PI_2 - asin(x);
 }
 
-float acosf(float x) NOEXCEPT
-{
+float acosf(float x) NOEXCEPT {
     return M_PI_2 - asinf(x);
 }
 
-double fabs(double value) NOEXCEPT
-{
+double fabs(double value) NOEXCEPT {
     return value < 0 ? -value : value;
 }
 
-double log2(double x) NOEXCEPT
-{
+double log2(double x) NOEXCEPT {
     double ret = 0.0;
     __asm__(
         "fld1\n"
@@ -348,73 +314,62 @@ double log2(double x) NOEXCEPT
     return ret;
 }
 
-float log2f(float x) NOEXCEPT
-{
+float log2f(float x) NOEXCEPT {
     return log2(x);
 }
 
-long double log2l(long double x) NOEXCEPT
-{
+long double log2l(long double x) NOEXCEPT {
     return log2(x);
 }
 
-double frexp(double, int*) NOEXCEPT
-{
-    //ASSERT_NOT_REACHED();
+double frexp(double, int*) NOEXCEPT {
+    // ASSERT_NOT_REACHED();
     return 0;
 }
 
-float frexpf(float, int*) NOEXCEPT
-{
-    //ASSERT_NOT_REACHED();
+float frexpf(float, int*) NOEXCEPT {
+    // ASSERT_NOT_REACHED();
     return 0;
 }
 
-long double frexpl(long double, int*) NOEXCEPT
-{
-    //ASSERT_NOT_REACHED();
+long double frexpl(long double, int*) NOEXCEPT {
+    // ASSERT_NOT_REACHED();
     return 0;
 }
 
-double round(double value) NOEXCEPT
-{
+double round(double value) NOEXCEPT {
     // FIXME: Please fix me. I am naive.
     if (value >= 0.0)
         return (double)(int)(value + 0.5);
     return (double)(int)(value - 0.5);
 }
 
-float roundf(float value) NOEXCEPT
-{
+float roundf(float value) NOEXCEPT {
     // FIXME: Please fix me. I am naive.
     if (value >= 0.0f)
         return (float)(int)(value + 0.5f);
     return (float)(int)(value - 0.5f);
 }
 
-float floorf(float value) NOEXCEPT
-{
+float floorf(float value) NOEXCEPT {
     if (value >= 0)
         return (int)value;
     int intvalue = (int)value;
     return ((float)intvalue == value) ? intvalue : intvalue - 1;
 }
 
-double floor(double value) NOEXCEPT
-{
+double floor(double value) NOEXCEPT {
     if (value >= 0)
         return (int)value;
     int intvalue = (int)value;
     return ((double)intvalue == value) ? intvalue : intvalue - 1;
 }
 
-double rint(double value) NOEXCEPT
-{
+double rint(double value) NOEXCEPT {
     return (int)roundf(value);
 }
 
-float ceilf(float value) NOEXCEPT
-{
+float ceilf(float value) NOEXCEPT {
     // FIXME: Please fix me. I am naive.
     int as_int = (int)value;
     if (value == (float)as_int)
@@ -427,8 +382,7 @@ float ceilf(float value) NOEXCEPT
     return as_int + 1;
 }
 
-double ceil(double value) NOEXCEPT
-{
+double ceil(double value) NOEXCEPT {
     // FIXME: Please fix me. I am naive.
     int as_int = (int)value;
     if (value == (double)as_int)
@@ -441,25 +395,21 @@ double ceil(double value) NOEXCEPT
     return as_int + 1;
 }
 
-double modf(double x, double* intpart) NOEXCEPT
-{
+double modf(double x, double* intpart) NOEXCEPT {
     *intpart = (double)((int)(x));
     return x - (int)x;
 }
 
-double gamma(double x) NOEXCEPT
-{
+double gamma(double x) NOEXCEPT {
     // Stirling approximation
     return sqrt(2.0 * M_PI / x) * pow(x / M_E, x);
 }
 
-double expm1(double x) NOEXCEPT
-{
+double expm1(double x) NOEXCEPT {
     return exp(x) - 1;
 }
 
-double cbrt(double x) NOEXCEPT
-{
+double cbrt(double x) NOEXCEPT {
     if (isinf(x) || x == 0)
         return x;
     if (x < 0)
@@ -496,33 +446,27 @@ double cbrt(double x) NOEXCEPT
     return r;
 }
 
-double log1p(double x) NOEXCEPT
-{
+double log1p(double x) NOEXCEPT {
     return log(1 + x);
 }
 
-double acosh(double x) NOEXCEPT
-{
+double acosh(double x) NOEXCEPT {
     return log(x + sqrt(x * x - 1));
 }
 
-double asinh(double x) NOEXCEPT
-{
+double asinh(double x) NOEXCEPT {
     return log(x + sqrt(x * x + 1));
 }
 
-double atanh(double x) NOEXCEPT
-{
+double atanh(double x) NOEXCEPT {
     return log((1 + x) / (1 - x)) / 2.0;
 }
 
-double hypot(double x, double y) NOEXCEPT
-{
+double hypot(double x, double y) NOEXCEPT {
     return sqrt(x * x + y * y);
 }
 
-double erf(double x) NOEXCEPT
-{
+double erf(double x) NOEXCEPT {
     // algorithm taken from Abramowitz and Stegun (no. 26.2.17)
     double t = 1 / (1 + 0.47047 * fabs(x));
     double poly = t * (0.3480242 + t * (-0.958798 + t * 0.7478556));
@@ -533,8 +477,7 @@ double erf(double x) NOEXCEPT
     return answer;
 }
 
-double erfc(double x) NOEXCEPT
-{
+double erfc(double x) NOEXCEPT {
     return 1 - erf(x);
 }
 }

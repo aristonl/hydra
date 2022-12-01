@@ -10,13 +10,13 @@
 #include <Framebuffer.hpp>
 
 struct MemoryDescriptor {
-  unsigned int Type;
-  unsigned long long PhysicalStart, VirtualStart, NumberOfPages, Attribute;
+    unsigned int Type;
+    unsigned long long PhysicalStart, VirtualStart, NumberOfPages, Attribute;
 };
 
 struct BOB {
-	unsigned long long DescriptorSize, MapSize;
-	MemoryDescriptor* MemoryMap;
+    unsigned long long DescriptorSize, MapSize;
+    MemoryDescriptor* MemoryMap;
 
-  Framebuffer* framebuffer;
+    Framebuffer* framebuffer;
 };

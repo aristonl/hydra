@@ -5,7 +5,7 @@
 __BEGIN_DECLS
 
 #ifndef EOF
-#define EOF (-1)
+#    define EOF (-1)
 #endif
 
 struct __STDIO_FILE {

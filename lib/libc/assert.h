@@ -11,7 +11,7 @@
 #include <sys/cdefs.h>
 
 #ifdef NDEBUG
-#define assert(e) ((void)0)
+#    define assert(e) ((void)0)
 #endif /* NDEBUG */
 
 __BEGIN_DECLS
@@ -21,7 +21,7 @@ void __assert_fail(const char* msg, const char* file, unsigned line, const char*
 // This isn't used but it's for standard compliance
 void __assert(const char* msg, const char* file, unsigned line);
 
-#define assert(e) (static_cast <bool> (e) ? void (0) : __assert (#e, __FILE__, __LINE__, __PRETTY_FUNCTION__))
+#define assert(e) (static_cast<bool>(e) ? void(0) : __assert(#e, __FILE__, __LINE__, __PRETTY_FUNCTION__))
 #define ASSERT assert
 #define ASSERT_NOT_REACHED assert(false)
 

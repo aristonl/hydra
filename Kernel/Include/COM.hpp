@@ -1,7 +1,7 @@
 //========= Copyright N11 Software, All rights reserved. ============//
 //
 // File: COM.hpp
-// Purpose: 
+// Purpose:
 // Maintainer: FiReLScar
 //
 //===================================================================//

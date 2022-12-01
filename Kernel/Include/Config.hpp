@@ -1,7 +1,7 @@
 //========= Copyright N11 Software, All rights reserved. ============//
 //
 // File: Config.hpp
-// Purpose: 
+// Purpose:
 // Maintainer: aristonl, FiReLScar
 //
 //===================================================================//

@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2021 Ariston Lorenzo. All rights reserved.
  *
- * SPDX-License-Identifier: MIT 
+ * SPDX-License-Identifier: MIT
  */
 
 #pragma once

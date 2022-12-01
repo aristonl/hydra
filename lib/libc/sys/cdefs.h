@@ -1,11 +1,11 @@
-/* Copyright (c) 2021 Null. All rights reserved. 
+/* Copyright (c) 2021 Null. All rights reserved.
  * Copyright (c) 2021 Echo/Inferno/B.O.B. Developers.
  */
-/* 
- * Copyright (c) 2020 Optix. 
+/*
+ * Copyright (c) 2020 Optix.
  * Licensed under the Optix Public License.
  */
-/* 
+/*
  * cdefs.h
  *
  * Created by Ariston Lorenzo on 1/9/2020.
@@ -38,5 +38,5 @@
 #define offsetof(type, member) __builtin_offsetof(type, member)
 
 #ifdef __cplusplus
-//extern "C" int main(int, char**);
+// extern "C" int main(int, char**);
 #endif
