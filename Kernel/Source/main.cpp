@@ -26,7 +26,7 @@ __attribute__((sysv_abi)) void Inferno(BOB* bob) {
     // CPU ID
     detect_cpu();
 
-    get_model();
+    cpu_brand();
 
 // Create GDT
 #if EnableGDT == true
