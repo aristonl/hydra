@@ -12,10 +12,10 @@
 void SyscallHandler(void*) {
     register unsigned long func asm("rax");
     switch (func) {
-    case 1:
-        register unsigned int descriptor asm("rdi");
-        register const char* buf asm("rdx");
-        kprintf(buf);
-        break;
+        case 1:
+            register unsigned int descriptor asm("rdi");
+            register const char* buf asm("rdx");
+            kprintf(buf);
+            break;
     }
 }
