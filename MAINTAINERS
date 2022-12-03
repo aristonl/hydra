@@ -39,6 +39,14 @@ S:	Maintained
 G:	ssh://git.n11.dev/hydra-stable
 G:	https://github.com/aristonl/hydra.git (mirror)
 
+KERNEL
+M: hydra-inferno@googlegroups.com
+R: Levi Hicks <levih@n11.dev>
+S: Maintained
+D: kernel/*
+C: https://discord.com/users/382192202991796224
+G: ssh://git.n11.dev/hydra
+
 THE REST:
 M:	hydra-inferno@googlegroups.com
 R:	Levi Hicks <levih@n11.dev>
