@@ -41,6 +41,80 @@ int main(int x) {
 }
 ```
 
+### Namespaces
+Always indent children properties in namespaces.
+```cpp
+namspace APIC {
+    bool Capable();
+    void SetBase(unsigned int base);
+    unsigned int GetBase();
+    void Write(unsigned int reg, unsigned int value);
+    unsigned int Read(unsigned int reg);
+    void Enable();
+}
+```
+
+### Case Statements
+Case statements should always be indented.
+```cpp
+switch (pd.size) {
+    case 0:
+        signednum = va_arg(args, int);
+        break;
+    case 1:
+        signednum = va_arg(args, long);
+        break;
+    case 2:
+        signednum = va_arg(args, long long);
+        break;
+}
+
+### Class Publics and Privates
+Always indent public and private in classes.
+```cpp
+class Framebuffer {
+    public:
+        Framebuffer() { }
+        Framebuffer(unsigned long long Address, unsigned long long Size, unsigned int Width, unsigned int Height, unsigned int PPSL) {
+            this->Address = (void*)Address;
+            this->Size = Size;
+            this->Width = Width;
+            this->Height = Height;
+            this->PPSL = PPSL;
+        }
+        void* Address;
+        unsigned long long Size;
+        unsigned int Width, Height, PPSL;
+};
+```
+
+### Hash Statements
+Hash statements must be indented like a children property.
+```cpp
+void Inferno(BOB* bob) {
+    #if EnableGDT == true
+		GDT::Table GDT = {
+			{ 0, 0, 0, 0x00, 0x00, 0 },
+			{ 0, 0, 0, 0x9a, 0xa0, 0 },
+			{ 0, 0, 0, 0x92, 0xa0, 0 },
+			{ 0, 0, 0, 0xfa, 0xa0, 0 },
+			{ 0, 0, 0, 0xf2, 0xa0, 0 },
+		};
+		GDT::Descriptor descriptor;
+		descriptor.size = sizeof(GDT) - 1;
+		descriptor.offset = (unsigned long long)&GDT;
+		LoadGDT(&descriptor);
+		kprintf("\r\e[92m[INFO] Loaded GDT...\e[0m\n\r");
+	#endif
+}
+```
+
+### One Liners
+Always try to condense short statements to one-liners. This helps make
+things cleaner. Assembly statements and function statements should always
+remain on one line unless the 80 char limit was reached or passed in which
+breaking of the function/assembly statement is allowed.
+
 ### Line Length
 80 is the recommended maximum for line length. What do we mean by 'recommended'?
 If your statement just happens to go slightly over the line (anymore from around
