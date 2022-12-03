@@ -16,33 +16,33 @@
 #include <Interrupts/Interrupts.hpp>
 #include <Interrupts/PageFault.hpp>
 #include <Interrupts/Syscall.hpp>
+#include <Memory/Memory.hpp>
 #include <Memory/Mem_.hpp>
-#include <cpu/cpuid.h>
+#include <CPU/CPUID.hpp>
 
 extern unsigned long long InfernoStart;
 extern unsigned long long InfernoEnd;
 
 __attribute__((sysv_abi)) void Inferno(BOB* bob) {
-    // CPU ID
-    detect_cpu();
+	// Memory
+	Memory::Init(bob);
+	kprintf("\e[92m[INFO] Total Memory: %dMB\n\r", Memory::GetSize()/0x1000/1024);
 
-    cpu_brand();
-
-// Create GDT
-#if EnableGDT == true
-    GDT::Table GDT = {
-        { 0, 0, 0, 0x00, 0x00, 0 },
-        { 0, 0, 0, 0x9a, 0xa0, 0 },
-        { 0, 0, 0, 0x92, 0xa0, 0 },
-        { 0, 0, 0, 0xfa, 0xa0, 0 },
-        { 0, 0, 0, 0xf2, 0xa0, 0 },
-    };
-    GDT::Descriptor descriptor;
-    descriptor.size = sizeof(GDT) - 1;
-    descriptor.offset = (unsigned long long)&GDT;
-    LoadGDT(&descriptor);
-    kprintf("\r\e[92m[INFO] Loaded GDT...\e[0m\n\r");
-#endif
+	// Create GDT
+	#if EnableGDT == true
+		GDT::Table GDT = {
+			{ 0, 0, 0, 0x00, 0x00, 0 },
+			{ 0, 0, 0, 0x9a, 0xa0, 0 },
+			{ 0, 0, 0, 0x92, 0xa0, 0 },
+			{ 0, 0, 0, 0xfa, 0xa0, 0 },
+			{ 0, 0, 0, 0xf2, 0xa0, 0 },
+		};
+		GDT::Descriptor descriptor;
+		descriptor.size = sizeof(GDT) - 1;
+		descriptor.offset = (unsigned long long)&GDT;
+		LoadGDT(&descriptor);
+		kprintf("\r\e[92m[INFO] Loaded GDT...\e[0m\n\r");
+	#endif
 
     // Create IDT
     Interrupts::CreateIDT();
@@ -62,12 +62,8 @@ __attribute__((sysv_abi)) void Inferno(BOB* bob) {
     Interrupts::LoadIDT();
     kprintf("\r\e[92m[INFO] Loaded IDT...\e[0m\n\r");
 
-    kprintf("Result: %d\n\r", 1234);
     unsigned long res = 0;
-    asm volatile("int $0x80"
-                 : "=a"(res)
-                 : "a"(1), "d"((unsigned long)"Hello from syscall\n\r"), "D"((unsigned long)0)
-                 : "rcx", "r11", "memory");
+    asm volatile("int $0x80" : "=a"(res) : "a"(1), "d"((unsigned long)"Hello from syscall\n\r"), "D"((unsigned long)0) : "rcx", "r11", "memory");
 }
 
 __attribute__((ms_abi)) [[noreturn]] void main(BOB* bob) {
@@ -76,6 +72,5 @@ __attribute__((ms_abi)) [[noreturn]] void main(BOB* bob) {
     // Once finished say hello and halt
     kprintf("\e[92m[INFO] Done!\e[0m\n\r");
 
-    while (true)
-        asm("hlt");
+    while (true) asm("hlt");
 }
