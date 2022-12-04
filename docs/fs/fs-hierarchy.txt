@@ -1,0 +1,31 @@
+Inferno File System Hierachy Standard (subject to change) v0.1
+December, 2022
+
+/
+├── bin/ (Essential binaries)
+├── boot/ (Bootloader files, kernels)
+│	└── efi/ (Mount location of boot partition)
+├── dev/ (Essential device files / like Linux)
+│	├── null
+│	└── tty0
+├── etc/ (System-wide configs)
+├── home/ (User home directories)
+│	├── n11user/
+│	│	├── .config/ (User-specific configs)
+│	│	├── Desktop/
+│	│	├── Documents
+│	│	├── Music
+│	│	├── Pictures
+│	│	└── Videos
+│	└── guest/ (Guest account)
+├── lib/ (Essential libraries for binaries in bin/)
+├── mnt/ (Mount point of temporary partitions)
+├── root/ (Home directory for root)
+├── tmp/ (Temporary files / not kept after reboots)
+├── usr/ (Hierarchy for read-only user data / must be sharable)
+│	├── bin/ (User binaries)
+│	├── include/ (Standard user includes)
+│	├── lib/ (Libraries for binaries in /usr/bin)
+│	└── src/ (Hydra/Inferno source code)
+└── var/ (Variable files)
+	└── tmp/ (Temporary files / kept after reboots
