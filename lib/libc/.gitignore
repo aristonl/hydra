@@ -1,1 +1,5 @@
 *.o
+
+# Library files
+*.so
+*.a
