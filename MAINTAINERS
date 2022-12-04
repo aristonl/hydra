@@ -20,6 +20,7 @@
 	
 DOCUMENTATION
 M:	hydra-inferno@googlegroups.com
+R:	Ariston Lorenzo <aristonl@n11.dev> (Temporary)
 S: 	Orphan
 B:	https://github.com/N11Software/hydra
 D:	docs/*
@@ -29,6 +30,7 @@ G: 	ssh://git.n11.dev/hydra
 LIBRARIES
 M: 	hydra-inferno@googlegroups.com
 R: 	Nola G <nolag@n11.dev>
+R: 	Ariston Lorenzo <aristonl@n11.dev>
 S: 	Maintained
 D: 	lib/*
 
@@ -49,9 +51,8 @@ G: ssh://git.n11.dev/hydra
 
 THE REST:
 M:	hydra-inferno@googlegroups.com
-R:	Levi Hicks <levih@n11.dev>
 R:	Ariston Lorenzo <aristonl@n11.dev>
-S:	crying inside
+S:	i use arch on a macbook btw
 D:	*
 B:	hydra-inferno@googlegroups.com
 C:	https://discord.gg/SNXBh4w3nW
