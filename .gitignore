@@ -31,3 +31,4 @@ cmake_install.cmake
 # Patches
 .patch
 patches/
+.pc/
