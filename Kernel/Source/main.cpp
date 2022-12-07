@@ -6,6 +6,9 @@
 //
 //===================================================================//
 
+#include <unistd.h>
+#include <stdint.h>
+
 #include <BOB.hpp>
 #include <COM.hpp>
 #include <Config.hpp>
@@ -63,7 +66,10 @@ __attribute__((sysv_abi)) void Inferno(BOB* bob) {
     kprintf("\r\e[92m[INFO] Loaded IDT...\e[0m\n\r");
 
     unsigned long res = 0;
-    asm volatile("int $0x80" : "=a"(res) : "a"(1), "d"((unsigned long)"Hello from syscall\n\r"), "D"((unsigned long)0) : "rcx", "r11", "memory");
+    asm volatile("int $0x80" : "=a"(res) : "a"(1), 
+			"d"((unsigned long)"Hello from syscall\n\r"), 
+			"D"((unsigned long)0) : "rcx", "r11", "memory");
+	
 }
 
 __attribute__((ms_abi)) [[noreturn]] void main(BOB* bob) {
