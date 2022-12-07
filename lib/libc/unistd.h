@@ -3,6 +3,8 @@
 #include <sys/cdefs.h>
 #include <sys/types.h>
 
+#include <stdint.h>
+
 __BEGIN_DECLS
 
 uid_t getuid();
@@ -21,6 +23,9 @@ int gethostname(char*, size_t);
 ssize_t readlink(const char* path, char* buffer, size_t);
 char* ttyname(int fd);
 int ttyname_r(int fd, char* buffer, size_t);
+
+int brk(void *addr);
+void *sbrk(intptr_t increment);
 
 #define WEXITSTATUS(status) (((status)&0xff00) >> 8)
 #define WTERMSIG(status) ((status)&0x7f)
