@@ -8,6 +8,7 @@
 
 #include <unistd.h>
 #include <stdint.h>
+#include <errno.h>
 
 void *sbrk(intptr_t increment) {
 	extern char __heap_start;
@@ -25,7 +26,7 @@ void *sbrk(intptr_t increment) {
 	if (heap_end < (&__heap_end)) {
 
 	} else {
-		// TODO: return ENOMEM
+		errno = ENOMEM;
 		return (char*)-1;
 	}
 
