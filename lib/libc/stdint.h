@@ -34,6 +34,9 @@ typedef short int int_least16_t;
 typedef int int_least32_t;
 typedef long int int_least64_t;
 
+typedef long int intptr_t;
+typedef unsigned long int uintptr_t;
+
 #define __int8_t_defined 1
 #define __uint8_t_defined 1
 #define __int16_t_defined 1
