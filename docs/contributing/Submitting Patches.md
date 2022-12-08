@@ -36,7 +36,8 @@ so. The first two is to use git send-email through already formatted
 patches or to generate the patch without saving to a file and sending
 it. The third way is to use another email client (ie. neomutt) and send
 the patch via the email client. You can find how to do the latter in
-EmailClients.rst.
+EmailClients.rst. Make sure you know what maintainer you need to send
+the message to before you send it. Check MAINTAINERS for more info.
 
 ### git send-email with formatted patches
 If you've already formatted your patches and saved them to a directory
@@ -45,7 +46,7 @@ a patch series.
 
 To send a single patch, simply run:
 ```
-$ git send-email --to=hydra-inferno@googlegroups.com patches/0001-Add-a-new-function.patch
+$ git send-email --to="Some Maintainer <example@n11.dev>" --cc=hydra-inferno@googlegroups.com patches/0001-Add-a-new-function.patch
 ```
 To send a patch series, run:
 ```
