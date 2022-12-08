@@ -7,7 +7,7 @@ unsigned short inw_p(unsigned short port);
 unsigned int inl(unsigned short port);
 unsigned int inl_p(unsigned short port);
 
-void outb(unsigned char value, unsigned short port);
+void outb(unsigned short port, unsigned char value);
 void outb_p(unsigned char value, unsigned short port);
 void outw(unsigned short value, unsigned short port);
 void outw_p(unsigned short value, unsigned short port);

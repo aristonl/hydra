@@ -7,6 +7,8 @@
 //===================================================================//
 
 #include <stdarg.h>
+#include <stdint.h>
+#include <sys/io.h>
 #include <COM.hpp>
 
 bool COM1Active = false;
