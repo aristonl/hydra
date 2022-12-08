@@ -7,7 +7,7 @@
 //===================================================================//
 
 #pragma once
-#include <IO.hpp>
+#include <sys/io.h>
 
 void InitializeSerialDevice();
 char AwaitSerialResponse();

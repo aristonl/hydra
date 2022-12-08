@@ -2,11 +2,11 @@
 //
 // File: IO.cpp
 // Purpose:
-// Maintainer: FiReLScar
+// Maintainer: aristonl, FiReLScar
 //
 //===================================================================//
 
-#include <IO.hpp>
+#include <sys/io.h>
 
 void outb(unsigned short port, unsigned char value) {
     asm volatile("outb %0, %1" :: "a"(value), "Nd"(port));

@@ -13,7 +13,7 @@
 #include <COM.hpp>
 #include <Config.hpp>
 #include <GDT.hpp>
-#include <IO.hpp>
+#include <sys/io.h>
 #include <Interrupts/APIC.hpp>
 #include <Interrupts/DoublePageFault.hpp>
 #include <Interrupts/Interrupts.hpp>
