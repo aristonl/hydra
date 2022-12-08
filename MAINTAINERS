@@ -41,6 +41,7 @@ R: 	Nola G <nolag@n11.dev>
 R: 	Ariston Lorenzo <aristonl@n11.dev>
 S: 	Maintained
 D: 	lib/*
+G:  https://github.com/gingerwitch64/hydra-tcm.git
 
 STABLE TREE
 M:	hydra-inferno@googlegroups.com
