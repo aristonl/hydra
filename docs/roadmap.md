@@ -18,5 +18,5 @@ Subject to change.
  - Toolchain
  - Syscalls
  - Keyboard/Mouse Input
- - N/A Filesystem (TBD)
- - Bash or ZSH
+ - ext2 Filesystem
+ - Bash
