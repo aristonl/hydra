@@ -16,7 +16,7 @@ typedef dword uid_t;
 typedef dword gid_t;
 typedef int pid_t;
 
-typedef dword size_t;
+typedef long unsigned int size_t;
 typedef signed_dword ssize_t;
 
 typedef dword ino_t;
