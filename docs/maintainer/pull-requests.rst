@@ -53,3 +53,12 @@ to the maintainer and CC the mailing list. Pull requests to Linus typically have
 subject line something like::
 
 	[GIT PULL] <subsystem> changes for v1.0
+
+Merging Pull Requests
+---------------------
+Once the maintainer recieves the pull request, they can run::
+
+  git pull git@github.com:gingerwitch64/hydra-tcm.git tags/lib-misc-1.0
+
+Which will (in most cases) create a merge commit or fast-forward depending on if the
+commits share the same parent commit.
