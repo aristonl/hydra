@@ -16,6 +16,11 @@ Arch Linux / Manjaro
 ::
     $ sudo pacman -S --needed base-devel mtools libisoburn qemu qemu-arch-extra edk2-ovmf nasm gmp libmpc mpfr cmake ninja
 
+macOS
+^^^^^
+::
+    $ brew install x86_64-elf-gcc ninja cmake qemu mtools xorriso nasm
+
 
 Downloading
 -----------
