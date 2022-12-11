@@ -23,6 +23,9 @@ rules.ninja
 .ninja_deps
 .ninja_log
 
+# Xcode Project Files
+*.xcodeproj
+
 # CMake
 CMakeFiles/
 CMakeCache.txt
