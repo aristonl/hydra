@@ -6,16 +6,15 @@ Prerequisites
 -------------
     Make sure you have all the prerequisites needed to build.
 
-    - Ubuntu / Debian
-
+    - Ubuntu / Debian:
     ::
         $ sudo apt install mtools xorriso qemu qemu-system ovmf build-essential nasm bison flex libgmp3-dev libmpc-dev libmpfr-dev texinfo cmake ninja-build
 
-    - Arch Linux / Manjaro
+    - Arch Linux / Manjaro:
     ::
         $ sudo pacman -S --needed base-devel mtools libisoburn qemu qemu-arch-extra edk2-ovmf nasm gmp libmpc mpfr cmake ninja
 
-    - macOS
+    - macOS:
     ::
         $ brew install x86_64-elf-gcc ninja cmake qemu mtools xorriso nasm
 
