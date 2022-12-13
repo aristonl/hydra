@@ -23,7 +23,7 @@ struct blockMeta {
 	struct blockMeta *next;
 	int free;
 	int magic; // TODO: For debugging reasons. We can remove this later
-}
+};
 
 #define META_SIZE sizeof(struct block_meta)
 
