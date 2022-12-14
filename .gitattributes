@@ -12,5 +12,8 @@
 *.h++   text diff=cpp
 *.hh    text diff=cpp
 
+# GitHub linguist shit
+*.h linguist-language=cpp
+
 # Compiled Binary File
 *.bin binary
