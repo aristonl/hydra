@@ -4,12 +4,12 @@
 
 __BEGIN_DECLS
 
-typedef unsigned long long int uint64_t;
+typedef unsigned long int uint64_t;
 typedef unsigned int uint32_t;
 typedef unsigned short int uint16_t;
 typedef unsigned char uint8_t;
 
-typedef long long int int64_t;
+typedef long int int64_t;
 typedef int int32_t;
 typedef short int int16_t;
 typedef signed char int8_t;
@@ -49,11 +49,11 @@ typedef unsigned long int uintptr_t;
 typedef unsigned long int uintptr_t;
 typedef long int intptr_t;
 
-typedef unsigned long long int uintmax_t;
+typedef unsigned long int uintmax_t;
 #define UINTMAX_MAX __UINTMAX_MAX__
 #define UINTMAX_MIN __UINTMAX_MIN__
 
-typedef long long int intmax_t;
+typedef long int intmax_t;
 #define INTMAX_MAX __INTMAX_MAX__
 #define INTMAX_MIN (-INTMAX_MAX - 1)
 

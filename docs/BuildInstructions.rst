@@ -1,25 +1,22 @@
-Building Hydra
-==============
-This document will explain how to build Hydra and prerequisites needed.
+Building Inferno
+================
+This document will explain how to build Inferno and prerequisites needed.
 
 Prerequisites
 -------------
     Make sure you have all the prerequisites needed to build.
 
-Ubuntu / Debian
-^^^^^^^^^^^^^^^
-::
-    $ sudo apt install mtools xorriso qemu qemu-system ovmf build-essential nasm bison flex libgmp3-dev libmpc-dev libmpfr-dev texinfo cmake ninja-build
+    - Ubuntu / Debian:
+    ::
+        $ sudo apt install mtools xorriso qemu qemu-system ovmf build-essential nasm bison flex libgmp3-dev libmpc-dev libmpfr-dev texinfo cmake ninja-build
 
-Arch Linux / Manjaro
-^^^^^^^^^^^^^^^^^^^^
-::
-    $ sudo pacman -S --needed base-devel mtools libisoburn qemu qemu-arch-extra edk2-ovmf nasm gmp libmpc mpfr cmake ninja
+    - Arch Linux / Manjaro:
+    ::
+        $ sudo pacman -S --needed base-devel mtools libisoburn qemu qemu-arch-extra edk2-ovmf nasm gmp libmpc mpfr cmake ninja
 
-macOS
-^^^^^
-::
-    $ brew install x86_64-elf-gcc ninja cmake qemu mtools xorriso nasm
+    - macOS:
+    ::
+        $ brew install x86_64-elf-gcc ninja cmake qemu mtools xorriso nasm
 
 *NOTE*: Make sure you export x86_64-elf-gcc/x86_64-elf-g++ as your CC and CXX so CMake doesn't configure using clang.
 
@@ -27,7 +24,7 @@ Downloading
 -----------
  - You can download the latest release tarball and unpack it:
    ::
-        $ xz -cd hydra-0.1.x.tar.xz | tar xvf -
+        $ xz -cd inferno-0.1.x.tar.xz | tar xvf -
    
    Replace the "X" with the version number of the release.
 
@@ -44,12 +41,12 @@ Downloading
 
 Compiling
 ---------
-Once you are configured, you can build Hydra/Inferno with:
+Once you are configured, you can build Inferno with:
 ::
    $ cmake -GNinja .
    $ ninja
 
-This will build the ISO and save it into the ``$HYDRA_ROOT/Build`` folder.
+This will build the ISO and save it into the ``$SRC_ROOT/Build`` folder.
 
 ## Emulating
 You can use the ISO in other virtualization software such as VirtualBox or
