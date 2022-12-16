@@ -21,6 +21,7 @@ macOS
 ::
     $ brew install x86_64-elf-gcc ninja cmake qemu mtools xorriso nasm
 
+*NOTE*: Make sure you export x86_64-elf-gcc/x86_64-elf-g++ as your CC and CXX so CMake doesn't configure using clang.
 
 Downloading
 -----------
