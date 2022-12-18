@@ -52,4 +52,4 @@ This will build the ISO and save it into the ``$SRC_ROOT/Build`` folder.
 You can use the ISO in other virtualization software such as VirtualBox or
 VMWare or use QEMU to emulate it. You can either write up the command
 yourself or use the default QEMU command that comes with CMakeLists.txt
-which can be ran with ``ninja emulate``.
+which can be ran with ``ninja emulate`` or ``ninja emulate-no-display`.
