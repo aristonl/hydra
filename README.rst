@@ -29,7 +29,8 @@ How can I contribute?
 Contact
 -------
   You can contact us via `Discord <https://discord.gg/SNXBh4w3nW>`_ or
-  through the mailing list, hydra-inferno@googlegroups.com.
+  through the mailing list, hydra-inferno@googlegroups.com. See CREDITS or
+  MAINTAINERS for specific developer contact info.
 
 License
 -------
