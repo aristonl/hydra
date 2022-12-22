@@ -81,3 +81,5 @@
 #define SSIZE_MAX 2147483647
 
 #define LINK_MAX 4096
+
+#define BITS_PER_LONG (sizeof(long) * 8)
