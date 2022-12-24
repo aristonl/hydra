@@ -26,6 +26,9 @@ rules.ninja
 # Xcode Project Files
 *.xcodeproj
 
+# Kate Project files
+.kateproject
+
 # CMake
 CMakeFiles/
 CMakeCache.txt
