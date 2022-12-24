@@ -4,31 +4,27 @@
 
 __BEGIN_DECLS
 
-typedef unsigned int dword;
-typedef unsigned int word;
-typedef unsigned char byte;
-
 typedef signed int signed_dword;
 typedef signed int signed_word;
 typedef signed int signed_byte;
 
-typedef dword uid_t;
-typedef dword gid_t;
+typedef unsigned int uid_t;
+typedef unsigned int gid_t;
 typedef int pid_t;
 
 typedef unsigned long int size_t;
 typedef long int ssize_t;
 
-typedef dword ino_t;
-typedef signed_dword off_t;
+typedef unsigned int ino_t;
+typedef signed int off_t;
 
-typedef dword dev_t;
-typedef dword mode_t;
-typedef dword nlink_t;
-typedef dword blksize_t;
-typedef dword blkcnt_t;
-typedef dword time_t;
-typedef dword suseconds_t;
+typedef unsigned int dev_t;
+typedef unsigned int mode_t;
+typedef unsigned int nlink_t;
+typedef unsigned int blksize_t;
+typedef unsigned int blkcnt_t;
+typedef unsigned int time_t;
+typedef unsigned int suseconds_t;
 
 struct timeval {
     time_t tv_sec;
