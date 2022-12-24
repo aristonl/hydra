@@ -13,4 +13,6 @@ void* realloc(void* ptr, long unsigned int);
 void exit(int status);
 void abort();
 
+int abs(int n);
+
 __END_DECLS
