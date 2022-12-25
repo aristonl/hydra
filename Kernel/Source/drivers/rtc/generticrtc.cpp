@@ -1,3 +1,11 @@
+//========= Copyright N11 Software, All rights reserved. ============//
+//
+// File: genericrtc.cpp
+// Purpose: Generic RTC driver
+// Maintainer: aristonl
+//
+//===================================================================//
+
 #include <sys/io.h>
 #include <drivers/cmos/cmos.h>
 #include <drivers/rtc/rtc.h>

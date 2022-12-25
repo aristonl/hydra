@@ -1,3 +1,11 @@
+//========= Copyright N11 Software, All rights reserved. ============//
+//
+// File: cmos.h
+// Purpose: CMOS related functions
+// Maintainer: aristonl
+//
+//===================================================================//
+
 #pragma once
 
 #include <sys/io.h>
