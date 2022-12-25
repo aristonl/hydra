@@ -30,6 +30,8 @@ extern unsigned long long InfernoStart;
 extern unsigned long long InfernoEnd;
 
 __attribute__((sysv_abi)) void Inferno(BOB* bob) {
+	kprintf("\e[92m[KERNEL] Inferno kernel version %s\n\r", kernelVersion);
+
 	// Memory
 	Memory::Init(bob);
 	kprintf("\e[92m[INFO] Total Memory: %dMB\n\r", Memory::GetSize()/0x1000/1024);

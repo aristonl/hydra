@@ -1,3 +1,5 @@
+add_definitions(-DkernelVersion="0.1alpha")
+
 # Setup NASM
 set(CMAKE_ASM_NASM_SOURCE_FILE_EXTENSIONS ${CMAKE_ASM_NASM_SOURCE_FILE_EXTENSIONS} s S)
 enable_language(ASM_NASM)
