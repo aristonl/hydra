@@ -9,4 +9,8 @@ enum {
 
 unsigned char get_RTC_register(int reg);
 
+namespace RTC {
 void readRTC();
+
+int init();
+}
