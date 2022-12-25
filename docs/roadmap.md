@@ -11,7 +11,7 @@ Subject to change.
  - [ ] Paging MM
  - [ ] Virtual MM
  - [ ] APIC
- - [ ] NVRAM
+ - [x] CMOS/RTC
  - [x] Syscalls 
 
 ### Milestone 2 (v0.1pre2)
