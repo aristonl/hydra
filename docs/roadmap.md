@@ -13,6 +13,7 @@ Subject to change.
  - [ ] APIC
  - [x] CMOS/RTC
  - [x] Syscalls 
+ - [ ] Basic Video Driver (for serial output to screen)
 
 ### Milestone 2 (v0.1pre2)
  - Toolchain
