@@ -1,5 +1,6 @@
 #include <sys/io.h>
-#include <cmos.h>
+#include <drivers/cmos/cmos.h>
+#include <drivers/rtc/rtc.h>
 
 #include <COM.hpp>
 
@@ -15,25 +16,20 @@ int century_register = 0x00;
 
 unsigned char registerB; // 0x0B
 
-unsigned char getRTCRegister(int reg) {
-      outb(cmos_address, reg);
-      return inb(cmos_data);
-}
-
 namespace RTC {
 
 void readRTC() {
-	second = getRTCRegister(0x00);
-	minute = getRTCRegister(0x02);
-	hour = getRTCRegister(0x04);
+	second = getRegister(0x00);
+	minute = getRegister(0x02);
+	hour = getRegister(0x04);
 
-	day = getRTCRegister(0x07);
-	month = getRTCRegister(0x08);
-	year = getRTCRegister(0x09);
+	day = getRegister(0x07);
+	month = getRegister(0x08);
+	year = getRegister(0x09);
 
 	// TODO: Add 2000 to year so it'll display the full 4-digit year
 
-	registerB = getRTCRegister(0x0B);
+	registerB = getRegister(0x0B);
 
 	// Convert BCD to binary values if necessary
 

@@ -22,7 +22,9 @@
 #include <Memory/Memory.hpp>
 #include <Memory/Mem_.hpp>
 #include <CPU/CPUID.hpp>
-#include <cmos.h>
+
+// Drivers
+#include <drivers/rtc/rtc.h>
 
 extern unsigned long long InfernoStart;
 extern unsigned long long InfernoEnd;
