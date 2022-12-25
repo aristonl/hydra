@@ -20,6 +20,8 @@ unsigned char getRTCRegister(int reg) {
       return inb(cmos_data);
 }
 
+namespace RTC {
+
 void readRTC() {
 	second = getRTCRegister(0x00);
 	minute = getRTCRegister(0x02);
@@ -50,5 +52,14 @@ void readRTC() {
 		hour = ((hour & 0x7F) + 12) % 24;
 	}
 
-	kprintf("\r\e[92m[KERNEL] rtc: %u/%u/%u %u:%u:%u\e[0m\n\r", day, month, year, hour, minute, second);
+	// FIXME: Make the hour, min, sec show as two digits when it is < 10. (ex: 07 instead of 7)
+	kprintf("\r\e[92m[KERNEL] rtc: %u/%u/%uT%u:%u:%u\e[0m\n\r", day, month, year, hour, minute, second);
+}
+
+int init() {
+	RTC::readRTC();
+	kprintf("\r\e[92m[KERNEL] rtc: rtc initialized\e[0m\n\r");
+	return 0;
+}
+
 }
