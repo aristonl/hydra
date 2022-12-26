@@ -12,6 +12,8 @@
 
 #include <COM.hpp>
 
+#include <log.h>
+
 unsigned char second; // 0x00
 unsigned char minute; // 0x02
 unsigned char hour;  // 0x04
@@ -57,12 +59,12 @@ void readRTC() {
 	}
 
 	// FIXME: Make the hour, min, sec show as two digits when it is < 10. (ex: 07 instead of 7)
-	kprintf("\r\e[92m[KERNEL] rtc: %u/%u/%uT%u:%u:%u\e[0m\n\r", day, month, year, hour, minute, second);
+	prInfo("rtc", "%d/%d/%dT%d:%d:%d", day, month, year, hour, minute, second);
 }
 
 int init() {
 	RTC::readRTC();
-	kprintf("\r\e[92m[KERNEL] rtc: rtc initialized\e[0m\n\r");
+	prInfo("rtc", "rtc initialized");
 	return 0;
 }
 

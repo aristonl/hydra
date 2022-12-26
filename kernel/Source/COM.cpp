@@ -11,6 +11,8 @@
 #include <sys/io.h>
 #include <COM.hpp>
 
+#include <log.h>
+
 bool COM1Active = false;
 
 void InitializeSerialDevice() {
@@ -26,7 +28,7 @@ void InitializeSerialDevice() {
     if (inb(0x3f8 + 0) != 0xAE) return;
     outb(0x3f8 + 4, 0x0F);
     COM1Active = true;
-    kprintf("\r\e[92m[INFO] Serial Device Initialized...\e[0m\n\r");
+    prInfo("kernel", "serial device initalized");
 }
 
 int SerialRecieveEvent() { return inb(0x3f8 + 5) & 1; }

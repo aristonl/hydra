@@ -22,6 +22,7 @@
 #include <Memory/Memory.hpp>
 #include <Memory/Mem_.hpp>
 #include <CPU/CPUID.hpp>
+#include <log.h>
 
 // Drivers
 #include <drivers/rtc/rtc.h>
@@ -30,11 +31,11 @@ extern unsigned long long InfernoStart;
 extern unsigned long long InfernoEnd;
 
 __attribute__((sysv_abi)) void Inferno(BOB* bob) {
-	kprintf("\e[92m[KERNEL] Inferno kernel version %s\n\r", kernelVersion);
+	prInfo("kernel", "Inferno kernel version %s", kernelVersion);
 
 	// Memory
 	Memory::Init(bob);
-	kprintf("\e[92m[INFO] Total Memory: %dMB\n\r", Memory::GetSize()/0x1000/1024);
+	prInfo("mm", "Total Memory: %dMB", Memory::GetSize()/0x1000/1024);
 
 	// Create GDT
 	#if EnableGDT == true
@@ -49,7 +50,7 @@ __attribute__((sysv_abi)) void Inferno(BOB* bob) {
 		descriptor.size = sizeof(GDT) - 1;
 		descriptor.offset = (unsigned long long)&GDT;
 		LoadGDT(&descriptor);
-		kprintf("\r\e[92m[INFO] Loaded GDT...\e[0m\n\r");
+		prInfo("kernel", "initalized GDT");
 	#endif
 
     // Create IDT
@@ -63,12 +64,12 @@ __attribute__((sysv_abi)) void Inferno(BOB* bob) {
     // Load APIC
     if (APIC::Capable()) {
         APIC::Enable();
-        kprintf("\r\e[92m[INFO] Loaded APIC...\e[0m\n\r");
+        prInfo("apic", "initalized APIC");
     }
 
     // Load IDT
     Interrupts::LoadIDT();
-    kprintf("\r\e[92m[INFO] Loaded IDT...\e[0m\n\r");
+    prInfo("idt", "initialized IDT");
 
     unsigned long res = 0;
     asm volatile("int $0x80" : "=a"(res) : "a"(1), 
@@ -83,7 +84,7 @@ __attribute__((ms_abi)) [[noreturn]] void main(BOB* bob) {
     Inferno(bob);
 
     // Once finished say hello and halt
-    kprintf("\e[92m[INFO] Done!\e[0m\n\r");
+    prInfo("kernel", "Done!");
 
     while (true) asm("hlt");
 }
