@@ -1,3 +1,11 @@
+//========= Copyright N11 Software, All rights reserved. ============//
+//
+// File: log.h
+// Purpose: Message logging functions
+// Maintainer: aristonl
+//
+//===================================================================//
+
 #pragma once
 
 #include <COM.hpp>
