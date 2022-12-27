@@ -1,21 +1,28 @@
 #include <stdlib.h>
-
+#include <errno.h>
 #include <sys/types.h>
 #include <unistd.h>
 
+#include <log.h>
 
-/*
- *	malloc()
- */ 
-void *malloc(size_t size) {
-	void *p = sbrk(0);
-	void *request = sbrk(size);
-	
-	if (request == (void*) -1) {
-		return NULL;
-	} else {
-		return p;
-	}
+#define heapSize 1000000
+
+static char heap[heapSize];
+static size_t heapPtr = 0;
+
+void* malloc(size_t size)
+{
+  // Check if there is enough space on the heap
+  if (heapPtr + size > heapSize) {
+    // Not enough space on the heap
+    return ENOMEM;
+	prErr("mm", "malloc(): ENOMEM - Not enough space on the heap.");
+  }
+
+  // Allocate memory from the heap
+  void* ptr = &heap[heapPtr];
+  heapPtr += size;
+  return ptr;
 }
 
 struct blockMeta {
