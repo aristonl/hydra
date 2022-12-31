@@ -5,6 +5,8 @@
 
 #include <log.h>
 
+/*
+
 #define heapSize 1000000
 
 static char heap[heapSize];
@@ -36,4 +38,4 @@ struct blockMeta {
 
 void *globalBase = NULL;
 
-
+*/
