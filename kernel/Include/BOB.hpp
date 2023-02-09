@@ -17,6 +17,6 @@ struct MemoryDescriptor {
 struct BOB {
     unsigned long long DescriptorSize, MapSize;
     MemoryDescriptor* MemoryMap;
-
+    void* RSDP;
     Framebuffer* framebuffer;
 };

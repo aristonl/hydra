@@ -4,7 +4,7 @@
 //
 // To Andreas Kling:
 // ILY no homo
-// Sincerely,  Levi Hicks (levih@n11.dev)
+// Sincerely, Levi Hicks (levih@n11.dev)
 
 template<bool condition, class TrueType, class FalseType>
 struct __Conditional {
