@@ -28,7 +28,7 @@ G:	ssh://git.n11.dev/bob
 
 DOCUMENTATION
 M:	hydra-inferno@googlegroups.com
-R:	Ariston Lorenzo <aristonl@n11.dev> (Temporary)
+R:	Ariston Lorenzo <me@ariston.dev> (Temporary)
 S: 	Orphan
 B:	https://github.com/N11Software/hydra
 D:	docs/*
@@ -38,14 +38,14 @@ G: 	ssh://git.n11.dev/hydra
 LIBRARIES
 M: 	hydra-inferno@googlegroups.com
 R: 	Nola G <nolag@n11.dev>
-R: 	Ariston Lorenzo <aristonl@n11.dev>
+R: 	Ariston Lorenzo <me@ariston.dev>
 S: 	Maintained
 D: 	lib/*
 G:  https://github.com/gingerwitch64/hydra-tcm.git
 
 STABLE TREE
 M:	hydra-inferno@googlegroups.com
-R:	Ariston Lorenzo <aristonl@n11.dev>
+R:	Ariston Lorenzo <me@ariston.dev>
 S:	Maintained
 G:	ssh://git.n11.dev/hydra-stable
 G:	https://github.com/aristonl/hydra.git (mirror)
@@ -60,7 +60,7 @@ G: ssh://git.n11.dev/hydra
 
 THE REST:
 M:	hydra-inferno@googlegroups.com
-R:	Ariston Lorenzo <aristonl@n11.dev>
+R:	Ariston Lorenzo <me@ariston.dev>
 S:	i use arch on a macbook btw
 D:	*
 B:	hydra-inferno@googlegroups.com
