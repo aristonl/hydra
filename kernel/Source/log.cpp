@@ -51,6 +51,9 @@ void prErr(const char* subsystem, const char* message, ...) {
 			case 's':
 				kprintf("%s", va_arg(args, char*));
 				break;
+			case 'X':
+				kprintf("%X", va_arg(args, int));
+				break;
 			}
 		} else {
 			kputchar(*p);

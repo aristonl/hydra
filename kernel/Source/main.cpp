@@ -26,6 +26,7 @@
 
 // Drivers
 #include <drivers/rtc/rtc.h>
+#include <drivers/pci/pci.h>
 
 extern unsigned long long InfernoStart;
 extern unsigned long long InfernoEnd;
@@ -77,6 +78,8 @@ __attribute__((sysv_abi)) void Inferno(BOB* bob) {
 			"D"((unsigned long)0) : "rcx", "r11", "memory");
 
 	RTC::init();
+
+	PCI::init();
 	
 }
 
