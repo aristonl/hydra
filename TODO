@@ -1,25 +1,43 @@
 Inferno TODO
 
-[x] Better Opensource Bootloader (BOB)
-[x] GDT/IDT
-[x] Basic LibC
-[x] kprintf function
-[x] Serial support
-[ ] Multitasking
-[ ] Paging MM
-[ ] Virtual MM
-[ ] APIC
-[x] CMOS/RTC
-[x] Syscalls 
-[ ] Basic Video Driver (for serial output to screen)
-[x] Check PCI buses for devices and list devices
-[ ] Figure out a way to map PCI class-codes/sub-classes to
-	their respective init() functions
+This is the current TODO list for now. Add to it as needed and
+hope that someone will get to it. This first section consists of
+the actual TODO list itself. The next section consists of task
+descriptions.
 
-(TODO for v0.1pre2)
- - Toolchain
- - Syscalls
- - Keyboard/Mouse Input
- - ext2 Filesystem
- - Epoch Time (for ext2 which stores dates using epoch)
- - Bash
+[x] - Complete
+[ ] - Incomplete
+[@] - Abandoned
+
+- Milestone 1 (v0.1pre1)
+
+	Task				Urgency		Grade		Assignees		ID
+-------------------------------------------------------------------------------
+[x] BOB - Bootloader	High		Advanced	<levih>			1
+[x] GDT/IDT										<levih>			2
+[x] Basic LibC			High		Low			<aristonl>		3
+[x] kprintf function	High		Medium		<levih>			4
+[x] Serial support		High		Low			<levih>			5
+[ ] Multitasking								<?>				6
+[ ] Paging MM									<?>				7
+[ ] Virtual MM									<?>				8
+[ ] APIC										<?>				9
+[x] CMOS/RTC			Medium		Medium		<aristonl>		10
+[x] Syscalls 									<levih>			11
+[ ] Basic Video Driver	High		High		<?>				12
+[x] Basic PCI Driver	High		Medium		<aristonl>		13
+[ ] Map devs to drivers	High		Medium		<?>				14
+
+- Milestone 2 (v0.1pre2)
+
+	Task				Urgency		Grade		Assignees		ID
+-------------------------------------------------------------------------------
+[x] Toolchain			High		Medium		<aristonl>		15
+[ ] Syscalls									<?>				16
+[ ] Keyboard/Mouse		High					<?>				17
+[ ] ext2 Filesystem		High		High		<aristonl>		18
+[ ] Epoch Time			High		Low			<aristonl>		19
+[ ] Bash				High		High		<?>				20
+
+
+
