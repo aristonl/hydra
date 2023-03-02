@@ -10,6 +10,6 @@
 
 namespace RTC {
 void readRTC();
-
+unsigned long long getEpochTime();
 int init();
 }

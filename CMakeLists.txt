@@ -6,6 +6,9 @@ SET(CMAKE_SYSTEM_NAME Generic)
 SET(CMAKE_SYSTEM_PROCESSOR x86_64)
 SET(CMAKE_CROSSCOMPILING 1)
 
+set(CMAKE_C_COMPILER "${CMAKE_CURRENT_SOURCE_DIR}/toolchain/Local/x86_64/bin/x86_64-hydra-gcc")
+set(CMAKE_CXX_COMPILER "${CMAKE_CURRENT_SOURCE_DIR}/toolchain/Local/x86_64/bin/x86_64-hydra-g++")
+
 cmake_minimum_required(VERSION 3.16)
 
 project(Hydra C CXX ASM_NASM)

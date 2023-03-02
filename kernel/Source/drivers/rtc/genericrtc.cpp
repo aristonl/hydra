@@ -37,8 +37,6 @@ void readRTC() {
 	month = getRegister(0x08);
 	year = getRegister(0x09);
 
-	// TODO: Add 2000 to year so it'll display the full 4-digit year
-
 	registerB = getRegister(0x0B);
 
 	// Convert BCD to binary values if necessary
@@ -58,8 +56,11 @@ void readRTC() {
 		hour = ((hour & 0x7F) + 12) % 24;
 	}
 
+	unsigned int century = 20; // Hardcoded since Hydra probwon't be around in 2100.
+	unsigned int full_year = (century * 100) + year;
+
 	// FIXME: Make the hour, min, sec show as two digits when it is < 10. (ex: 07 instead of 7)
-	prInfo("rtc", "%d/%d/%dT%d:%d:%d", day, month, year, hour, minute, second);
+	prInfo("rtc", "%d/%d/%dT%d:%d:%d", day, month, full_year, hour, minute, second);
 }
 
 int init() {
@@ -67,5 +68,14 @@ int init() {
 	prInfo("rtc", "rtc initialized");
 	return 0;
 }
+
+// Epoch TIme function
+// TODO: need this for ext2
+/*unsigned long long getEpochTime() {
+	RTC::readRTC();
+	unsigned long long epochTime = 0;
+	return epochTime;
+}*/
+
 
 }
