@@ -24,15 +24,18 @@ How can I contribute?
 ---------------------
   We accept any useful patches whether they are coding style fixes, small
   changes, or even new drivers, features, etc.. For more info on how to
-  contribute, see docs/contributing for more info.
+  contribute, see docs/contributing for more info. ***We are actively
+  looking for more contributors, so if you are interested, please feel
+  free to help in any way you can!***
 
 Contact
 -------
   You can contact us via [Discord](https://discord.gg/SNXBh4w3nW) or
   through the mailing list, hydra-inferno@googlegroups.com. See CREDITS or
-  MAINTAINERS for specific developer contact info.
+  MAINTAINERS for specific developer contact info. We're now also on IRC
+  in Libera Chat under #n11.
 
 License
 -------
   Inferno is licensed under the N11 Public Source License - see the
-  accompanying COPYING file for more details.
+  accompanying COPYRIGHT file for more details.
