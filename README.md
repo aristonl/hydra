@@ -1,5 +1,3 @@
-.. _readme:
-
 Hydra/Inferno
 =============
 
@@ -12,9 +10,11 @@ What is Hydra/Inferno?
   We aim to have what you'd expect in a usual Unix system like multitasking,
   virtual memory, shared libraries, good memory management, etc..
 
+  Build instructions can be found in docs/BuildInstructions.rst.
+
 What hardware can it run on?
 ----------------------------
-  As of v0.1, Inferno targets x86_64 with future plans to target ARM64.
+  As of v1.0, Inferno targets x86_64 with future plans to target ARM64.
   32-bit architectures aren't planned for later releases.
 
   We do accept 32-bit related patches but they will not be maintained by
@@ -28,11 +28,11 @@ How can I contribute?
 
 Contact
 -------
-  You can contact us via `Discord <https://discord.gg/SNXBh4w3nW>`_ or
+  You can contact us via [Discord](https://discord.gg/SNXBh4w3nW) or
   through the mailing list, hydra-inferno@googlegroups.com. See CREDITS or
   MAINTAINERS for specific developer contact info.
 
 License
 -------
   Inferno is licensed under the N11 Public Source License - see the
-  accompanying LICENSE file for more details.
+  accompanying COPYING file for more details.
