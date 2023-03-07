@@ -32,6 +32,7 @@ Source Roadmap
 --------------
 | Directory | Description |
 |-----------|-------------|
+| bin | User programs |
 | boot | Bootloader source |
 | docs | Documentation |
 | kernel | Inferno kernel source |
