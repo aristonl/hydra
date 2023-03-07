@@ -10,7 +10,7 @@ What is Hydra/Inferno?
   We aim to have what you'd expect in a usual Unix system like multitasking,
   virtual memory, shared libraries, good memory management, etc..
 
-  Build instructions can be found in docs/BuildInstructions.rst.
+  Build instructions can be found in [docs/BuildInstructions.rst](docs/BuildInstructions.rst).
 
 What hardware can it run on?
 ----------------------------
@@ -48,4 +48,4 @@ Contact
 License
 -------
   Inferno is licensed under the N11 Public Source License - see the
-  accompanying COPYRIGHT file for more details.
+  accompanying [COPYRIGHT](COPYRIGHT) file for more details.
