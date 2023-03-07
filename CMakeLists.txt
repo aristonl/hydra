@@ -21,5 +21,6 @@ include_directories(lib/libutils)
 include_directories(${CMAKE_CURRENT_BINARY_DIR})
 include_directories(${CMAKE_CURRENT_BINARY_DIR}/lib)
 
+add_subdirectory(boot)
 add_subdirectory(kernel)
 add_subdirectory(lib)
