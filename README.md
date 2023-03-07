@@ -28,6 +28,16 @@ How can I contribute?
   looking for more contributors, so if you are interested, please feel
   free to help in any way you can!***
 
+Source Roadmap
+--------------
+| Directory | Description |
+|-----------|-------------|
+| boot | Bootloader source |
+| docs | Documentation |
+| kernel | Inferno kernel source |
+| lib | System libraries |
+| toolchain | Hydra toolchain scripts |
+
 Contact
 -------
   You can contact us via [Discord](https://discord.gg/SNXBh4w3nW) or
