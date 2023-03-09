@@ -40,4 +40,16 @@ descriptions.
 [ ] Bash				High		High		<?>				20
 [ ] FS Hierarchy		High		Low			<atl+lsh>		21
 
+-------------------------------------------------------------------------------
+
+#21 - FS Hierarchy
+    
+		Levi's current File System hierarchy design isn't very UNIX friendly
+		so it'd be best to modify it enough that it will still support UNIX
+		and still fit well with what Levi wants. Although this is listed as
+		Milestone 2, it'd be great to have this ASAP. For the current file
+		system hierarchy design by Levi (and with partial help from me), see
+		docs/fs/fs-hierarchy.txt
+    
+		Signed-off-by: Ariston Lorenzo <me@ariston.dev>
 
