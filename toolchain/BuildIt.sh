@@ -52,13 +52,13 @@ GDB_VERSION="11.2"
 GDB_MD5SUM="b5674bef1fbd6beead889f80afa6f269"
 GDB_NAME="gdb-$GDB_VERSION"
 GDB_PKG="${GDB_NAME}.tar.gz"
-GDB_BASE_URL="https://ftp.gnu.org/gnu/gdb"
+GDB_BASE_URL="https://gnu.mirror.constant.com/gdb"
 
 GCC_VERSION="12.2.0"
 GCC_MD5SUM="7854cdccc3a7988aa37fb0d0038b8096"
 GCC_NAME="gcc-$GCC_VERSION"
 GCC_PKG="${GCC_NAME}.tar.gz"
-GCC_BASE_URL="https://ftp.gnu.org/gnu/gcc"
+GCC_BASE_URL="https://gnu.mirror.constant.com/gcc"
 
 buildstep() {
     NAME=$1
@@ -281,10 +281,10 @@ pushd "$BUILD"
         echo "XXX install gcc and libgcc"
         buildstep "gcc+libgcc/install" "$MAKE" install-gcc install-target-libgcc || exit 1
 
-        echo "XXX build libstdc++"
-        buildstep "libstdc++/build" "$MAKE" -j "$MAKEJOBS" all-target-libstdc++-v3 || exit 1
-        echo "XXX install libstdc++"
-        buildstep "libstdc++/install" "$MAKE" install-target-libstdc++-v3 || exit 1
+        #echo "XXX build libstdc++"
+        #buildstep "libstdc++/build" "$MAKE" -j "$MAKEJOBS" all-target-libstdc++-v3 || exit 1
+        #echo "XXX install libstdc++"
+        #buildstep "libstdc++/install" "$MAKE" install-target-libstdc++-v3 || exit 1
     popd
 
     if [ "$SYSTEM_NAME" = "OpenBSD" ]; then
