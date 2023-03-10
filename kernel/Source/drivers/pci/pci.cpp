@@ -41,6 +41,11 @@ namespace PCI {
 
 		pci_device_t device;
 
+		if (class_id == 0x01 && subclass_id == 0x08) {
+			prInfo("PCI", "Found NVMe device");
+			nvme_init(vendor_id, device_id);
+		}
+
 		device.vendor_id = vendor_id;
 		device.device_id = device_id;
 		device.class_id = class_id;
