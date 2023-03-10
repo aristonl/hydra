@@ -39,6 +39,7 @@ descriptions.
 [ ] Epoch Time			High		Low			<atl>		    19
 [ ] Bash				High		High		<?>				20
 [ ] FS Hierarchy		High		Low			<atl+lsh>		21
+[ ] ACPI (for shutdown) High					<?>				22
 
 -------------------------------------------------------------------------------
 
