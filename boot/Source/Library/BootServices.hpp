@@ -9,7 +9,8 @@ struct BootServices {
   void* FreePages;
   unsigned long long (*GetMemoryMap)(unsigned long long* MemoryMapSize, MemoryDescriptor* MemoryMap, unsigned long long* MapKey, unsigned long long* DescriptorSize, unsigned int* DescriptorVersion);
   unsigned long long (*AllocatePool)(unsigned long long PoolType, unsigned long long Size, void** Buffer);
-  void* FreePool, *CreateEvent, *SetTimer, *WaitForEvent, *SignalEvent, *CloseEvent, *CheckEvent, *InstallProtocolInterface, *ReinstallProtocolInterface, *UninstallProtocolInterface;
+  unsigned long long (*FreePool)(void* Buffer);
+  void* CreateEvent, *SetTimer, *WaitForEvent, *SignalEvent, *CloseEvent, *CheckEvent, *InstallProtocolInterface, *ReinstallProtocolInterface, *UninstallProtocolInterface;
   unsigned long long (*HandleProtocol)(void* Handle, struct GUID* Protocol, void** Interface);
   void* Reserved, *RegisterProtocolNotify, *LocateHandle, *LocateDevicePath, *InstallConfigurationTable, *LoadImage, *StartImage, *Exit, *UnloadImage;
   unsigned long long (*ExitBootServices)(void* ImageHandle, unsigned long long MapKey);
