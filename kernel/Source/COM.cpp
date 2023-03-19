@@ -13,6 +13,8 @@
 
 #include <log.h>
 
+#include <string>
+
 bool COM1Active = false;
 
 void InitializeSerialDevice() {
@@ -83,6 +85,24 @@ int strlen(const char* str) {
             }
         }
     }
+}
+
+char *strcpy(char* dest, const char* src) {
+	if (dest == nullptr) {
+		return nullptr;
+	}
+
+	char *ptr = dest;
+
+	while (*src != '\0') {
+		*dest = *src;
+		dest++;
+		src++;
+	}
+
+	*dest = '\0';
+
+	return ptr;
 }
 
 struct PrintData {

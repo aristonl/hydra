@@ -5,8 +5,9 @@
 
 __BEGIN_DECLS
 
-size_t strlen(const char*);
+int strlen(const char* str);
 int strcmp(const char*, const char*);
+char* strcpy(char* dest, const char* src);
 int memcmp(const void*, const void*, size_t);
 void *memcpy(void *, const void *, size_t);
 void* memset(void* str, int c, size_t n);
