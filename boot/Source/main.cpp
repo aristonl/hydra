@@ -22,7 +22,7 @@ void* memset(void* s, unsigned char c, unsigned long long len) {
 struct BOB {
 	unsigned long long DescriptorSize, MapSize;
 	MemoryDescriptor* MemoryMap;
-
+  void* RSDP;
   Framebuffer* Framebuffer;
 };
 
@@ -146,6 +146,7 @@ extern "C" __attribute__((ms_abi)) unsigned long long boot(void* ImageHandle, st
   bob->MapSize = MapSize;
 	bob->MemoryMap = Map;
   bob->Framebuffer = &framebuffer;
+  bob->RSDP = rsdp;
 
 	void (*KernelMain)(BOB*)=((void (*)(BOB*))KernelHeaders.Entry);
   KernelMain(bob);
