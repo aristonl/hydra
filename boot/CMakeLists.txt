@@ -26,5 +26,9 @@ set(CMAKE_OSX_ARCHITECTURES x86_64)
 
 set(CMAKE_OSX_SYSROOT "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk")
 
-
 add_executable(bootx64.efi ${SOURCE_FILES})
+
+add_custom_target(srcboot
+	COMMAND cp bootx64.efi ../Build/ISO/EFI/BOOT/bootx64.efi
+	DEPENDS bootx64.efi
+)
