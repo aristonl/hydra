@@ -20,6 +20,8 @@ void* memset(void* s, unsigned char c, unsigned long long len) {
 struct BOB {
 	unsigned long long DescriptorSize, MapSize;
 	MemoryDescriptor* MemoryMap;
+
+  Framebuffer* Framebuffer;
 };
 
 #define CheckStatus status = 
@@ -95,28 +97,8 @@ extern "C" __attribute__((ms_abi)) unsigned long long boot(void* ImageHandle, st
     CheckStatus image->Close(image);
   }
 
-  FileProtocol* fontFile;
-  CheckStatus FS->Open(FS, &fontFile, (unsigned short*) L"font.psf", 0x0000000000000001, 0);
-
-  PSFHeader* fontHeader;
-  PSFFont* font;
-  CheckStatus SystemTable->BootServices->AllocatePool(2, sizeof(PSFHeader), (void**)&fontHeader);
-  unsigned long long fontSize = sizeof(fontHeader);
-  CheckStatus fontFile->Read(fontFile, &fontSize, fontHeader);
-  if (fontHeader->Magic[0] == 0x36 || fontHeader->Magic[1] == 0x04) {
-    unsigned long long glyphBufferSize = fontHeader->GlyphSize*256;
-    void* glyphBuffer; {
-      CheckStatus fontFile->SetPosition(fontFile, sizeof(PSFHeader));
-      CheckStatus SystemTable->BootServices->AllocatePool(2, glyphBufferSize, (void**)&glyphBuffer);
-      CheckStatus fontFile->Read(fontFile, &glyphBufferSize, glyphBuffer);
-      CheckStatus SystemTable->BootServices->AllocatePool(2, sizeof(PSFFont), (void**)&font);
-      font->Header = fontHeader;
-      font->GlyphBuffer = glyphBuffer;
-    }
-  }
-
   FileProtocol* KernelFile;
-  CheckStatus FS->Open(FS, &KernelFile, (unsigned short*) L"inferno", 0x0000000000000001, 0);
+  CheckStatus FS->Open(FS, &KernelFile, (unsigned short*) L"kernel", 0x0000000000000001, 0);
 
   ELFHeaders KernelHeaders; {
     unsigned long long FileInfoSize;
@@ -129,7 +111,8 @@ extern "C" __attribute__((ms_abi)) unsigned long long boot(void* ImageHandle, st
   }
 
   if (memcmp(&KernelHeaders.Identifier[0], "\u007fELF\0", 4) != 0 || KernelHeaders.Identifier[4] != 2 || KernelHeaders.Identifier[5] != 1 || KernelHeaders.Type != 2 || KernelHeaders.Machine != 62 || KernelHeaders.Version != 1) {
-    CheckStatus SystemTable->ConsoleOutput->Print(SystemTable->ConsoleOutput, (unsigned short int*) L"Error whilst loading Inferno!\r\nPlease DO NOT modify Inferno without experience!");
+    PrintTGA(ErrorIcon, SystemTable, framebuffer, framebuffer.Width/2, framebuffer.Height/2);
+    CheckStatus SystemTable->ConsoleOutput->Print(SystemTable->ConsoleOutput, (unsigned short int*) L"Error whilst loading kernel!\r\n");
     return 1;
   }
 
@@ -174,6 +157,7 @@ extern "C" __attribute__((ms_abi)) unsigned long long boot(void* ImageHandle, st
   bob->DescriptorSize = DescriptorSize;
   bob->MapSize = MapSize;
 	bob->MemoryMap = Map;
+  bob->Framebuffer = &framebuffer;
 
 	void (*KernelMain)(BOB*)=((void (*)(BOB*))KernelHeaders.Entry);
   KernelMain(bob);
