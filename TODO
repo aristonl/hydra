@@ -24,7 +24,7 @@ descriptions.
 [ ] APIC										<?>				9
 [x] CMOS/RTC			Medium		Medium		<atl>		    10
 [x] Syscalls 									<levih>			11
-[ ] Basic Video Driver	High		High		<?>				12
+[ ] Basic Video Driver	High		High		<levih>			12
 [x] Basic PCI Driver	High		Medium		<atl>		    13
 [ ] Map devs to drivers	High		Medium		<?>				14
 
