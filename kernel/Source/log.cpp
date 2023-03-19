@@ -104,6 +104,9 @@ void prDebug(const char* subsystem, const char* message, ...) {
 			case 's':
 				kprintf("%s", va_arg(args, char*));
 				break;
+			case 'x':
+				kprintf("%x", va_arg(args, int));
+				break;
 			}
 		} else {
 			kputchar(*p);

@@ -51,7 +51,7 @@ namespace PCI {
 		device.class_id = class_id;
 		device.subclass_id = subclass_id;
 
-		prDebug("PCI", "Detected device: %d:%d (Class %d, Subclass %d)",
+		prDebug("PCI", "Detected device: %x:%x (Class %d, Subclass %d)",
 				vendor_id, device_id, class_id, subclass_id);
 	}
 
