@@ -17,6 +17,11 @@ void* memset(void* s, unsigned char c, unsigned long long len) {
   return s;
 }
 
+struct BOB {
+	unsigned long long DescriptorSize, MapSize;
+	MemoryDescriptor* MemoryMap;
+};
+
 #define CheckStatus status = 
 
 extern "C" __attribute__((ms_abi)) unsigned long long boot(void* ImageHandle, struct SystemTable* SystemTable) {
@@ -165,8 +170,13 @@ extern "C" __attribute__((ms_abi)) unsigned long long boot(void* ImageHandle, st
 
   SystemTable->BootServices->ExitBootServices(ImageHandle, MapKey);
 
-	void (*KernelMain)()=((void (*)())KernelHeaders.Entry);
-  KernelMain();
+	BOB* bob;
+  bob->DescriptorSize = DescriptorSize;
+  bob->MapSize = MapSize;
+	bob->MemoryMap = Map;
+
+	void (*KernelMain)(BOB*)=((void (*)(BOB*))KernelHeaders.Entry);
+  KernelMain(bob);
   PrintTGA(ErrorIcon, SystemTable, framebuffer, framebuffer.Width/2, framebuffer.Height/2);
   return 0;
 }
