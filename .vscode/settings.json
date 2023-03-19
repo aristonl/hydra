@@ -1,6 +1,16 @@
 {
     "C_Cpp.default.configurationProvider": "ms-vscode.makefile-tools",
     "files.associations": {
-        "types.h": "c"
+        "types.h": "c",
+        "sstream": "cpp",
+        "regex": "cpp",
+        "string": "cpp",
+        "buffer": "cpp",
+        "internet": "cpp",
+        "socket": "cpp",
+        "string_view": "cpp",
+        "array": "cpp",
+        "ranges": "cpp",
+        "span": "cpp"
     }
 }

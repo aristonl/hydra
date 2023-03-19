@@ -19,4 +19,5 @@ struct BOB {
     MemoryDescriptor* MemoryMap;
     void* RSDP;
     Framebuffer* framebuffer;
+    void* FontFile;
 };

@@ -23,6 +23,7 @@
 #include <Memory/Mem_.hpp>
 #include <CPU/CPUID.hpp>
 #include <log.h>
+#include <TTY.hpp>
 
 // Drivers
 #include <drivers/rtc/rtc.h>
@@ -85,6 +86,9 @@ __attribute__((sysv_abi)) void Inferno(BOB* bob) {
 }
 
 __attribute__((ms_abi)) [[noreturn]] void main(BOB* bob) {
+	SetFramebuffer(bob->framebuffer);
+	SetFont(bob->FontFile);
+	test();
     Inferno(bob);
 
     // Once finished say hello and halt

@@ -37,6 +37,7 @@ add_custom_command(TARGET Kernel POST_BUILD
 	COMMAND mcopy -i ${CMAKE_CURRENT_SOURCE_DIR}/../Build/ISO/Hydra.img ${CMAKE_CURRENT_SOURCE_DIR}/../Build/ISO/error.tga ::
 	COMMAND mcopy -i ${CMAKE_CURRENT_SOURCE_DIR}/../Build/ISO/Hydra.img ${CMAKE_CURRENT_SOURCE_DIR}/../Build/ISO/kernel ::
 	COMMAND mcopy -i ${CMAKE_CURRENT_SOURCE_DIR}/../Build/ISO/Hydra.img ${CMAKE_CURRENT_SOURCE_DIR}/../Build/ISO/startup.nsh ::
+	COMMAND mcopy -i ${CMAKE_CURRENT_SOURCE_DIR}/../Build/ISO/Hydra.img ${CMAKE_CURRENT_SOURCE_DIR}/../Build/ISO/FreeSans.sfn ::
 	USES_TERMINAL
 )
 

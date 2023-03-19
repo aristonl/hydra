@@ -8,8 +8,10 @@
 
 #pragma once
 #include <sys/io.h>
+#include <Framebuffer.hpp>
 
 void InitializeSerialDevice();
 char AwaitSerialResponse();
 void kputchar(char a);
 int kprintf(const char* fmt, ...);
+void initFB(Framebuffer* fb);

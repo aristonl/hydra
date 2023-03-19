@@ -24,6 +24,7 @@ struct BOB {
 	MemoryDescriptor* MemoryMap;
   void* RSDP;
   Framebuffer* Framebuffer;
+  void* FontFile;
 };
 
 #if Debug == true
@@ -139,6 +140,21 @@ extern "C" __attribute__((ms_abi)) unsigned long long boot(void* ImageHandle, st
     while(1) asm("hlt");
   }
 
+  void* buffer;
+
+  {
+    FileProtocol* fontFile;
+    CheckStatus FS->Open(FS, &fontFile, (unsigned short*) L"FreeSans.sfn", 0x0000000000000001, 0);
+    unsigned long long size = 0;
+    CheckStatus fontFile->SetPosition(fontFile, 0);
+    CheckStatus fontFile->Read(fontFile, &size, (void*)0);
+    CheckStatus SystemTable->BootServices->AllocatePool(2, size, (void**)&buffer);
+    CheckStatus fontFile->SetPosition(fontFile, 0);
+    CheckStatus fontFile->Read(fontFile, &size, buffer);
+    CheckStatus fontFile->Close(fontFile);
+  }
+
+
   SystemTable->BootServices->ExitBootServices(ImageHandle, MapKey);
 
 	BOB* bob;
@@ -147,6 +163,7 @@ extern "C" __attribute__((ms_abi)) unsigned long long boot(void* ImageHandle, st
 	bob->MemoryMap = Map;
   bob->Framebuffer = &framebuffer;
   bob->RSDP = rsdp;
+  bob->FontFile = buffer;
 
 	void (*KernelMain)(BOB*)=((void (*)(BOB*))KernelHeaders.Entry);
   KernelMain(bob);
