@@ -7,6 +7,8 @@
 #include "Library/String.hpp"
 #include "Library/ELF.hpp"
 
+#define Debug false
+
 void* memset(void* s, unsigned char c, unsigned long long len) {
   unsigned char *dst = (unsigned char*) s;
   while (len > 0) {
@@ -24,7 +26,11 @@ struct BOB {
   Framebuffer* Framebuffer;
 };
 
+#if Debug == true
 #define CheckStatus status = 
+#else
+#define CheckStatus
+#endif
 
 extern "C" __attribute__((ms_abi)) unsigned long long boot(void* ImageHandle, struct SystemTable* SystemTable) {
   Framebuffer framebuffer;
@@ -54,28 +60,6 @@ extern "C" __attribute__((ms_abi)) unsigned long long boot(void* ImageHandle, st
   CheckStatus SystemTable->BootServices->HandleProtocol(LoadedImage->DeviceHandle, &FileSystemProtocolGUID, (void**)&Volume);
   FileProtocol* FS;
   CheckStatus Volume->OpenVolume(Volume, &FS);
-
-  struct TGAImage* BootLogo;
-  {
-    FileProtocol* image;
-    CheckStatus FS->Open(FS, &image, (unsigned short*) L"Hydra.tga", 0x0000000000000001, 0);
-    struct TGAHeader* header;
-    unsigned long long headerSize = sizeof(struct TGAHeader);
-    CheckStatus SystemTable->BootServices->AllocatePool(2, headerSize, (void**)&header);
-    CheckStatus image->Read(image, &headerSize, header);
-    unsigned long long bufferSize = header->Width*header->Height*header->BytesPerPixel/8;
-    void* buffer; {
-      CheckStatus image->SetPosition(image, headerSize);
-      CheckStatus SystemTable->BootServices->AllocatePool(2, bufferSize, (void**)&buffer);
-      CheckStatus image->Read(image, &bufferSize, buffer);
-    }
-    CheckStatus SystemTable->BootServices->AllocatePool(2, sizeof(struct TGAImage), (void**)&BootLogo);
-    BootLogo->Pointer = header;
-    BootLogo->Buffer = buffer;
-    CheckStatus image->Close(image);
-  }
-
-  PrintTGA(BootLogo, SystemTable, framebuffer, framebuffer.Width/2, framebuffer.Height/2);
 
   struct TGAImage* ErrorIcon;
   {
