@@ -15,12 +15,12 @@ set_source_files_properties(${ASM_SRCS} PROPERTIES LANGUAGE ASM_NASM)
 set(CMAKE_CXX_FLAGS "-ffreestanding -fshort-wchar -g -mabi=sysv -no-pie -mno-red-zone -fpermissive -mgeneral-regs-only -O2 -fno-stack-protector -fno-exceptions")
 add_link_options(-static -Bsymbolic -T${CMAKE_CURRENT_SOURCE_DIR}/linker.ld -fno-stack-protector -nostdlib -e main)
 include_directories(Include)
-add_executable(Kernel ${CPP_SRCS} ${ASM_SRCS})
+add_executable(kernel ${CPP_SRCS} ${ASM_SRCS})
 
-set_target_properties(Kernel PROPERTIES LINK_DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/linker.ld)
+set_target_properties(kernel PROPERTIES LINK_DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/linker.ld)
 
-add_custom_command(TARGET Kernel POST_BUILD
-	COMMAND mv ${CMAKE_CURRENT_SOURCE_DIR}/Kernel ${CMAKE_CURRENT_SOURCE_DIR}/../Build/ISO/kernel
+add_custom_command(TARGET kernel POST_BUILD
+	COMMAND mv ${CMAKE_CURRENT_SOURCE_DIR}/kernel ${CMAKE_CURRENT_SOURCE_DIR}/../Build/ISO/kernel
 	USES_TERMINAL
 )
 
@@ -28,7 +28,7 @@ if(NOT EXISTS Build/ISO/Hydra.img)
 	set(imagecmd dd if=/dev/zero of=${CMAKE_CURRENT_SOURCE_DIR}/../Build/ISO/Hydra.img bs=512 count=93750)
 endif()
 
-add_custom_command(TARGET Kernel POST_BUILD
+add_custom_command(TARGET kernel POST_BUILD
 	COMMAND ${imagecmd}
 	COMMAND mformat -i ${CMAKE_CURRENT_SOURCE_DIR}/../Build/ISO/Hydra.img -F ::
 	COMMAND mmd -i ${CMAKE_CURRENT_SOURCE_DIR}/../Build/ISO/Hydra.img ::/EFI
@@ -41,7 +41,7 @@ add_custom_command(TARGET Kernel POST_BUILD
 	USES_TERMINAL
 )
 
-add_custom_command(TARGET Kernel POST_BUILD
+add_custom_command(TARGET kernel POST_BUILD
 	COMMAND xorriso -as mkisofs -R -f -e Hydra.img -no-emul-boot -V "Hydra" -o ${CMAKE_CURRENT_SOURCE_DIR}/../Build/Hydra.iso ${CMAKE_CURRENT_SOURCE_DIR}/../Build/ISO/ > /dev/null 2>&1
 	USES_TERMINAL
 )
@@ -73,4 +73,4 @@ add_custom_target(emulate-no-display
 	USES_TERMINAL
 )
 
-add_dependencies(emulate Kernel)
+add_dependencies(emulate kernel)
