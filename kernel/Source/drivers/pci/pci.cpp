@@ -6,6 +6,7 @@
 //
 //===================================================================//
 
+#include <drivers/ata/ahci.h>
 #include <drivers/pci/pci.h>
 #include <drivers/nvme/nvme.h>
 #include <log.h>
@@ -42,8 +43,11 @@ namespace PCI {
 		pci_device_t device;
 
 		if (class_id == 0x01 && subclass_id == 0x08) {
-			prInfo("PCI", "Found NVMe device");
+			prInfo("pci", "Found NVMe device");
 			nvme_init(vendor_id, device_id);
+		} else if (class_id == 0x01 && subclass_id == 0x06) {
+			prInfo("pci", "Found AHCI SATA device");
+			ahci_init(vendor_id, device_id);
 		}
 
 		device.vendor_id = vendor_id;
