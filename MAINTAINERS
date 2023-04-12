@@ -22,9 +22,7 @@ BOB
 M:	hydra-inferno@googlegroups.com
 R:	Levi Hicks <levih@n11.dev>
 S:	Maintained
-D:	ssh://git.n11.dev/bob
-B:	https://github.com/N11Software/bob
-G:	ssh://git.n11.dev/bob
+D:	boot/*
 
 DOCUMENTATION
 M:	hydra-inferno@googlegroups.com
