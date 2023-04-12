@@ -14,7 +14,7 @@ set(CMAKE_CXX_STANDARD 11)
 
 set(CMAKE_CXX_COMPILER "x86_64-w64-mingw32-g++")
 
-set(SOURCE_FILES Source/main.cpp)
+set(SOURCE_FILES main.cpp)
 
 # x86_64-w64-mingw32-g++ -Werror -m64 -maccumulate-outgoing-args -ffreestanding -c $^ -o $@
 set(CMAKE_CXX_FLAGS "-Werror -m64 -maccumulate-outgoing-args -ffreestanding")
