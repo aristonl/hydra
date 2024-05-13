@@ -1,38 +1,3 @@
-<<<<<<< HEAD
-!Makefile
-!LICENSE
-
-*.o
-*.ao
-*.a
-*.so
-*.d
-
-*.swo
-*.swp
-*.config
-*.creator
-*.creator.user
-*.creator.user.*
-*.files
-*.includes
-*.cflags
-*.cxxflags
-*.autosave
-
-*.iso
-*.elf
-Build/Binaries/*
-Build/qemu-720p-bootloader.efi
-
-
-.DS_Store
-.vim/
-
-bootloader/
-
-hbm
-=======
 # NOTE! Don't add files that are generated in specific
 # subdirectories here. Add them in the ".gitignore" file
 # in that subdirectory instead.
@@ -75,4 +40,3 @@ patches/
 .pc/
 
 kernel/OVMF*
->>>>>>> new/main
