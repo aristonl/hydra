@@ -1,0 +1,53 @@
+                    
+            N11/INFERNO - an operating system and kernel duo
+                    Copyright 2021-2024 N11 Software
+  
+  You should hae received a copy of the N11 Public Source License with this
+  program. If not, see the following pages:
+
+	<https://n11.dev/legal/n11-psl/>.
+
+------------------------------------------------------------------------------
+
+What is N11/Inferno?:
+  
+  N11Inferno is an operating system/hybrid kernel written from scratch by 
+  Ariston Lorenzo, Levi Freisleben, and other developers.  The project aims 
+  towards UNIX/POSIX compliance.
+
+  We aim to have what you'd expect in a usual Unix system like multitasking,
+  virtual memory, shared libraries, good memory management, etc..
+
+  Build instructions can be found in docs/BuildInstructions.rst.
+
+What hardware can it run on?:
+
+  As of v0.1, Inferno targets x86_64 and ARM64.
+  32-bit architectures aren't planned for later releases.
+
+  We do accept 32-bit related patches but they will not be maintained by
+  any current maintainers.
+
+How can I contribute?:
+  
+  We accept any useful patches whether they are coding style fixes, small
+  changes, or even new drivers, features, etc.. For more info on how to
+  contribute, see docs/contributing for more info. ***We are actively
+  looking for more contributors, so if you are interested, please feel
+  free to help in any way you can!***
+
+Source Roadmap:
+
+| Directory |    Description    |
+|-----------|-------------------|
+| bin       | User programs     |
+| boot      | Bootloader source |
+| docs      | Documentation     |
+| kernel    | kernel source     |
+| lib       | System libraries  |
+| toolchain | toolchain scripts |
+
+Contact:
+
+  See CREDITS or MAINTAINERS for specific developer contact info.
+
