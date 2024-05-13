@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 !Makefile
 !LICENSE
 
@@ -31,3 +32,47 @@ Build/qemu-720p-bootloader.efi
 bootloader/
 
 hbm
+=======
+# NOTE! Don't add files that are generated in specific
+# subdirectories here. Add them in the ".gitignore" file
+# in that subdirectory instead.
+
+*.bin
+*.o
+*.so
+*.img
+*.iso
+*.DS_Store
+Build/ISO/kernel
+.idea/
+*.log
+
+# Makefiles
+Makefile
+
+build/
+
+# Ninja Build files
+build.ninja
+rules.ninja
+.ninja_deps
+.ninja_log
+
+# Xcode Project Files
+*.xcodeproj
+
+# Kate Project files
+.kateproject
+
+# CMake
+CMakeFiles/
+CMakeCache.txt
+cmake_install.cmake
+
+# Patches
+.patch
+patches/
+.pc/
+
+kernel/OVMF*
+>>>>>>> new/main

@@ -1,0 +1,56 @@
+Inferno TODO
+
+This is the current TODO list for now. Add to it as needed and
+hope that someone will get to it. This first section consists of
+the actual TODO list itself. The next section consists of task
+descriptions.
+
+[x] - Complete
+[ ] - Incomplete
+[@] - Abandoned
+
+- Milestone 1 (v0.1pre1)
+
+	Task				Urgency		Grade		Assignees		ID
+-------------------------------------------------------------------------------
+[x] BOB - Bootloader	High		Advanced	<levih>			1
+[x] GDT/IDT										<levih>			2
+[x] Basic LibC			High		Low			<atl>		    3
+[x] kprintf function	High		Medium		<levih>			4
+[x] Serial support		High		Low			<levih>			5
+[ ] Multitasking								<?>				6
+[ ] Paging MM									<?>				7
+[ ] Virtual MM									<?>				8
+[ ] APIC										<?>				9
+[x] CMOS/RTC			Medium		Medium		<atl>		    10
+[x] Syscalls 									<levih>			11
+[ ] Basic Video Driver	High		High		<levih>			12
+[x] Basic PCI Driver	High		Medium		<atl>		    13
+[ ] Map devs to drivers	High		Medium		<?>				14
+
+- Milestone 2 (v0.1pre2)
+
+	Task				Urgency		Grade		Assignees		ID
+-------------------------------------------------------------------------------
+[x] Toolchain			High		Medium		<atl>		    15
+[ ] Syscalls									<?>				16
+[ ] Keyboard/Mouse		High					<?>				17
+[ ] ext2 Filesystem		High		High		<atl>		    18
+[ ] Epoch Time			High		Low			<atl>		    19
+[ ] Bash				High		High		<?>				20
+[ ] FS Hierarchy		High		Low			<atl+lsh>		21
+[ ] ACPI (for shutdown) High					<?>				22
+
+-------------------------------------------------------------------------------
+
+#21 - FS Hierarchy
+    
+		Levi's current File System hierarchy design isn't very UNIX friendly
+		so it'd be best to modify it enough that it will still support UNIX
+		and still fit well with what Levi wants. Although this is listed as
+		Milestone 2, it'd be great to have this ASAP. For the current file
+		system hierarchy design by Levi (and with partial help from me), see
+		docs/fs/fs-hierarchy.txt
+    
+		Signed-off-by: Ariston Lorenzo <me@ariston.dev>
+

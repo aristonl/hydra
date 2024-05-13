@@ -1,0 +1,31 @@
+Inferno File System Hierachy Standard (subject to change) v0.1
+December, 2022
+
+/
+├── Applications (System-wide applications)
+│	└── Chrome
+│		├── Data
+│		│	└── config
+│		└── Binary
+│			└── chrome
+├── Kernel/ (Kernel-related files)
+│	└── Binaries/ (Essential binaries)
+├── Boot/ (Bootloader files, kernels)
+│	└── EFI/ (Mount location of boot partition)
+├── Devices/ (Essential device files)
+│	├── null
+│	└── tty0
+├── Users/ (User home directories)
+│	├── n11user/
+│	│	├── .config/ (User-specific configs)
+│	│	├── Applications (user apps)
+│	│	├── Desktop/
+│	│	├── Documents
+│	│	├── Music
+│	│	├── Pictures
+│	│	└── Videos
+│	├── root/
+│	└── guest/ (Guest account / not created by default)
+├── Libraries/ (All libraries)
+├── Headers/ (All header files)
+└── Volumes/ (Mount point of all partitions)
