@@ -26,10 +26,10 @@ descriptions.
 [x] GDT/IDT										<levih>			2
 [ ] Basic LibC			High		Low			<atl>		    3
 [x] kprintf function	High		Medium		<levih>			4
-[ ] Serial support		High		Low			<levih>			5
+[x] Serial support		High		Low			<levih>			5
 [ ] Multitasking								<?>				6
-[ ] Paging MM									<lsh>				7
-[ ] Virtual MM									<lsh>				8
+[x] Paging MM									<lsh>				7
+[x] Virtual MM									<lsh>				8
 [ ] APIC										<?>				9
 [x] CMOS/RTC			Medium		Medium		<atl>		    10
 [x] Syscalls 									<levih>			11
