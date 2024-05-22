@@ -10,6 +10,7 @@ SECTIONS {
         *(COMMON)
         *(.bss)
     }
+    .note.GNU-stack : ALIGN(0x1000) { *(.note   ) }
     /DISCARD/ : { *(.note.GNU-stack) }
 	InfernoEnd = .;
 }
