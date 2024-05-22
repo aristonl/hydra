@@ -1,0 +1,13 @@
+#!/bin/sh
+
+set -xe
+
+BUILD_DATE="$(date -Iseconds)"
+BUILD_HOST=$(whoami)"@"$(hostname)
+NMAKE_VERSION="20240522"
+
+CC="cc"
+CFLAGS='-ansi -pedantic -O2 -DNMAKE_VERSION="'$NMAKE_VERSION'" -DBUILD_DATE="'$BUILD_DATE'" -DBUILD_HOST="'$BUILD_HOST'"'
+
+$CC $CFLAGS -c *.c
+$CC -o nmake *.o $CFLAGS
