@@ -1,0 +1,13 @@
+			       nmake
+			       *****
+
+This is the repository for the N11 make tool. It is meant to act as
+a replacement for GNU make with a focus on simplicity and speed.
+
+nmake is distributed under the BSD-3-Clause license. See COPYRIGHT
+for details.
+
+If you found a bug:
+	email: me@ariston.dev
+
+--atl <me@ariston.dev>
