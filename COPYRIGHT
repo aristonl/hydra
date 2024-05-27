@@ -1,3 +1,18 @@
+note from atl:
+
+	All projects included in this depot that do not have an explicit
+	LICENSE or COPYRIGHT file in their root directory are covered under
+	this license.  Other projects like NMake and nlibc are covered under
+	their own respective licenses as specified in their LICENSE or
+	COPYRIGHT file.
+
+	Ariston Lorenzo
+	me(at)ariston(dot)dev
+
+	05/27/2024
+
+---
+
 N11 PUBLIC SOURCE LICENSE
 Version 1.0 - September 2022
 

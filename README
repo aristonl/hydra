@@ -1,53 +1,21 @@
-                    
-            N11/INFERNO - an operating system and kernel duo
-                    Copyright 2021-2024 N11 Software
-  
-  You should have received a copy of the N11 Public Source License with this
-  program. If not, see the following pages:
+N11/Inferno source tree
 
-	<https://n11.dev/legal/n11-psl/>.
+This is the top level of the N11/Inferno source tree depot.
 
-------------------------------------------------------------------------------
+For basic information on N11/Inferno, see Documentation/UserGuide/README
+first.
 
-What is N11/Inferno?:
-  
-  N11Inferno is an operating system/hybrid kernel written from scratch by 
-  Ariston Lorenzo, Levi Freisleben, and other developers.  The project aims 
-  towards UNIX/POSIX compliance.
+For copyright information, please see the file COPYRIGHT in this
+directory. For contact and maintainer information, see CREDITS and
+MAINTAINERS.
 
-  We aim to have what you'd expect in a usual Unix system like multitasking,
-  virtual memory, shared libraries, good memory management, etc..
+Depot Roadmap:
 
-  Build instructions can be found in docs/BuildInstructions.rst.
-
-What hardware can it run on?:
-
-  As of v0.1, Inferno targets x86_64 and ARM64.
-  32-bit architectures aren't planned for later releases.
-
-  We do accept 32-bit related patches but they will not be maintained by
-  any current maintainers.
-
-How can I contribute?:
-  
-  We accept any useful patches whether they are coding style fixes, small
-  changes, or even new drivers, features, etc.. For more info on how to
-  contribute, see docs/contributing for more info. ***We are actively
-  looking for more contributors, so if you are interested, please feel
-  free to help in any way you can!***
-
-Source Roadmap:
-
-| Directory |    Description    |
-|-----------|-------------------|
-| bin       | User programs     |
-| boot      | Bootloader source |
-| docs      | Documentation     |
-| kernel    | kernel source     |
-| lib       | System libraries  |
-| toolchain | toolchain scripts |
-
-Contact:
-
-  See CREDITS or MAINTAINERS for specific developer contact info.
-
+| Projects       | Description       |
+|----------------|-------------------|
+| Programs       | User programs     |
+| Boot           | Bootloader source |
+| Documentation  | Documentation     |
+| Kernel         | Inferno source    |
+| Libraries      | User libraries    |
+| Toolchain      | Toolchain scripts |

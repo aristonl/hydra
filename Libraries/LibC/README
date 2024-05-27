@@ -1,0 +1,7 @@
+
+	n11 libc
+
+The N11 LibC is a implementation of the C standard library for the
+Inferno kernel, built for the N11 operating system. This LibC is
+also designed to work on other operating systems as a replacement for
+glibc.
