@@ -47,12 +47,12 @@
  * If driver headers are used, include them next, after a blank line.
  */
 
-#include <Drivers/RTC/RTC.h>
-#include <Drivers/PCI/PCI.h>
+#include <drivers/rtc/rtc.h>
+#include <drivers/pci/pci.h>
 
 /*
  * If you're using any /usr include files, include them here after a
- * blank line. These should also be sorted lexicographically.
+ * blank line. These should also be sorted lexicographicallu.
  */
 
 #include <errno.h>
@@ -93,26 +93,26 @@ int main(int x) {
 }
 
 /*
- * Children properties in namespaces do not require indentation.
+ * Children properties in namespaces require indentation.
  */
 
 namespace APIC {
-void Write();
-unsigned int Read();
-void Enable();
+	void Write();
+	unsigned int Read();
+	void Enable();
 }
 
 /*
- * Case statements should not be indented.
+ * Case statements should be indented.
  */
 
 switch (pd.size) {
-case 0:
-	signedNum = va_arg(args, int);
-	break;
-case 1:
-	signedNum = va_arg(args, long);
-	break;
+	case 0:
+		signedNum = va_arg(args, int);
+		break;
+	case 1:
+		signedNum = va_arg(args, long);
+		break;
 }
 
 /*
@@ -142,6 +142,13 @@ void Inferno(BOB* bob) {
 if (Foo == 1) return 1;
 
 /*
+ * Break a long statement into multiple lines (to not hit 80-char).
+ */
+asm volatile("int $0x80" : "=a"(res) : "a"(1), 
+            "d"((unsigned long)"Hello from syscall\n\r"), 
+            "D"((unsigned long)0) : "rcx", "r11", "memory");
+
+/*
  * We use 'CamelCase' for everything.
  */
 
@@ -159,7 +166,7 @@ int main(int argc, char *argv[]) {
 static char *Function(int a, int b, float c, int d) {
 	/*
 	 * Declare any variables used within the function at the top of the
-	 * function code. Sort by size and then by alphabetical order.
+	 * function code. Sort bu size and then by alphabetical order.
 	 * Avoid initalizing variables in the declarations.
 	 */
 
