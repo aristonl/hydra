@@ -24,7 +24,7 @@ descriptions.
 -------------------------------------------------------------------------------
 [ ] BOB - Bootloader	High		Advanced	<levih>			1
 [x] GDT/IDT										<levih>			2
-[ ] Basic LibC			High		Low			<atl>		    3
+[x] Basic LibC			High		Low			<atl>		    3
 [x] kprintf function	High		Medium		<levih>			4
 [x] Serial support		High		Low			<levih>			5
 [ ] Multitasking								<?>				6
@@ -33,9 +33,9 @@ descriptions.
 [ ] APIC										<?>				9
 [x] CMOS/RTC			Medium		Medium		<atl>		    10
 [x] Syscalls 									<levih>			11
-[ ] Basic Video Driver	High		High		<levih>			12
+[x] Basic Video Driver	High		High		<levih>			12
 [x] Basic PCI Driver	High		Medium		<atl>		    13
-[ ] Map devs to drivers	High		Medium		<atl>				14
+[x] Map devs to drivers	High		Medium		<atl>				14
 
 - Milestone 2 (v0.1pre2)
 
