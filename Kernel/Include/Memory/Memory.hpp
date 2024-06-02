@@ -7,7 +7,7 @@
 //===================================================================//
 
 #pragma once
-#include <BOB.hpp>
+#include <BOB.h>
 
 namespace Memory {
     void Init(BOB* bob);

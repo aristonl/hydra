@@ -14,7 +14,7 @@
 #include <Config.h>
 #include <GDT.h>
 #include <sys/io.h>
-#include <Interrupts/APIC.h>
+#include <Interrupts/APIC.hpp>
 #include <Interrupts/DoublePageFault.hpp>
 #include <Interrupts/Interrupts.hpp>
 #include <Interrupts/PageFault.hpp>

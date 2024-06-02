@@ -1,6 +1,6 @@
-#include <drivers/nvme/nvme.h>
-#include <drivers/pci/pci.h>
-#include <log.h>
+#include <Drivers/NVMe/NVMe.h>
+#include <Drivers/PCI/PCI.h>
+#include <Log.h>
 
 #include <stdint.h>
 
