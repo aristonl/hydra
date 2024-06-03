@@ -69,13 +69,4 @@ int init() {
 	return 0;
 }
 
-// Epoch TIme function
-// TODO: need this for ext2
-/*unsigned long long getEpochTime() {
-	RTC::readRTC();
-	unsigned long long epochTime = 0;
-	return epochTime;
-}*/
-
-
 }
