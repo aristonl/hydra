@@ -12,6 +12,7 @@
 #include <BOB.h>
 #include <COM.h>
 #include <Config.h>
+#include <CPU/CPU.h>
 #include <GDT.h>
 #include <sys/io.h>
 #include <Interrupts/APIC.hpp>
@@ -35,6 +36,9 @@ extern unsigned long long InfernoEnd;
 __attribute__((sysv_abi)) void Inferno(BOB* bob) {
 	prInfo("kernel", "Inferno kernel version 0.1alpha");
 	kprintf("Copyright 2021-2023 N11 Software.\nCopyright 2018-2021 Ariston Lorenzo and Levi Hicks. All rights reserved.\nSee COPYRIGHT in the Inferno source tree for more information.\n");
+
+	// CPU
+	CPU::CPUDetect();
 
 	// Memory
 	Memory::Init(bob);
