@@ -1,8 +1,8 @@
 enable_language(ASM)
 
-file(GLOB_RECURSE LIBC_SOURCES *.cpp)
+file(GLOB_RECURSE LIBC_SOURCES src/*.cpp)
 
-file(GLOB_RECURSE LIBC_HEADER *.h)
+file(GLOB_RECURSE LIBC_HEADER include/*.h)
 
 add_library(crt0 STATIC crt0.s)
 target_link_libraries(crt0 PRIVATE NoCoverage)

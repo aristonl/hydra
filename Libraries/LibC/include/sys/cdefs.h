@@ -37,6 +37,8 @@
 
 #define offsetof(type, member) __builtin_offsetof(type, member)
 
+#define __n11_libc 1
+
 #ifdef __cplusplus
 // extern "C" int main(int, char**);
 #endif

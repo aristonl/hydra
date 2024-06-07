@@ -14,7 +14,7 @@ cmake_minimum_required(VERSION 3.16)
 project(Hydra C CXX ASM_NASM)
 
 include_directories(.)
-include_directories(Libraries/LibC)
+include_directories(Libraries/LibC/include)
 include_directories(Libraries/LibM)
 include_directories(Libraries/LibTar)
 include_directories(Libraries/LibUtils)
