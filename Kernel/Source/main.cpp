@@ -92,11 +92,11 @@ __attribute__((sysv_abi)) void Inferno(BOB* bob) {
 __attribute__((ms_abi)) [[noreturn]] void main(BOB* bob) {
 	SetFramebuffer(bob->framebuffer);
 	SetFont(bob->FontFile);
+	Inferno(bob);
 	test();
-    Inferno(bob);
 
-    // Once finished say hello and halt
-    prInfo("kernel", "Done!");
+	// Once finished say hello and halt
+	prInfo("kernel", "Done!");
 
-    while (true) asm("hlt");
+	while (true) asm("hlt");
 }
