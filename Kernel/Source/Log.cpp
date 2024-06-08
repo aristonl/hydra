@@ -15,7 +15,7 @@ void prInfo(const char* subsystem, const char* message, ...) {
 	va_list args;
 	va_start(args, message);
 
-	kprintf("\r\e\033[32m[INFO] \033[0;33m%s\033[0m: ", subsystem);
+	kprintf("[INFO] %s: ", subsystem);
 	for (const char* p = message; *p; ++p) {
 		if (*p == '%') {
 			++p;
@@ -31,7 +31,7 @@ void prInfo(const char* subsystem, const char* message, ...) {
 			kputchar(*p);
 		}
 	}
-	kprintf("\e[0m\n\r");
+	kprintf("\n\r");
 
 	va_end(args);
 }
@@ -40,7 +40,7 @@ void prErr(const char* subsystem, const char* message, ...) {
 	va_list args;
 	va_start(args, message);
 
-	kprintf("\r\e\033[31m[ERROR] \033[0;33m%s\033[0m: ", subsystem);
+	kprintf("[ERROR] %s: ", subsystem);
 	for (const char* p = message; *p; ++p) {
 		if (*p == '%') {
 			++p;
@@ -59,7 +59,7 @@ void prErr(const char* subsystem, const char* message, ...) {
 			kputchar(*p);
 		}
 	}
-	kprintf("\e[0m\n\r");
+	kprintf("\n\r");
 
 	va_end(args);
 }
@@ -68,7 +68,7 @@ void prWarn(const char* subsystem, const char* message, ...) {
 	va_list args;
 	va_start(args, message);
 
-	kprintf("\r\e\033[33m[WARNING] \033[0;33m%s\033[0m: ", subsystem);
+	kprintf("[WARNING] %s: ", subsystem);
 	for (const char* p = message; *p; ++p) {
 		if (*p == '%') {
 			++p;
@@ -84,7 +84,7 @@ void prWarn(const char* subsystem, const char* message, ...) {
 			kputchar(*p);
 		}
 	}
-	kprintf("\e[0m\n\r");
+	kprintf("\n\r");
 
 	va_end(args);
 }
@@ -93,7 +93,7 @@ void prDebug(const char* subsystem, const char* message, ...) {
 	va_list args;
 	va_start(args, message);
 
-	kprintf("\r\e\033[34m[DEBUG] \033[0;33m%s\033[0m: ", subsystem);
+	kprintf("[DEBUG] %s: ", subsystem);
 	for (const char* p = message; *p; ++p) {
 		if (*p == '%') {
 			++p;
@@ -112,7 +112,7 @@ void prDebug(const char* subsystem, const char* message, ...) {
 			kputchar(*p);
 		}
 	}
-	kprintf("\e[0m\n\r");
+	kprintf("\n\r");
 
 	va_end(args);
 }
