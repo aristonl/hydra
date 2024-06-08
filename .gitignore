@@ -15,6 +15,7 @@ Build/ISO/kernel
 # Makefiles
 Makefile
 
+
 build/
 
 # Ninja Build files
@@ -39,4 +40,4 @@ cmake_install.cmake
 patches/
 .pc/
 
-kernel/OVMF*
+Kernel/OVMF*
