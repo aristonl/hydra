@@ -201,7 +201,7 @@ void test() {
     swapBuffers();
 
     for (unsigned int i = 0; i < 5000; i++) {
-        prInfo("TTY", "%d/%d", i, (unsigned int)5000);
+        // prInfo("TTY", "%d/%d", i, (unsigned int)5000);
         int progress = (i*percentInPixel)/25;
         test.DrawRectangle(8+((width-16)/2)-100+1, 14+16+((height-8-14-16)/2)-10+1, progress, 20-2, 0xcccccc);
         test.Swap();
