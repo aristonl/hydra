@@ -261,6 +261,74 @@ int kprintf(const char* fmt, ...) {
             if (str == (void*)0) str = "(null)";
             _kprintf(&pd, "", "", str);
             _reset(&pd);
+        } else if (fmt[i] == 'M') {
+            unsigned long long* i = va_arg(args, unsigned long long*);
+            unsigned char x = 0;
+            unsigned long long y = i;
+            while (y >= 1024) {
+                y = y / 1024;
+                x++;
+            }
+
+            char* sizeType = "";
+            switch (x) {
+                case 0:
+                    sizeType = "B";
+                    break;
+                case 1:
+                    sizeType = "KB";
+                    break;
+                case 2:
+                    sizeType = "MB";
+                    break;
+                case 3:
+                    sizeType = "GB";
+                    break;
+                case 4:
+                    sizeType = "TB";
+                    break;
+                default:
+                    sizeType = "B";
+                    y = i;
+                    break;
+            }
+            kprintf("%d%s", y, sizeType);
+            // _kprintf(&pd, "", "", str);
+            _reset(&pd);
+        } else if (fmt[i] == 'm') {
+            unsigned long long* i = va_arg(args, unsigned long long*);
+            unsigned char x = 0;
+            unsigned long long y = i;
+            while (y >= 1024) {
+                y = y / 1024;
+                x++;
+            }
+
+            char* sizeType = "";
+            switch (x) {
+                case 0:
+                    sizeType = "b";
+                    break;
+                case 1:
+                    sizeType = "KiB";
+                    break;
+                case 2:
+                    sizeType = "MiB";
+                    break;
+                case 3:
+                    sizeType = "GiB";
+                    break;
+                case 4:
+                    sizeType = "TiB";
+                    break;
+                default:
+                    sizeType = "b";
+                    y = i;
+                    break;
+            }
+            kprintf("%d%s", y, sizeType);
+            // _kprintf(&pd, "", "", str);
+            _reset(&pd);
         } else {
             char x[2];
             if (fmt[i] == 'c') x[0] = va_arg(args, int);

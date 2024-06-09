@@ -42,7 +42,9 @@ __attribute__((sysv_abi)) void Inferno(BOB* bob) {
 
 	// Memory
 	Memory::Init(bob);
-	prInfo("mm", "Total Memory: %dMB", Memory::GetSize()/0x1000/1024);
+	unsigned long long memory = Memory::GetSize();
+	if (memory < 1073741824 && memory > 269484032) memory -= 269484032;
+	prInfo("mm", "Total Memory: %m", memory);
 
 	// Create GDT
 	#if EnableGDT == true
