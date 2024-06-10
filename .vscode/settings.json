@@ -9,7 +9,10 @@
     "compare": "cpp",
     "cstdint": "cpp",
     "format": "cpp",
-    "buffer": "cpp"
+    "buffer": "cpp",
+    "cstddef": "cpp",
+    "Wattributes2.C": "cpp",
+    "printmessage.h": "c"
   },
   "terminal.integrated.profiles.osx": {
     "zsh": {

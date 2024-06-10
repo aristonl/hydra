@@ -264,32 +264,32 @@ int kprintf(const char* fmt, ...) {
         } else if (fmt[i] == 'M') {
             unsigned long long* i = va_arg(args, unsigned long long*);
             unsigned char x = 0;
-            unsigned long long y = i;
+            unsigned long long y = (unsigned long long)i;
             while (y >= 1024) {
                 y = y / 1024;
                 x++;
             }
 
-            char* sizeType = "";
+            char* sizeType = (char*)"";
             switch (x) {
                 case 0:
-                    sizeType = "B";
+                    sizeType = (char*)"B";
                     break;
                 case 1:
-                    sizeType = "KB";
+                    sizeType = (char*)"KB";
                     break;
                 case 2:
-                    sizeType = "MB";
+                    sizeType = (char*)"MB";
                     break;
                 case 3:
-                    sizeType = "GB";
+                    sizeType = (char*)"GB";
                     break;
                 case 4:
-                    sizeType = "TB";
+                    sizeType = (char*)"TB";
                     break;
                 default:
-                    sizeType = "B";
-                    y = i;
+                    sizeType = (char*)"B";
+                    y = (unsigned long long)i;
                     break;
             }
             kprintf("%d%s", y, sizeType);
@@ -298,35 +298,41 @@ int kprintf(const char* fmt, ...) {
         } else if (fmt[i] == 'm') {
             unsigned long long* i = va_arg(args, unsigned long long*);
             unsigned char x = 0;
-            unsigned long long y = i;
+            unsigned long long y = (unsigned long long)i;
             while (y >= 1024) {
                 y = y / 1024;
                 x++;
             }
 
-            char* sizeType = "";
+            char* sizeType = (char*)"";
             switch (x) {
                 case 0:
-                    sizeType = "b";
+                    sizeType = (char*)"b";
                     break;
                 case 1:
-                    sizeType = "KiB";
+                    sizeType = (char*)"KiB";
                     break;
                 case 2:
-                    sizeType = "MiB";
+                    sizeType = (char*)"MiB";
                     break;
                 case 3:
-                    sizeType = "GiB";
+                    sizeType = (char*)"GiB";
                     break;
                 case 4:
-                    sizeType = "TiB";
+                    sizeType = (char*)"TiB";
                     break;
                 default:
-                    sizeType = "b";
-                    y = i;
+                    sizeType = (char*)"b";
+                    y = (unsigned long long)i;
                     break;
             }
             kprintf("%d%s", y, sizeType);
+            // _kprintf(&pd, "", "", str);
+            _reset(&pd);
+        } else if (fmt[i] == 'h') {
+            bool* i = va_arg(args, bool*);
+            if ((bool)i) kprintf("true");
+            else kprintf("false");
             // _kprintf(&pd, "", "", str);
             _reset(&pd);
         } else {
