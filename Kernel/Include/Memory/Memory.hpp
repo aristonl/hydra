@@ -7,8 +7,8 @@
 //===================================================================//
 
 #pragma once
-#include <BOB.h>
-#include <Log.h>
+#include <Boot/BOB.h>
+#include <Inferno/Log.h>
 #include <Memory/Mem_.hpp>
 
 namespace Memory {

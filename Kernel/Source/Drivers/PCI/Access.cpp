@@ -7,7 +7,7 @@
 //===================================================================//
 
 #include <Drivers/PCI/PCI.h>
-#include <Log.h>
+#include <Inferno/Log.h>
 #include <sys/io.h>
 #include <stdint.h>
 

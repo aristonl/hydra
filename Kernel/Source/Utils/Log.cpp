@@ -6,9 +6,9 @@
 //
 //===================================================================//
 
-#include <Log.h>
+#include <Inferno/Log.h>
 
-#include <COM.h>
+#include <Drivers/TTY/COM.h>
 #include <stdarg.h>
 
 void prInfo(const char* subsystem, const char* message, ...) {

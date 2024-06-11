@@ -3,7 +3,7 @@
 #include <sys/types.h>
 #include <unistd.h>
 
-#include <Log.h>
+#include <Inferno/Log.h>
 
 /*
 

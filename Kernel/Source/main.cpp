@@ -9,11 +9,11 @@
 #include <unistd.h>
 #include <stdint.h>
 
-#include <BOB.h>
-#include <COM.h>
-#include <Config.h>
+#include <Boot/BOB.h>
+#include <Drivers/TTY/COM.h>
+#include <Inferno/Config.h>
 #include <CPU/CPU.h>
-#include <GDT.h>
+#include <CPU/GDT.h>
 #include <sys/io.h>
 #include <Interrupts/APIC.hpp>
 #include <Interrupts/DoublePageFault.hpp>
@@ -24,8 +24,8 @@
 #include <Memory/Mem_.hpp>
 #include <Memory/Paging.h>
 #include <CPU/CPUID.h>
-#include <Log.h>
-#include <TTY.h>
+#include <Inferno/Log.h>
+#include <Drivers/TTY/TTY.h>
 
 // Drivers
 #include <Drivers/RTC/RTC.h>

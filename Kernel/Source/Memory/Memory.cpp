@@ -2,7 +2,7 @@
 #include <stddef.h>
 #include <Memory/Paging.h>
 #include <Memory/Mem_.hpp>
-#include <Log.h>
+#include <Inferno/Log.h>
 #include <Drivers/RTC/RTC.h>
 
 unsigned long long Size = 0;

@@ -10,9 +10,9 @@
 #include <Drivers/CMOS/CMOS.h>
 #include <Drivers/RTC/RTC.h>
 
-#include <COM.h>
+#include <Drivers/TTY/COM.h>
 
-#include <Log.h>
+#include <Inferno/Log.h>
 
 unsigned char second; // 0x00
 unsigned char minute; // 0x02

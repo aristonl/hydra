@@ -6,7 +6,7 @@
 //
 //===================================================================//
 
-#include <Log.h>
+#include <Inferno/Log.h>
 #include <CPU/CPU.h>
 #include <CPU/CPUID.h>
 #include <CPU/VendorID.h>

@@ -7,7 +7,7 @@
 //===================================================================//
 
 #pragma once
-#include <Config.h>
+#include <Inferno/Config.h>
 
 #if EnableGDT == true
     namespace GDT {

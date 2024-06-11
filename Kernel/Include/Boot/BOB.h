@@ -7,7 +7,7 @@
 //===================================================================//
 
 #pragma once
-#include <Framebuffer.h>
+#include <Drivers/TTY/Framebuffer.h>
 
 struct MemoryDescriptor {
     unsigned int Type;

@@ -6,10 +6,10 @@
 //
 //===================================================================//
 
-#include <Drivers/ATA/AHCI.h>
+#include <Drivers/Storage/ATA/AHCI.h>
 #include <Drivers/PCI/PCI.h>
-#include <Drivers/NVMe/NVMe.h>
-#include <Log.h>
+#include <Drivers/Storage/NVMe/NVMe.h>
+#include <Inferno/Log.h>
 #include <stdint.h>
 
 namespace PCI {

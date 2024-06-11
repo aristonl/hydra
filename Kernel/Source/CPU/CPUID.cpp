@@ -6,7 +6,7 @@
 //
 //===================================================================//
 
-#include <Log.h>
+#include <Inferno/Log.h>
 #include <CPU/CPUID.h>
 #include <CPU/VendorID.h>
 #include <Memory/Mem_.hpp>

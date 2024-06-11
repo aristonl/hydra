@@ -6,7 +6,7 @@
 //
 //===================================================================//
 
-#include <COM.h>
+#include <Drivers/TTY/COM.h>
 #include <Interrupts/PageFault.hpp>
 
 void PageFault(void*) {

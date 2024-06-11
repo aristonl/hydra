@@ -6,7 +6,7 @@
 //
 //===================================================================//
 
-#include <COM.h>
+#include <Drivers/TTY/COM.h>
 #include <Interrupts/Syscall.hpp>
 
 void SyscallHandler(void*) {

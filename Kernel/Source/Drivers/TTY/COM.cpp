@@ -9,9 +9,9 @@
 #include <stdarg.h>
 #include <stdint.h>
 #include <sys/io.h>
-#include <COM.h>
+#include <Drivers/TTY/COM.h>
 
-#include <Log.h>
+#include <Inferno/Log.h>
 
 bool COM1Active = false;
 
