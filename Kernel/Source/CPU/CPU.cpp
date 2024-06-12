@@ -11,7 +11,7 @@
 #include <CPU/CPUID.h>
 #include <CPU/VendorID.h>
 
-#include <string.h>
+#include <Drivers/TTY/COM.h>
 
 namespace CPU {
 	void CPUDetect() {

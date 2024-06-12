@@ -10,6 +10,7 @@
 #include <sys/io.h>
 #include <Drivers/TTY/Framebuffer.h>
 
+int strlen(const char* str);
 void InitializeSerialDevice();
 char AwaitSerialResponse();
 void kputchar(char a);

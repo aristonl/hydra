@@ -1,9 +1,13 @@
 #include <Drivers/TTY/TTY.h>
+#include <Drivers/TTY/COM.h>
 #include <Memory/Mem_.hpp>
 #include <stdint.h>
+#include <sys/types.h>
 #include <Inferno/Log.h>
 // #define SSFN_CONSOLEBITMAP_TRUECOLOR
 // #include <ssfn.h>
+
+#include <Drivers/TTY/Font8x8Basic.h>
 
 void* font;
 Framebuffer* fb;
@@ -19,10 +23,11 @@ void SetFont(void* _font) {
 uint8_t* buffer;
 
 void putpixel(unsigned int x, unsigned int y, unsigned int color) {
-    buffer[(4*fb->PPSL*y+4*x)] = (color & 0xFF);
-    buffer[(4*fb->PPSL*y+4*x)+1] = (color & 0xFF00) >> 8;
-    buffer[(4*fb->PPSL*y+4*x)+2] = (color & 0xFF0000) >> 16;
-    buffer[(4*fb->PPSL*y+4*x)+3] = (color & 0xFF000000) >> 24;
+	unsigned int pos = 4 * (fb->PPSL * y + x);
+	buffer[pos] = (color & 0xFF);
+    	buffer[pos+1] = (color & 0xFF00) >> 8;
+    	buffer[pos+2] = (color & 0xFF0000) >> 16;
+    	buffer[pos+3] = (color & 0xFF000000) >> 24;
 }
 
 void swapBuffers() {
@@ -30,7 +35,6 @@ void swapBuffers() {
 }
 
 uint8_t* windowBuffer;
-
 
 class Window {
     public:
@@ -151,14 +155,36 @@ class Window {
             }
         }
 
+	void drawChar(uint8_t ch, int x, int y) {
+		for (int i = 0; i < 8; i++) {
+			for (int j = 0; j < 8; j++) {
+				if (font8x8_basic[ch][i] & (1 << j)) {
+					putpixel(x + j, y + i, 0xffffff);
+				}
+			}
+		}
+	}
+
+	void drawString(const char* str) {
+		while (*str) {
+			drawChar(*str++, current_x, current_y);
+			current_x += 8;
+		}
+
+		current_x = 0;
+		current_y += 8;
+	}
+
         void Swap() {
             memcpy(buffer+(4*fb->PPSL*y+4*x), WindowBuffer, 4*fb->PPSL*Height+4*Width);
         }
+
+	int current_x = 0;
+	int current_y = 0;
     private:
         int Width, Height, x, y;
         uint8_t* WindowBuffer;
 };
-
 
 void test() {
     // no malloc yet so we have to use a static buffer
@@ -210,5 +236,10 @@ void test() {
 
     test.Close();
     test.Swap();
-    swapBuffers();
+    
+	test.drawString("Test 1");
+	test.drawString("Test 2");
+	test.drawString("Hello, World!");
+
+	swapBuffers();
 }

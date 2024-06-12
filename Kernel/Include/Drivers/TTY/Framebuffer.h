@@ -8,6 +8,8 @@
 
 #pragma once
 
+#include <stdint.h>
+
 class Framebuffer {
     public:
         Framebuffer() { }
@@ -21,4 +23,10 @@ class Framebuffer {
         void* Address;
         unsigned long long Size;
         unsigned int Width, Height, PPSL;
+
+	void drawChar(uint8_t ch, int x, int y, uint32_t color);
+	void drawString(const char* str, int x, int y, uint32_t color);
+
+	int current_x;
+	int current_y;
 };
