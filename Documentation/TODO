@@ -1,0 +1,23 @@
+-*-text-*-
+
+This file is a more specific tasklist, as well as shows current
+tasks on people's stacks.  There may be references from private
+conversations or other places, so certain tasks might not make
+any sense unless you have context.  I'm just gonna keep this
+file under version control for convenience purposes, so feel
+free to use this file to your descretion.
+
+	- atl.
+
+---------------------------------------------------------------------
+
+General Problems (someone please grab these thanks :thumbsup:):
+
+	- QEMU emulation through KVM causes a boot loop before (or
+	  possibly during) the framebuffer initialization.
+
+Ariston:
+
+	- finalize file system tree
+	- figure out kprintf output to drawString().
+

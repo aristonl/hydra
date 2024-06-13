@@ -12,7 +12,7 @@ December, 2022
 │	└── Binaries/ (Essential binaries)
 ├── Boot/ (Bootloader files, kernels)
 │	└── EFI/ (Mount location of boot partition)
-├── Devices/ (Essential device files)
+├── dev/ (Essential device files)
 │	├── null
 │	└── tty0
 ├── Users/ (User home directories)
@@ -28,4 +28,5 @@ December, 2022
 │	└── guest/ (Guest account / not created by default)
 ├── Libraries/ (All libraries)
 ├── Headers/ (All header files)
-└── Volumes/ (Mount point of all partitions)
+├── Volumes/ (Mount point of all partitions)
+└── tmp/ (Temporary files, deleted on boot)

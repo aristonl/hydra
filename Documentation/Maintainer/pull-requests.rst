@@ -46,10 +46,10 @@ so::
         git request-pull master git@github.com:gingerwitch64/hydra-tcm.git lib-misc-1.0
 
 We heavily recommend the use of ``ssh`` as it is used as the main protocol for
-``git.n11.dev`` but it is not required.
+``n11.dev`` but it is not required.
 
 A pull request is submitted in the same way as an ordinary patch. Send as inline email 
-to the maintainer and CC the mailing list. Pull requests to Linus typically have a 
+to the maintainer and CC the mailing list. Pull requests to us typically have a 
 subject line something like::
 
 	[GIT PULL] <subsystem> changes for v1.0
